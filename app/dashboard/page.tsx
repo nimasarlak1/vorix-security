@@ -1,81 +1,103 @@
 export default function Dashboard() {
   return (
-    <main className="min-h-screen bg-gray-100 flex">
+    <main className="min-h-screen bg-gray-100 flex" dir="rtl">
 
-      {/* Sidebar */}
+      {/* منوی کناری */}
       <aside className="w-64 bg-black text-white p-6">
         <h2 className="text-2xl font-bold mb-8">
           Vorix Security
         </h2>
 
-        <nav className="space-y-4">
-          <p>Dashboard</p>
-          <p>Security</p>
-          <p>Threats</p>
-          <p>Reports</p>
-          <p>Settings</p>
+        <nav className="space-y-5 text-right">
+          <p>داشبورد</p>
+          <p>وضعیت امنیت</p>
+          <p>تهدیدها</p>
+          <p>گزارش‌ها</p>
+          <p>تنظیمات</p>
         </nav>
       </aside>
 
 
-      {/* Main */}
+      {/* محتوای اصلی */}
       <section className="flex-1 p-8">
 
         <div className="flex justify-between items-center mb-8">
+
           <h1 className="text-3xl font-bold">
-            Security Dashboard
+            پنل امنیتی مشتری
           </h1>
 
           <button className="bg-black text-white px-5 py-2 rounded">
-            Admin
+            حساب کاربری
           </button>
+
         </div>
 
 
-        {/* Cards */}
+        {/* کارت‌ها */}
         <div className="grid md:grid-cols-3 gap-6">
 
+
           <div className="bg-white p-6 rounded-xl shadow">
             <h3 className="font-bold">
-              Security Status
+              وضعیت حفاظت
             </h3>
             <p className="mt-3 text-green-600">
-              Protected
+              فعال و محافظت شده
             </p>
           </div>
 
 
           <div className="bg-white p-6 rounded-xl shadow">
             <h3 className="font-bold">
-              Threat Detection
+              تهدیدهای شناسایی شده
             </h3>
             <p className="mt-3">
-              0 Threats Found
+              ۰ مورد
             </p>
           </div>
 
 
           <div className="bg-white p-6 rounded-xl shadow">
             <h3 className="font-bold">
-              System Status
+              وضعیت سرویس
             </h3>
             <p className="mt-3">
-              Online
+              آنلاین
             </p>
           </div>
+
 
         </div>
 
 
-        {/* Reports */}
+        {/* گزارش‌ها */}
         <div className="bg-white rounded-xl shadow p-6 mt-8">
+
           <h2 className="text-xl font-bold">
-            Security Reports
+            گزارش امنیتی
           </h2>
 
           <p className="mt-3">
-            No recent security events.
+            تاکنون هیچ رویداد امنیتی ثبت نشده است.
           </p>
+
+        </div>
+
+
+        {/* اطلاعات مشتری */}
+        <div className="bg-white rounded-xl shadow p-6 mt-8">
+
+          <h2 className="text-xl font-bold">
+            اطلاعات سرویس
+          </h2>
+
+          <div className="mt-4 space-y-2">
+            <p>سطح حفاظت: پیشرفته</p>
+            <p>وضعیت اشتراک: فعال</p>
+            <p>آخرین بررسی: امروز</p>
+          </div>
+
         </div>
 
 
