@@ -18,20 +18,18 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <div className="p-8 border rounded-lg">
-        <h1 className="text-2xl font-bold mb-4">
-          ورود
-        </h1>
+      <div>
+        <h1 className="text-3xl mb-5">ورود</h1>
 
         <input
-          className="border p-2 mb-3 block"
+          className="border p-2 m-1"
           placeholder="ایمیل"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          className="border p-2 mb-3 block"
+          className="border p-2 m-1"
           placeholder="رمز عبور"
           type="password"
           value={password}
@@ -39,7 +37,7 @@ export default function LoginPage() {
         />
 
         <button
-          className="bg-black text-white px-4 py-2 rounded"
+          className="border p-2 m-1"
           onClick={handleLogin}
         >
           ورود
