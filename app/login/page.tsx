@@ -7,7 +7,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  function handleLogin() {
+  function handleورود() {
     if (!email || !password) {
       setMessage("لطفا ایمیل و رمز عبور را وارد کنید");
       return;
