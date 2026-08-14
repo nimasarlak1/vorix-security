@@ -7,19 +7,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  function handleLogin() {
+  const handleLogin = () => {
     if (!email || !password) {
       setMessage("لطفا ایمیل و رمز عبور را وارد کنید");
       return;
     }
 
     setMessage("ورود انجام شد");
-  }
+  };
 
   return (
     <main className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md p-6">
-
         <h1 className="text-3xl mb-6">
           ورود
         </h1>
@@ -52,7 +51,6 @@ export default function LoginPage() {
             {message}
           </p>
         )}
-
       </div>
     </main>
   );
