@@ -25,3 +25,6 @@
     "autoprefixer": "latest"
   }
 }
+"overrides": {
+  "@aws-sdk/credential-provider-ini": "3.972.0"
+}
