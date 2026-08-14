@@ -1,57 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>VORIX.SECURITY | Secure Technology Solutions</title>
-
-<meta name="description" content="VORIX.SECURITY provides secure web development, software engineering and technology solutions.">
-
-<meta name="keywords" content="security, software, web development, technology, cybersecurity">
-
-<meta name="author" content="VORIX.SECURITY">
+<meta name="description" content="VORIX.SECURITY - Secure web development, software engineering and technology solutions.">
 
 <meta name="robots" content="index, follow">
 
-<meta name="theme-color" content="#050816">
+<meta name="theme-color" content="#070b14">
 
-
-<meta property="og:title" content="VORIX.SECURITY">
-<meta property="og:description" content="Secure web, software and technology services.">
-<meta property="og:type" content="website">
-
+<title>VORIX.SECURITY | Secure Technology</title>
 
 <style>
 
 :root{
---bg:#050816;
---card:#0b1220;
---card2:#101a30;
---text:#ffffff;
---muted:#9aa7bd;
---green:#00f5a0;
---blue:#00c6ff;
---border:#22304a;
---max:1200px;
+--bg:#070b14;
+--card:#111827;
+--text:#f5f7fb;
+--muted:#9ba8bc;
+--green:#63e6be;
+--blue:#60a5fa;
+--border:#263247;
+--max:1180px;
 }
-
 
 *{
+box-sizing:border-box;
 margin:0;
 padding:0;
-box-sizing:border-box;
 }
-
 
 html{
 scroll-behavior:smooth;
 }
 
-
 body{
-
 font-family:
 Inter,
 Segoe UI,
@@ -59,58 +45,44 @@ Arial,
 sans-serif;
 
 background:
-radial-gradient(circle at top right,
-rgba(0,198,255,.15),
-transparent 35%),
-
-radial-gradient(circle at bottom left,
-rgba(0,245,160,.12),
-transparent 35%),
-
+radial-gradient(circle at top right,rgba(96,165,250,.15),transparent 35%),
+radial-gradient(circle at bottom left,rgba(99,230,190,.1),transparent 35%),
 var(--bg);
 
 color:var(--text);
-
-line-height:1.6;
-
+line-height:1.7;
 }
-
 
 a{
-text-decoration:none;
 color:inherit;
+text-decoration:none;
 }
 
-
 .container{
-
 width:min(92%,var(--max));
 margin:auto;
-
 }
 
 
 /* HEADER */
 
-
 header{
 
 position:sticky;
 top:0;
-z-index:99;
+z-index:10;
 
-background:rgba(5,8,22,.85);
+background:rgba(7,11,20,.85);
 
-backdrop-filter:blur(15px);
+backdrop-filter:blur(12px);
 
 border-bottom:1px solid var(--border);
 
 }
 
-
 .nav{
 
-height:80px;
+height:75px;
 
 display:flex;
 
@@ -123,14 +95,13 @@ justify-content:space-between;
 
 .logo{
 
-font-size:1.4rem;
+font-size:1.3rem;
 
 font-weight:900;
 
 letter-spacing:2px;
 
 }
-
 
 .logo span{
 
@@ -143,7 +114,7 @@ nav{
 
 display:flex;
 
-gap:30px;
+gap:25px;
 
 }
 
@@ -151,8 +122,6 @@ gap:30px;
 nav a{
 
 color:var(--muted);
-
-transition:.3s;
 
 }
 
@@ -164,48 +133,12 @@ color:white;
 }
 
 
-.btn{
-
-padding:12px 22px;
-
-border-radius:12px;
-
-font-weight:800;
-
-display:inline-block;
-
-transition:.3s;
-
-}
-
-
-.btn-primary{
-
-background:linear-gradient(
-135deg,
-var(--green),
-var(--blue)
-);
-
-color:#00110c;
-
-}
-
-
-.btn:hover{
-
-transform:translateY(-3px);
-
-}
-
-
-
 /* HERO */
 
 
 .hero{
 
-padding:120px 0;
+padding:110px 0;
 
 }
 
@@ -216,7 +149,7 @@ display:grid;
 
 grid-template-columns:1.2fr .8fr;
 
-gap:70px;
+gap:60px;
 
 align-items:center;
 
@@ -227,15 +160,15 @@ align-items:center;
 
 display:inline-block;
 
-padding:8px 16px;
+padding:8px 15px;
 
 border-radius:50px;
 
-background:rgba(0,245,160,.1);
-
-border:1px solid rgba(0,245,160,.3);
+background:rgba(99,230,190,.1);
 
 color:var(--green);
+
+border:1px solid rgba(99,230,190,.3);
 
 margin-bottom:25px;
 
@@ -244,7 +177,7 @@ margin-bottom:25px;
 
 h1{
 
-font-size:clamp(3rem,8vw,6rem);
+font-size:clamp(3rem,7vw,6rem);
 
 line-height:.95;
 
@@ -266,14 +199,14 @@ margin-top:25px;
 
 max-width:650px;
 
-font-size:1.2rem;
-
 color:var(--muted);
+
+font-size:1.15rem;
 
 }
 
 
-.actions{
+.buttons{
 
 margin-top:35px;
 
@@ -286,43 +219,64 @@ flex-wrap:wrap;
 }
 
 
-.card{
+.btn{
 
-background:
-linear-gradient(
-145deg,
-rgba(255,255,255,.05),
-rgba(255,255,255,.01)
-),
+padding:12px 22px;
 
-var(--card);
+border-radius:12px;
+
+font-weight:800;
+
+}
+
+
+.primary{
+
+background:var(--green);
+
+color:#06110d;
+
+}
+
+
+.secondary{
 
 border:1px solid var(--border);
 
-border-radius:24px;
+background:var(--card);
 
-padding:35px;
+}
 
-}/* SECURITY CARD */
 
-.security-box{
+.card{
+
+background:var(--card);
+
+border:1px solid var(--border);
+
+border-radius:22px;
+
+padding:30px;
+
+}
+  /* SECURITY CARD */
+
+.security-card{
 
 display:flex;
 
 flex-direction:column;
 
-gap:20px;
+gap:18px;
 
 }
 
 
-.security-icon{
+.shield{
 
-width:80px;
+width:70px;
 
-height:80px;
-
-border-radius:20px;
+height:70px;
 
 display:flex;
 
@@ -330,29 +284,29 @@ align-items:center;
 
 justify-content:center;
 
-font-size:40px;
+border-radius:18px;
 
-background:
-rgba(0,245,160,.12);
+background:rgba(99,230,190,.12);
 
 color:var(--green);
+
+font-size:32px;
 
 }
 
 
-.security-box h2{
+.security-card h2{
 
 font-size:2rem;
 
 }
 
 
-.security-box p{
+.security-card p{
 
 color:var(--muted);
 
 }
-
 
 
 /* SECTIONS */
@@ -360,36 +314,32 @@ color:var(--muted);
 
 section{
 
-padding:100px 0;
+padding:90px 0;
 
 }
 
 
-.section-title{
+.title{
 
 max-width:700px;
 
-margin-bottom:50px;
+margin-bottom:40px;
 
 }
 
 
-.section-title h2{
+.title h2{
 
-font-size:3rem;
+font-size:2.8rem;
 
-line-height:1.1;
+margin-bottom:15px;
 
 }
 
 
-.section-title p{
+.title p{
 
 color:var(--muted);
-
-margin-top:15px;
-
-font-size:1.1rem;
 
 }
 
@@ -402,54 +352,42 @@ font-size:1.1rem;
 
 display:grid;
 
-grid-template-columns:
-repeat(3,1fr);
+grid-template-columns:repeat(3,1fr);
 
-gap:25px;
+gap:20px;
 
 }
 
 
 .service{
 
-padding:30px;
-
-border-radius:20px;
+padding:28px;
 
 background:var(--card);
 
 border:1px solid var(--border);
 
-transition:.3s;
+border-radius:18px;
+
+transition:.25s;
 
 }
 
 
 .service:hover{
 
-transform:translateY(-8px);
+transform:translateY(-5px);
 
 border-color:var(--green);
 
 }
 
 
-.number{
+.service strong{
 
-font-size:2rem;
+display:block;
 
-font-weight:900;
-
-color:var(--green);
-
-margin-bottom:20px;
-
-}
-
-
-.service h3{
-
-font-size:1.4rem;
+font-size:1.3rem;
 
 margin-bottom:12px;
 
@@ -464,10 +402,10 @@ color:var(--muted);
 
 
 
-/* SECURITY PRINCIPLES */
+/* SECURITY */
 
 
-.security-section{
+.security{
 
 background:rgba(255,255,255,.03);
 
@@ -478,25 +416,20 @@ border-bottom:1px solid var(--border);
 }
 
 
-.points{
+.security-list{
 
 display:grid;
 
-grid-template-columns:
-repeat(2,1fr);
+grid-template-columns:repeat(2,1fr);
 
 gap:20px;
 
 }
 
 
-.point{
+.security-item{
 
-display:flex;
-
-gap:15px;
-
-padding:25px;
+padding:22px;
 
 background:var(--card);
 
@@ -507,18 +440,14 @@ border:1px solid var(--border);
 }
 
 
-.check{
+.security-item h3{
 
-color:var(--green);
-
-font-size:22px;
-
-font-weight:bold;
+margin-bottom:8px;
 
 }
 
 
-.point span{
+.security-item p{
 
 color:var(--muted);
 
@@ -529,39 +458,31 @@ color:var(--muted);
 /* ABOUT */
 
 
-.about-grid{
+.about{
 
 display:grid;
 
-grid-template-columns:
-repeat(3,1fr);
+grid-template-columns:repeat(3,1fr);
 
-gap:25px;
+gap:20px;
 
 }
 
 
-.about-card{
+.about div{
 
 background:var(--card);
 
-padding:30px;
-
-border-radius:20px;
-
 border:1px solid var(--border);
 
-}
+border-radius:18px;
 
-
-.about-card h3{
-
-margin-bottom:10px;
+padding:25px;
 
 }
 
 
-.about-card p{
+.about p{
 
 color:var(--muted);
 
@@ -569,53 +490,46 @@ color:var(--muted);
 
 
 
-/* CTA */
+/* CONTACT */
 
 
-.cta{
+.contact-box{
 
 text-align:center;
-
-}
-
-
-.cta-box{
-
-padding:70px 30px;
 
 background:
 
 radial-gradient(
 circle,
-rgba(0,245,160,.15),
+rgba(99,230,190,.15),
 transparent 60%
 ),
 
 var(--card);
 
-border-radius:30px;
+padding:60px 30px;
+
+border-radius:25px;
 
 border:1px solid var(--border);
 
 }
 
 
-.cta h2{
+.contact-box h2{
 
-font-size:3rem;
+font-size:2.5rem;
 
-margin-bottom:20px;
+margin-bottom:15px;
 
 }
 
 
-.cta p{
+.contact-box p{
 
 color:var(--muted);
 
-max-width:600px;
-
-margin:auto;
+margin-bottom:25px;
 
 }
 
@@ -626,9 +540,11 @@ margin:auto;
 
 footer{
 
-padding:35px 0;
-
 border-top:1px solid var(--border);
+
+padding:30px 0;
+
+color:var(--muted);
 
 }
 
@@ -639,8 +555,6 @@ display:flex;
 
 justify-content:space-between;
 
-color:var(--muted);
-
 }
 
 
@@ -648,7 +562,7 @@ color:var(--muted);
 /* MOBILE */
 
 
-@media(max-width:900px){
+@media(max-width:850px){
 
 .hero-grid{
 
@@ -664,14 +578,14 @@ grid-template-columns:1fr;
 }
 
 
-.points{
+.security-list{
 
 grid-template-columns:1fr;
 
 }
 
 
-.about-grid{
+.about{
 
 grid-template-columns:1fr;
 
@@ -693,7 +607,6 @@ font-size:3.5rem;
 
 }
 
-
 </style>
 
 </head>
@@ -706,9 +619,10 @@ font-size:3.5rem;
 
 <div class="container nav">
 
-<a class="logo">
+
+<div class="logo">
 VORIX<span>.SECURITY</span>
-</a>
+</div>
 
 
 <nav>
@@ -725,11 +639,13 @@ Security
 About
 </a>
 
-<a class="btn btn-primary" href="#contact">
+<a href="#contact">
 Contact
 </a>
 
+
 </nav>
+
 
 </div>
 
@@ -741,6 +657,7 @@ Contact
 
 <section class="hero">
 
+
 <div class="container hero-grid">
 
 
@@ -748,62 +665,59 @@ Contact
 
 
 <div class="badge">
-● Security First Technology
+Security First Technology
 </div>
 
 
 <h1>
 
 VORIX<span>.</span><br>
-
 SECURITY
 
 </h1>
 
 
 <p>
-
 Secure web, software and technology solutions
-designed with privacy, reliability and modern
-engineering standards.
-
+built with reliability, privacy and security at the core.
 </p>
 
 
-<div class="actions">
+<div class="buttons">
 
-<a class="btn btn-primary" href="#services">
+<a class="btn primary" href="#services">
 Explore Services
 </a>
 
 
-<a class="btn" style="border:1px solid var(--border)" href="#contact">
+<a class="btn secondary" href="#contact">
 Contact
 </a>
 
-</div>
-
 
 </div>
 
 
+</div>
 
-<div class="card security-box">
 
 
-<div class="security-icon">
+<div class="card security-card">
+
+
+<div class="shield">
 🛡
 </div>
 
 
 <h2>
-Built Securely
+Built Secure
 </h2>
 
 
 <p>
-Security is integrated into every layer of
-development, architecture and technology.
+Modern engineering with security-focused architecture
+and responsible development practices.
 </p>
 
 
@@ -812,23 +726,22 @@ development, architecture and technology.
 
 </div>
 
-</section>
-/* SERVICES SECTION */
 
+</section>
 <section id="services">
 
 <div class="container">
 
 
-<div class="section-title">
+<div class="title">
 
 <h2>
 Technology Services
 </h2>
 
 <p>
-Professional digital solutions focused on security,
-performance and reliability.
+Secure and reliable digital solutions designed
+for modern businesses.
 </p>
 
 </div>
@@ -840,17 +753,13 @@ performance and reliability.
 
 <div class="service">
 
-<div class="number">
-01
-</div>
-
-<h3>
-Secure Web Development
-</h3>
+<strong>
+01 — Secure Web
+</strong>
 
 <p>
-Modern responsive websites built with clean code,
-security best practices and optimized performance.
+Professional responsive websites built with
+performance and security in mind.
 </p>
 
 </div>
@@ -859,17 +768,13 @@ security best practices and optimized performance.
 
 <div class="service">
 
-<div class="number">
-02
-</div>
-
-<h3>
-Software Engineering
-</h3>
+<strong>
+02 — Software Development
+</strong>
 
 <p>
-Reliable software solutions with scalable architecture
-and maintainable development standards.
+Clean architecture, scalable systems and
+maintainable software solutions.
 </p>
 
 </div>
@@ -878,17 +783,13 @@ and maintainable development standards.
 
 <div class="service">
 
-<div class="number">
-03
-</div>
-
-<h3>
-Technology Consulting
-</h3>
+<strong>
+03 — Technology Solutions
+</strong>
 
 <p>
-Strategic technology solutions designed for
-business growth and digital security.
+Modern technology consulting focused on
+security and reliability.
 </p>
 
 </div>
@@ -903,129 +804,93 @@ business growth and digital security.
 
 
 
+<section id="security" class="security">
 
-
-<section id="security" class="security-section">
 
 <div class="container">
 
 
-<div class="section-title">
+<div class="title">
 
 <h2>
 Security Principles
 </h2>
 
 <p>
-Security is not an extra feature.
-It is part of the foundation.
+Security is part of the engineering process.
 </p>
 
 </div>
 
 
 
-<div class="points">
+<div class="security-list">
 
 
-<div class="point">
+<div class="security-item">
 
-<div class="check">
-✓
-</div>
-
-<div>
-
-<strong>
+<h3>
 Secure By Design
-</strong>
+</h3>
 
-<span>
-Security decisions are considered from the beginning.
-</span>
-
-</div>
-
-</div>
-
-
-
-
-<div class="point">
-
-<div class="check">
-✓
-</div>
-
-<div>
-
-<strong>
-Privacy Focused
-</strong>
-
-<span>
-Respecting data protection and reducing unnecessary exposure.
-</span>
-
-</div>
+<p>
+Security decisions are considered from
+architecture to deployment.
+</p>
 
 </div>
 
 
 
+<div class="security-item">
 
-<div class="point">
+<h3>
+Privacy First
+</h3>
 
-<div class="check">
-✓
-</div>
-
-<div>
-
-<strong>
-Clean Architecture
-</strong>
-
-<span>
-Simple and maintainable systems are easier to protect.
-</span>
-
-</div>
+<p>
+Responsible handling of information and
+minimizing unnecessary data exposure.
+</p>
 
 </div>
 
 
 
+<div class="security-item">
 
-<div class="point">
+<h3>
+Least Privilege
+</h3>
 
-<div class="check">
-✓
-</div>
-
-<div>
-
-<strong>
-Reliable Engineering
-</strong>
-
-<span>
-Stable technology built for long-term operation.
-</span>
+<p>
+Reducing unnecessary permissions and access.
+</p>
 
 </div>
 
-</div>
 
+
+<div class="security-item">
+
+<h3>
+Clean Code
+</h3>
+
+<p>
+Maintainable code creates safer systems.
+</p>
+
+</div>
 
 
 </div>
 
 
 </div>
+
 
 </section>
-
 
 
 
@@ -1036,72 +901,63 @@ Stable technology built for long-term operation.
 <div class="container">
 
 
-<div class="section-title">
+<div class="title">
 
 <h2>
 About VORIX.SECURITY
 </h2>
 
-
 <p>
 A technology brand focused on secure digital
-products and modern engineering.
+engineering.
 </p>
-
 
 </div>
 
 
 
-<div class="about-grid">
+<div class="about">
 
 
-
-<div class="about-card">
+<div>
 
 <h3>
 Reliability
 </h3>
 
 <p>
-Creating dependable systems designed for
-real-world usage.
+Building stable and dependable systems.
 </p>
 
 </div>
 
 
 
-
-<div class="about-card">
+<div>
 
 <h3>
 Privacy
 </h3>
 
 <p>
-Protecting information through responsible
-technology practices.
+Protecting information through responsible design.
 </p>
 
 </div>
 
 
 
-
-<div class="about-card">
+<div>
 
 <h3>
 Quality
 </h3>
 
 <p>
-Delivering professional experiences with
-attention to detail.
+Delivering clean and professional technology.
 </p>
 
 </div>
-
 
 
 </div>
@@ -1115,14 +971,13 @@ attention to detail.
 
 
 
-
-<section id="contact" class="cta">
+<section id="contact">
 
 
 <div class="container">
 
 
-<div class="cta-box">
+<div class="contact-box">
 
 
 <h2>
@@ -1131,21 +986,18 @@ Build Something Secure
 
 
 <p>
-Have a web, software or technology project?
-Start with VORIX.SECURITY.
+Start your next web, software or technology
+project with VORIX.SECURITY.
 </p>
 
 
-<br>
-
-
-<a class="btn btn-primary"
+<a
+class="btn primary"
 href="mailto:contact@vorix.security">
 
 Contact VORIX.SECURITY
 
 </a>
-
 
 
 </div>
@@ -1155,7 +1007,15 @@ Contact VORIX.SECURITY
 
 
 </section>
+
+
+
+</main>
+
+
+
 <footer>
+
 
 <div class="container footer">
 
@@ -1166,63 +1026,15 @@ Contact VORIX.SECURITY
 
 
 <div>
-
-<a href="#services">
-Services
-</a>
-
-&nbsp;&nbsp;
-
-<a href="#security">
-Security
-</a>
-
-&nbsp;&nbsp;
-
-<a href="#contact">
-Contact
-</a>
-
-
+Secure Technology Solutions
 </div>
 
 
 </div>
+
 
 </footer>
 
-
-
-</main>
-
-
-<script>
-
-/* Smooth security-focused interactions */
-
-document.querySelectorAll('a[href^="#"]').forEach(link=>{
-
-link.addEventListener("click",function(e){
-
-const target=document.querySelector(this.getAttribute("href"));
-
-if(target){
-
-e.preventDefault();
-
-target.scrollIntoView({
-
-behavior:"smooth"
-
-});
-
-}
-
-});
-
-});
-
-</script>
 
 
 </body>
