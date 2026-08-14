@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
 
@@ -10,7 +10,7 @@
 
   <meta
     name="description"
-    content="VORIX.SECURITY — Secure web, software and technology services."
+    content="VORIX.SECURITY - خدمات امن وب، نرم‌افزار و فناوری"
   >
 
   <meta
@@ -18,7 +18,7 @@
     content="index, follow"
   >
 
-  <meta name="theme-color" content="#0a0f1c">
+  <meta name="theme-color" content="#070b14">
 
   <meta
     property="og:title"
@@ -27,7 +27,7 @@
 
   <meta
     property="og:description"
-    content="Secure web, software and technology services."
+    content="خدمات امن وب، نرم‌افزار و فناوری"
   >
 
   <meta
@@ -35,7 +35,7 @@
     content="website"
   >
 
-  <title>VORIX.SECURITY — Secure Technology</title>
+  <title>VORIX.SECURITY | فناوری امن</title>
 
   <style>
     :root {
@@ -47,7 +47,6 @@
       --muted: #9ba8bc;
       --accent: #63e6be;
       --accent-2: #60a5fa;
-      --danger: #ff6b6b;
       --max: 1180px;
       --radius: 18px;
     }
@@ -64,27 +63,23 @@
 
     body {
       font-family:
-        Inter,
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
+        Tahoma,
+        Arial,
         sans-serif;
       background:
         radial-gradient(
-          circle at 80% 10%,
+          circle at 20% 10%,
           rgba(96, 165, 250, 0.12),
           transparent 35%
         ),
         radial-gradient(
-          circle at 10% 30%,
+          circle at 90% 30%,
           rgba(99, 230, 190, 0.08),
           transparent 30%
         ),
         var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.9;
     }
 
     a {
@@ -99,25 +94,25 @@
 
     .skip-link {
       position: absolute;
-      left: -9999px;
+      right: -9999px;
       top: 10px;
       z-index: 999;
       background: var(--accent);
       color: #06110d;
       padding: 10px 16px;
       border-radius: 8px;
-      font-weight: 700;
+      font-weight: bold;
     }
 
     .skip-link:focus {
-      left: 10px;
+      right: 10px;
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(7, 11, 20, 0.88);
+      background: rgba(7, 11, 20, 0.9);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
@@ -131,6 +126,7 @@
     }
 
     .logo {
+      direction: ltr;
       font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: 0.08em;
@@ -143,7 +139,7 @@
     nav {
       display: flex;
       align-items: center;
-      gap: 26px;
+      gap: 24px;
     }
 
     nav a {
@@ -158,7 +154,7 @@
     }
 
     .nav-button {
-      padding: 10px 16px;
+      padding: 8px 16px;
       border: 1px solid var(--accent);
       border-radius: 10px;
       color: var(--accent);
@@ -179,13 +175,13 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 12px;
+      padding: 6px 13px;
       border: 1px solid rgba(99,230,190,0.25);
       background: rgba(99,230,190,0.06);
       color: var(--accent);
       border-radius: 999px;
       font-size: 0.82rem;
-      font-weight: 700;
+      font-weight: bold;
       margin-bottom: 22px;
     }
 
@@ -198,9 +194,11 @@
     }
 
     h1 {
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      line-height: 0.95;
-      letter-spacing: -0.06em;
+      direction: ltr;
+      text-align: right;
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
       margin-bottom: 26px;
     }
 
@@ -211,8 +209,8 @@
     .hero-text {
       max-width: 650px;
       color: var(--muted);
-      font-size: 1.18rem;
-      margin-bottom: 34px;
+      font-size: 1.15rem;
+      margin-bottom: 32px;
     }
 
     .actions {
@@ -225,12 +223,10 @@
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      padding: 13px 20px;
+      padding: 12px 20px;
       border-radius: 11px;
-      font-weight: 800;
-      transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
+      font-weight: bold;
+      transition: transform 0.2s ease;
     }
 
     .button:hover {
@@ -249,7 +245,6 @@
     }
 
     .security-card {
-      position: relative;
       padding: 28px;
       border: 1px solid var(--border);
       border-radius: 24px;
@@ -272,7 +267,7 @@
       background: rgba(99,230,190,0.1);
       color: var(--accent);
       font-size: 2rem;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .security-card h2 {
@@ -312,7 +307,7 @@
 
     .section-header h2 {
       font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1.1;
+      line-height: 1.2;
       margin-bottom: 14px;
     }
 
@@ -333,513 +328,4 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       transition:
-        border-color 0.2s ease,
-        transform 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(99,230,190,0.4);
-    }
-
-    .icon {
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: rgba(96,165,250,0.1);
-      color: var(--accent-2);
-      font-size: 1.25rem;
-      margin-bottom: 20px;
-    }
-
-    .card h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-    }
-
-    .card p {
-      color: var(--muted);
-    }
-
-    .principles {
-      background: rgba(13,19,34,0.7);
-      border-block: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .principle-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .principle {
-      display: flex;
-      gap: 16px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: rgba(17,24,39,0.55);
-    }
-
-    .check {
-      flex: 0 0 auto;
-      color: var(--accent);
-      font-weight: 900;
-    }
-
-    .principle strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .principle span {
-      color: var(--muted);
-      font-size: 0.93rem;
-    }
-
-    .cta {
-      text-align: center;
-      padding: 100px 20px;
-    }
-
-    .cta-box {
-      max-width: 850px;
-      margin: auto;
-      padding: 60px 30px;
-      border: 1px solid var(--border);
-      border-radius: 26px;
-      background:
-        radial-gradient(
-          circle at 50% 0%,
-          rgba(99,230,190,0.1),
-          transparent 55%
-        ),
-        var(--card);
-    }
-
-    .cta h2 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1.1;
-      margin-bottom: 18px;
-    }
-
-    .cta p {
-      max-width: 620px;
-      margin: 0 auto 28px;
-      color: var(--muted);
-    }
-
-    footer {
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding: 30px 0;
-    }
-
-    .footer-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .copyright {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 20px;
-    }
-
-    .footer-links a {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 850px) {
-      .hero {
-        padding-top: 80px;
-      }
-
-      .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 45px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .principle-list {
-        grid-template-columns: 1fr;
-      }
-
-      nav {
-        gap: 12px;
-      }
-
-      nav a:not(.nav-button) {
-        display: none;
-      }
-    }
-
-    @media (max-width: 520px) {
-      h1 {
-        font-size: 3.4rem;
-      }
-
-      .nav-button {
-        padding: 8px 12px;
-      }
-
-      .hero {
-        padding-bottom: 70px;
-      }
-
-      section {
-        padding: 65px 0;
-      }
-
-      .footer-content {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition: none !important;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <a class="skip-link" href="#main">
-    Skip to content
-  </a>
-
-  <header>
-    <div class="container nav">
-
-      <a class="logo" href="#top" aria-label="VORIX.SECURITY home">
-        VORIX<span>.SECURITY</span>
-      </a>
-
-      <nav aria-label="Main navigation">
-        <a href="#services">Services</a>
-        <a href="#security">Security</a>
-        <a href="#about">About</a>
-        <a class="nav-button" href="#contact">Contact</a>
-      </nav>
-
-    </div>
-  </header>
-
-  <main id="main">
-
-    <section class="hero" id="top">
-      <div class="container hero-grid">
-
-        <div>
-
-          <div class="eyebrow">
-            <span class="dot"></span>
-            Security-first technology
-          </div>
-
-          <h1>
-            VORIX<span>.</span><br>
-            SECURITY
-          </h1>
-
-          <p class="hero-text">
-            Secure web, software and technology services built
-            with reliability, privacy and security at the core.
-          </p>
-
-          <div class="actions">
-            <a class="button button-primary" href="#services">
-              Explore services
-            </a>
-
-            <a class="button button-secondary" href="#contact">
-              Get in touch
-            </a>
-          </div>
-
-        </div>
-
-        <div class="security-card">
-
-          <div class="shield" aria-hidden="true">
-            ◈
-          </div>
-
-          <h2>
-            Built with security in mind
-          </h2>
-
-          <p>
-            Clean architecture, responsible engineering and
-            security-conscious development for modern digital
-            products.
-          </p>
-
-          <div class="status">
-            <span class="status-dot"></span>
-            Security-first approach
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <section id="services">
-      <div class="container">
-
-        <div class="section-header">
-          <h2>
-            Technology that takes security seriously.
-          </h2>
-
-          <p>
-            Practical digital services designed around
-            performance, maintainability and security.
-          </p>
-        </div>
-
-        <div class="grid">
-
-          <article class="card">
-            <div class="icon" aria-hidden="true">01</div>
-
-            <h3>
-              Secure Web
-            </h3>
-
-            <p>
-              Modern, responsive websites with security,
-              accessibility and performance considered from
-              the beginning.
-            </p>
-          </article>
-
-          <article class="card">
-            <div class="icon" aria-hidden="true">02</div>
-
-            <h3>
-              Software Development
-            </h3>
-
-            <p>
-              Reliable software solutions with clean
-              architecture, maintainable code and
-              security-conscious engineering.
-            </p>
-          </article>
-
-          <article class="card">
-            <div class="icon" aria-hidden="true">03</div>
-
-            <h3>
-              Technology Services
-            </h3>
-
-            <p>
-              Technology solutions focused on reliability,
-              privacy, scalability and long-term maintainability.
-            </p>
-          </article>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <section class="principles" id="security">
-      <div class="container">
-
-        <div class="section-header">
-          <h2>
-            Security principles
-          </h2>
-
-          <p>
-            Security is treated as part of engineering,
-            not something added at the end.
-          </p>
-        </div>
-
-        <div class="principle-list">
-
-          <div class="principle">
-            <div class="check">✓</div>
-            <div>
-              <strong>Least privilege</strong>
-              <span>
-                Minimize unnecessary access and permissions.
-              </span>
-            </div>
-          </div>
-
-          <div class="principle">
-            <div class="check">✓</div>
-            <div>
-              <strong>Secure by design</strong>
-              <span>
-                Consider security during architecture and development.
-              </span>
-            </div>
-          </div>
-
-          <div class="principle">
-            <div class="check">✓</div>
-            <div>
-              <strong>Privacy awareness</strong>
-              <span>
-                Avoid unnecessary collection and exposure of data.
-              </span>
-            </div>
-          </div>
-
-          <div class="principle">
-            <div class="check">✓</div>
-            <div>
-              <strong>Maintainable code</strong>
-              <span>
-                Simple and understandable systems are easier to secure.
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <section id="about">
-      <div class="container">
-
-        <div class="section-header">
-          <h2>
-            VORIX.SECURITY
-          </h2>
-
-          <p>
-            A technology-focused brand centered on secure web,
-            software and digital engineering.
-          </p>
-        </div>
-
-        <div class="grid">
-
-          <article class="card">
-            <div class="icon" aria-hidden="true">A</div>
-
-            <h3>
-              Reliability
-            </h3>
-
-            <p>
-              Build systems that are stable, understandable
-              and designed for long-term use.
-            </p>
-          </article>
-
-          <article class="card">
-            <div class="icon" aria-hidden="true">B</div>
-
-            <h3>
-              Privacy
-            </h3>
-
-            <p>
-              Treat user and system data carefully and
-              avoid unnecessary exposure.
-            </p>
-          </article>
-
-          <article class="card">
-            <div class="icon" aria-hidden="true">C</div>
-
-            <h3>
-              Quality
-            </h3>
-
-            <p>
-              Focus on clean implementation, responsive
-              experiences and responsible engineering.
-            </p>
-          </article>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <section class="cta" id="contact">
-      <div class="container">
-
-        <div class="cta-box">
-
-          <h2>
-            Build something secure.
-          </h2>
-
-          <p>
-            Have a web, software or technology project?
-            Let's start with a security-first approach.
-          </p>
-
-          <div class="actions" style="justify-content:center;">
-
-            <a
-              class="button button-primary"
-              href="mailto:contact@vorix.security"
-            >
-              Contact VORIX.SECURITY
-            </a>
-
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-
-  <footer>
-    <div class="container footer-content">
-
-      <div class="copyright">
-        © 2026 VORIX.SECURITY. All rights reserved.
-      </div>
-
-      <div class="footer-links">
-        <a href="#services">Services</a>
-        <a href="#security">Security</a>
-        <a href="#contact">Contact</a>
-      </div>
-
-    </div>
-  </footer>
-
-</body>
-</html>
+       
