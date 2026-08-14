@@ -18,8 +18,8 @@ margin:auto;
 
 header{
 background:#070b18;
-padding:20px 0;
 border-bottom:1px solid #1e293b;
+padding:20px 0;
 }
 
 .nav{
@@ -40,32 +40,30 @@ color:#00e5ff;
 nav a{
 color:white;
 text-decoration:none;
-margin:0 15px;
+margin:15px;
 }
 
 .hero{
-padding:80px 0;
+padding:100px 0;
 }
 
 .hero-content{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:40px;
 align-items:center;
+gap:40px;
 }
 
 .badge{
 display:inline-block;
 padding:10px 20px;
-border-radius:30px;
-background:#00e5ff;
-color:#000;
-font-weight:bold;
+border:1px solid #00e5ff;
+border-radius:20px;
+color:#00e5ff;
 }
 
 h1{
-font-size:45px;
-line-height:1.5;
+font-size:50px;
 }
 
 p{
@@ -74,51 +72,20 @@ line-height:2;
 color:#cbd5e1;
 }
 
-.buttons{
-margin-top:30px;
-}
-
 .btn{
 display:inline-block;
-padding:15px 30px;
-border-radius:10px;
-text-decoration:none;
-margin-left:10px;
-}
-
-.primary{
 background:#00e5ff;
 color:#000;
-}
-
-.secondary{
-border:1px solid #00e5ff;
-color:white;
-}
-
-.hero-box{
-background:#111827;
-padding:30px;
-border-radius:20px;
-}
-
-.terminal{
-font-size:18px;
-line-height:2;
-}
-
-section{
-padding:60px 0;
-}
-
-h2{
-font-size:35px;
+padding:15px 35px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
 }
 
 .services-grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:20px;
+grid-template-columns:repeat(2,1fr);
+gap:25px;
 }
 
 .service{
@@ -128,72 +95,29 @@ border-radius:15px;
 border:1px solid #1e293b;
 }
 
+.service h3{
+color:#00e5ff;
+}
+
 .contact{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:40px;
-}
-
-input,textarea{
-width:100%;
-padding:15px;
-margin:10px 0;
-background:#111827;
-border:1px solid #334155;
-color:white;
-border-radius:10px;
-}
-
-textarea{
-height:120px;
-}
-
-button{
-border:none;
-cursor:pointer;
+padding:60px 0;
 }
 
 footer{
-text-align:center;
-padding:30px;
 background:#070b18;
+padding:30px;
+text-align:center;
 }
-
 
 @media(max-width:800px){
 
 .hero-content,
-.contact,
 .services-grid{
 grid-template-columns:1fr;
 }
 
 h1{
-font-size:30px;
+font-size:35px;
 }
 
 }
-html{
-scroll-behavior:smooth;
-}
-
-body{
-min-height:100vh;
-}
-
-.hero h1{
-color:#ffffff;
-font-weight:900;
-}
-
-.service h3{
-color:#00e5ff;
-}
-
-form button{
-font-size:18px;
-}
-
-a:hover{
-opacity:.8;
-  }
