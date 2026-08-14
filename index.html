@@ -1,1042 +1,2123 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="description" content="VORIX.SECURITY - Secure web development, software engineering and technology solutions.">
-
-<meta name="robots" content="index, follow">
-
-<meta name="theme-color" content="#070b14">
-
-<title>VORIX.SECURITY | Secure Technology</title>
-
-<style>
-
-:root{
---bg:#070b14;
---card:#111827;
---text:#f5f7fb;
---muted:#9ba8bc;
---green:#63e6be;
---blue:#60a5fa;
---border:#263247;
---max:1180px;
-}
-
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
-
-html{
-scroll-behavior:smooth;
-}
-
-body{
-font-family:
-Inter,
-Segoe UI,
-Arial,
-sans-serif;
-
-background:
-radial-gradient(circle at top right,rgba(96,165,250,.15),transparent 35%),
-radial-gradient(circle at bottom left,rgba(99,230,190,.1),transparent 35%),
-var(--bg);
-
-color:var(--text);
-line-height:1.7;
-}
-
-a{
-color:inherit;
-text-decoration:none;
-}
-
-.container{
-width:min(92%,var(--max));
-margin:auto;
-}
-
-
-/* HEADER */
-
-header{
-
-position:sticky;
-top:0;
-z-index:10;
-
-background:rgba(7,11,20,.85);
-
-backdrop-filter:blur(12px);
-
-border-bottom:1px solid var(--border);
-
-}
-
-.nav{
-
-height:75px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-}
-
-
-.logo{
-
-font-size:1.3rem;
-
-font-weight:900;
-
-letter-spacing:2px;
-
-}
-
-.logo span{
-
-color:var(--green);
-
-}
-
-
-nav{
-
-display:flex;
-
-gap:25px;
-
-}
-
-
-nav a{
-
-color:var(--muted);
-
-}
-
-
-nav a:hover{
-
-color:white;
-
-}
-
-
-/* HERO */
-
-
-.hero{
-
-padding:110px 0;
-
-}
-
-
-.hero-grid{
-
-display:grid;
-
-grid-template-columns:1.2fr .8fr;
-
-gap:60px;
-
-align-items:center;
-
-}
-
-
-.badge{
-
-display:inline-block;
-
-padding:8px 15px;
-
-border-radius:50px;
-
-background:rgba(99,230,190,.1);
-
-color:var(--green);
-
-border:1px solid rgba(99,230,190,.3);
-
-margin-bottom:25px;
-
-}
-
-
-h1{
-
-font-size:clamp(3rem,7vw,6rem);
-
-line-height:.95;
-
-letter-spacing:-3px;
-
-}
-
-
-h1 span{
-
-color:var(--green);
-
-}
-
-
-.hero p{
-
-margin-top:25px;
-
-max-width:650px;
-
-color:var(--muted);
-
-font-size:1.15rem;
-
-}
-
-
-.buttons{
-
-margin-top:35px;
-
-display:flex;
-
-gap:15px;
-
-flex-wrap:wrap;
-
-}
-
-
-.btn{
-
-padding:12px 22px;
-
-border-radius:12px;
-
-font-weight:800;
-
-}
-
-
-.primary{
-
-background:var(--green);
-
-color:#06110d;
-
-}
-
-
-.secondary{
-
-border:1px solid var(--border);
-
-background:var(--card);
-
-}
-
-
-.card{
-
-background:var(--card);
-
-border:1px solid var(--border);
-
-border-radius:22px;
-
-padding:30px;
-
-}
-  /* SECURITY CARD */
-
-.security-card{
-
-display:flex;
-
-flex-direction:column;
-
-gap:18px;
-
-}
-
-
-.shield{
-
-width:70px;
-
-height:70px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-radius:18px;
-
-background:rgba(99,230,190,.12);
-
-color:var(--green);
-
-font-size:32px;
-
-}
-
-
-.security-card h2{
-
-font-size:2rem;
-
-}
-
-
-.security-card p{
-
-color:var(--muted);
-
-}
-
-
-/* SECTIONS */
-
-
-section{
-
-padding:90px 0;
-
-}
-
-
-.title{
-
-max-width:700px;
-
-margin-bottom:40px;
-
-}
-
-
-.title h2{
-
-font-size:2.8rem;
-
-margin-bottom:15px;
-
-}
-
-
-.title p{
-
-color:var(--muted);
-
-}
-
-
-
-/* SERVICES */
-
-
-.services{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:20px;
-
-}
-
-
-.service{
-
-padding:28px;
-
-background:var(--card);
-
-border:1px solid var(--border);
-
-border-radius:18px;
-
-transition:.25s;
-
-}
-
-
-.service:hover{
-
-transform:translateY(-5px);
-
-border-color:var(--green);
-
-}
-
-
-.service strong{
-
-display:block;
-
-font-size:1.3rem;
-
-margin-bottom:12px;
-
-}
-
-
-.service p{
-
-color:var(--muted);
-
-}
-
-
-
-/* SECURITY */
-
-
-.security{
-
-background:rgba(255,255,255,.03);
-
-border-top:1px solid var(--border);
-
-border-bottom:1px solid var(--border);
-
-}
-
-
-.security-list{
-
-display:grid;
-
-grid-template-columns:repeat(2,1fr);
-
-gap:20px;
-
-}
-
-
-.security-item{
-
-padding:22px;
-
-background:var(--card);
-
-border-radius:18px;
-
-border:1px solid var(--border);
-
-}
-
-
-.security-item h3{
-
-margin-bottom:8px;
-
-}
-
-
-.security-item p{
-
-color:var(--muted);
-
-}
-
-
-
-/* ABOUT */
-
-
-.about{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:20px;
-
-}
-
-
-.about div{
-
-background:var(--card);
-
-border:1px solid var(--border);
-
-border-radius:18px;
-
-padding:25px;
-
-}
-
-
-.about p{
-
-color:var(--muted);
-
-}
-
-
-
-/* CONTACT */
-
-
-.contact-box{
-
-text-align:center;
-
-background:
-
-radial-gradient(
-circle,
-rgba(99,230,190,.15),
-transparent 60%
-),
-
-var(--card);
-
-padding:60px 30px;
-
-border-radius:25px;
-
-border:1px solid var(--border);
-
-}
-
-
-.contact-box h2{
-
-font-size:2.5rem;
-
-margin-bottom:15px;
-
-}
-
-
-.contact-box p{
-
-color:var(--muted);
-
-margin-bottom:25px;
-
-}
-
-
-
-/* FOOTER */
-
-
-footer{
-
-border-top:1px solid var(--border);
-
-padding:30px 0;
-
-color:var(--muted);
-
-}
-
-
-.footer{
-
-display:flex;
-
-justify-content:space-between;
-
-}
-
-
-
-/* MOBILE */
-
-
-@media(max-width:850px){
-
-.hero-grid{
-
-grid-template-columns:1fr;
-
-}
-
-
-.services{
-
-grid-template-columns:1fr;
-
-}
-
-
-.security-list{
-
-grid-template-columns:1fr;
-
-}
-
-
-.about{
-
-grid-template-columns:1fr;
-
-}
-
-
-nav a:not(:last-child){
-
-display:none;
-
-}
-
-
-h1{
-
-font-size:3.5rem;
-
-}
-
-}
-
-</style>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>VORIX.SECURITY | مهندسی امن وب، نرم‌افزار و زیرساخت</title>
+
+  <meta name="description" content="VORIX.SECURITY؛ طراحی و توسعه وب، نرم‌افزار و زیرساخت با رویکرد امنیت‌محور، معماری امن، DevSecOps، هاردنینگ، پایش و تست امنیتی.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#080b12">
+  <meta name="author" content="VORIX.SECURITY">
+  <meta name="application-name" content="VORIX.SECURITY">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="canonical" href="https://vorix.security/">
+
+  <meta property="og:locale" content="fa_IR">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VORIX.SECURITY">
+  <meta property="og:title" content="VORIX.SECURITY | مهندسی امن">
+  <meta property="og:description" content="مهندسی امن وب، نرم‌افزار و زیرساخت فناوری.">
+  <meta property="og:url" content="https://vorix.security/">
+  <meta property="og:image" content="https://vorix.security/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="VORIX.SECURITY">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="VORIX.SECURITY | مهندسی امن">
+  <meta name="twitter:description" content="مهندسی امن وب، نرم‌افزار و زیرساخت فناوری.">
+  <meta name="twitter:image" content="https://vorix.security/og-image.png">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23080b12'/%3E%3Cpath d='M50 14 81 27v23c0 19-13 34-31 40-18-6-31-21-31-40V27z' fill='none' stroke='%23ffb454' stroke-width='6'/%3E%3Cpath d='m36 50 9 9 20-20' fill='none' stroke='%23ffb454' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {
+        "@type":"Organization",
+        "@id":"https://vorix.security/#organization",
+        "name":"VORIX.SECURITY",
+        "url":"https://vorix.security/",
+        "email":"contact@vorix.security",
+        "description":"طراحی و توسعه وب، نرم‌افزار و زیرساخت فناوری با رویکرد امنیت‌محور."
+      },
+      {
+        "@type":"WebSite",
+        "@id":"https://vorix.security/#website",
+        "url":"https://vorix.security/",
+        "name":"VORIX.SECURITY",
+        "inLanguage":"fa-IR",
+        "publisher":{
+          "@id":"https://vorix.security/#organization"
+        }
+      },
+      {
+        "@type":"WebPage",
+        "@id":"https://vorix.security/#webpage",
+        "url":"https://vorix.security/",
+        "name":"VORIX.SECURITY | مهندسی امن وب، نرم‌افزار و زیرساخت",
+        "isPartOf":{
+          "@id":"https://vorix.security/#website"
+        },
+        "about":{
+          "@id":"https://vorix.security/#organization"
+        },
+        "inLanguage":"fa-IR"
+      },
+      {
+        "@type":"FAQPage",
+        "mainEntity":[
+          {
+            "@type":"Question",
+            "name":"VORIX.SECURITY چه خدماتی ارائه می‌دهد؟",
+            "acceptedAnswer":{
+              "@type":"Answer",
+              "text":"طراحی و توسعه وب، توسعه نرم‌افزار، زیرساخت، DevSecOps، هاردنینگ و بررسی امنیتی."
+            }
+          },
+          {
+            "@type":"Question",
+            "name":"امنیت در چه مرحله‌ای از پروژه بررسی می‌شود؟",
+            "acceptedAnswer":{
+              "@type":"Answer",
+              "text":"امنیت از مرحله معماری و طراحی در نظر گرفته می‌شود و در طول توسعه و استقرار ادامه پیدا می‌کند."
+            }
+          },
+          {
+            "@type":"Question",
+            "name":"آیا پروژه‌های موجود نیز قابل بررسی هستند؟",
+            "acceptedAnswer":{
+              "@type":"Answer",
+              "text":"بله. پروژه‌های موجود می‌توانند از نظر معماری، پیکربندی، وابستگی‌ها و سطح امنیتی بررسی شوند."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#080b12;
+      --surface:#0d121b;
+      --surface-2:#101722;
+      --card:#111925;
+      --card-hover:#151f2e;
+      --border:#202b3b;
+      --border-light:#2a374b;
+      --text:#f2f5f8;
+      --muted:#8c98aa;
+      --muted-2:#687487;
+      --amber:#ffb454;
+      --amber-dark:#b97b2d;
+      --cyan:#5fd6ff;
+      --green:#63e6be;
+      --red:#ff6b6b;
+      --max:1180px;
+      --radius:18px;
+      --font:"Tahoma","Vazirmatn",Arial,sans-serif;
+      --mono:"Courier New",monospace;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html{
+      scroll-behavior:smooth;
+      scroll-padding-top:90px;
+    }
+
+    body{
+      min-height:100vh;
+      overflow-x:hidden;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 5%,rgba(95,214,255,.08),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(255,180,84,.08),transparent 30%),
+        var(--bg);
+      font-family:var(--font);
+      line-height:1.9;
+    }
+
+    body::selection{
+      background:var(--amber);
+      color:#171006;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    button,
+    input,
+    textarea{
+      font:inherit;
+    }
+
+    button{
+      color:inherit;
+      border:0;
+      background:none;
+      cursor:pointer;
+    }
+
+    img,
+    svg{
+      display:block;
+      max-width:100%;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible{
+      outline:3px solid var(--amber);
+      outline-offset:3px;
+    }
+
+    .container{
+      width:min(92%,var(--max));
+      margin-inline:auto;
+    }
+
+    .skip{
+      position:fixed;
+      top:10px;
+      right:-10000px;
+      z-index:9999;
+      padding:10px 16px;
+      border-radius:9px;
+      background:var(--amber);
+      color:#171006;
+      font-weight:900;
+    }
+
+    .skip:focus{
+      right:10px;
+    }
+
+    .top-line{
+      position:fixed;
+      inset-inline:0;
+      top:0;
+      z-index:1100;
+      height:1px;
+      pointer-events:none;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(95,214,255,.8),
+        transparent
+      );
+      animation:sweep 10s linear infinite;
+    }
+
+    @keyframes sweep{
+      0%{
+        transform:translateY(0);
+        opacity:0;
+      }
+      8%{
+        opacity:1;
+      }
+      92%{
+        opacity:1;
+      }
+      100%{
+        transform:translateY(100vh);
+        opacity:0;
+      }
+    }
+
+    /* HEADER */
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      border-bottom:1px solid rgba(32,43,59,.9);
+      background:rgba(8,11,18,.84);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+    }
+
+    .nav{
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:25px;
+    }
+
+    .logo{
+      direction:ltr;
+      white-space:nowrap;
+      font-family:var(--mono);
+      font-size:1.05rem;
+      font-weight:700;
+      letter-spacing:.04em;
+    }
+
+    .logo span{
+      color:var(--amber);
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:25px;
+    }
+
+    .nav-links a{
+      color:var(--muted);
+      font-size:.9rem;
+      transition:color .2s ease;
+    }
+
+    .nav-links a:hover{
+      color:var(--text);
+    }
+
+    .nav-cta{
+      padding:9px 16px;
+      border:1px solid var(--amber);
+      border-radius:9px;
+      color:var(--amber)!important;
+      font-weight:800;
+    }
+
+    .nav-cta:hover{
+      background:rgba(255,180,84,.08);
+    }
+
+    .nav-toggle{
+      display:none;
+      width:42px;
+      height:42px;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:5px;
+      border:1px solid var(--border);
+      border-radius:9px;
+    }
+
+    .nav-toggle span{
+      width:19px;
+      height:2px;
+      background:var(--text);
+      transition:.25s;
+    }
+
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){
+      transform:translateY(7px) rotate(45deg);
+    }
+
+    .nav-toggle[aria-expanded="true"] span:nth-child(2){
+      opacity:0;
+    }
+
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){
+      transform:translateY(-7px) rotate(-45deg);
+    }
+
+    .mobile-panel{
+      display:none;
+      padding:12px 0 18px;
+      border-top:1px solid var(--border);
+    }
+
+    .mobile-panel.open{
+      display:block;
+    }
+
+    .mobile-panel a{
+      display:block;
+      padding:12px 4px;
+      color:var(--muted);
+      border-bottom:1px solid var(--border);
+    }
+
+    /* HERO */
+
+    .hero{
+      position:relative;
+      padding:110px 0 95px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      align-items:center;
+      gap:65px;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      margin-bottom:23px;
+      padding:7px 13px;
+      border:1px solid rgba(255,180,84,.28);
+      border-radius:999px;
+      background:rgba(255,180,84,.055);
+      color:var(--amber);
+      font-family:var(--mono);
+      font-size:.76rem;
+      font-weight:700;
+    }
+
+    .dot{
+      width:7px;
+      height:7px;
+      flex:none;
+      border-radius:50%;
+      background:var(--amber);
+      box-shadow:0 0 13px var(--amber);
+    }
+
+    h1{
+      margin-bottom:22px;
+      font-size:clamp(2.7rem,6vw,4.7rem);
+      line-height:1.08;
+      letter-spacing:-.04em;
+      font-weight:900;
+    }
+
+    h1 .accent{
+      color:var(--amber);
+    }
+
+    .hero-text{
+      max-width:650px;
+      margin-bottom:30px;
+      color:var(--muted);
+      font-size:1.08rem;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .button{
+      min-height:49px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 21px;
+      border-radius:11px;
+      font-weight:800;
+      transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+    }
+
+    .button:hover{
+      transform:translateY(-2px);
+    }
+
+    .primary{
+      background:var(--amber);
+      color:#171006;
+    }
+
+    .secondary{
+      border:1px solid var(--border-light);
+      background:var(--surface);
+    }
+
+    .secondary:hover{
+      border-color:var(--amber-dark);
+    }
+
+    /* TERMINAL */
+
+    .terminal{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--card);
+      box-shadow:0 35px 100px rgba(0,0,0,.45);
+    }
+
+    .terminal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 17px;
+      border-bottom:1px solid var(--border);
+      background:var(--surface);
+    }
+
+    .terminal-title{
+      direction:ltr;
+      font-family:var(--mono);
+      font-size:.72rem;
+      color:var(--muted);
+    }
+
+    .lights{
+      display:flex;
+      gap:7px;
+    }
+
+    .lights span{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--border-light);
+    }
+
+    .lights span:nth-child(1){
+      background:var(--red);
+    }
+
+    .lights span:nth-child(2){
+      background:var(--amber);
+    }
+
+    .lights span:nth-child(3){
+      background:var(--green);
+    }
+
+    .terminal-body{
+      padding:20px;
+    }
+
+    .terminal-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:15px;
+      padding:11px 0;
+      border-bottom:1px dashed var(--border);
+      font-size:.9rem;
+    }
+
+    .terminal-row:last-child{
+      border-bottom:0;
+    }
+
+    .terminal-key{
+      color:var(--muted);
+    }
+
+    .terminal-value{
+      direction:ltr;
+      white-space:nowrap;
+      font-family:var(--mono);
+      color:var(--cyan);
+      font-weight:700;
+    }
+
+    .terminal-value.ok{
+      color:var(--green);
+    }
+
+    .terminal-value.warn{
+      color:var(--amber);
+    }
+
+    .terminal-scan{
+      position:absolute;
+      inset-inline:0;
+      top:-70px;
+      height:70px;
+      pointer-events:none;
+      background:linear-gradient(
+        180deg,
+        transparent,
+        rgba(95,214,255,.08),
+        transparent
+      );
+      animation:terminalScan 6s ease-in-out infinite;
+    }
+
+    @keyframes terminalScan{
+      0%{top:-70px}
+      50%{top:100%}
+      100%{top:-70px}
+    }
+
+    /* GLOBAL SECTION */
+
+    section{
+      position:relative;
+      padding:88px 0;
+    }
+
+    .section-head{
+      max-width:730px;
+      margin-bottom:42px;
+    }
+
+    .label{
+      display:inline-block;
+      margin-bottom:10px;
+      padding:4px 9px;
+      border:1px solid var(--border);
+      border-radius:6px;
+      color:var(--amber);
+      direction:ltr;
+      font-family:var(--mono);
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.04em;
+    }
+
+    .section-head h2{
+      margin-bottom:11px;
+      font-size:clamp(1.9rem,3.5vw,2.7rem);
+      line-height:1.35;
+      font-weight:900;
+    }
+
+    .section-head p{
+      color:var(--muted);
+    }
+
+    /* CARDS */
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .card{
+      position:relative;
+      padding:28px 25px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:rgba(17,25,37,.78);
+      transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+      border-color:rgba(255,180,84,.36);
+      background:var(--card-hover);
+    }
+
+    .tag{
+      display:inline-block;
+      margin-bottom:15px;
+      padding:3px 8px;
+      border:1px solid var(--border);
+      border-radius:6px;
+      direction:ltr;
+      font-family:var(--mono);
+      font-size:.7rem;
+      color:var(--cyan);
+    }
+
+    .card h3{
+      margin-bottom:8px;
+      font-size:1.12rem;
+      font-weight:800;
+    }
+
+    .card p{
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    /* TRUST */
+
+    .trust{
+      border-block:1px solid var(--border);
+      background:rgba(13,18,27,.72);
+    }
+
+    .trust-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    .trust-item{
+      padding:22px 15px;
+      text-align:center;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(17,25,37,.65);
+    }
+
+    .trust-number{
+      display:block;
+      margin-bottom:5px;
+      direction:ltr;
+      font-family:var(--mono);
+      font-size:1.3rem;
+      color:var(--amber);
+      font-weight:800;
+    }
+
+    .trust-item span:last-child{
+      color:var(--muted);
+      font-size:.82rem;
+    }
+
+    /* SECURITY */
+
+    .security{
+      border-bottom:1px solid var(--border);
+    }
+
+    .checklist{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .check{
+      display:flex;
+      gap:15px;
+      padding:20px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(17,25,37,.55);
+    }
+
+    .check-code{
+      flex:none;
+      width:40px;
+      direction:ltr;
+      font-family:var(--mono);
+      font-size:.68rem;
+      color:var(--muted-2);
+    }
+
+    .check-mark{
+      color:var(--green);
+      font-weight:900;
+    }
+
+    .check h3{
+      margin-bottom:4px;
+      font-size:1rem;
+    }
+
+    .check p{
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    /* PROJECTS */
+
+    .project{
+      overflow:hidden;
+    }
+
+    .project-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+
+    .project-status{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(99,230,190,.22);
+      color:var(--green);
+      font-size:.7rem;
+    }
+
+    .project-status i{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 10px var(--green);
+    }
+
+    .project-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-top:18px;
+    }
+
+    .project-list span{
+      padding:4px 8px;
+      border:1px solid var(--border);
+      border-radius:6px;
+      color:var(--muted-2);
+      font-family:var(--mono);
+      font-size:.68rem;
+      direction:ltr;
+    }
+
+    /* TECHNOLOGY */
+
+    .technology{
+      border-block:1px solid var(--border);
+      background:rgba(13,18,27,.65);
+    }
+
+    .tech-grid{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:12px;
+    }
+
+    .tech{
+      padding:18px 10px;
+      text-align:center;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--surface);
+      color:var(--muted);
+      direction:ltr;
+      font-family:var(--mono);
+      font-size:.76rem;
+      transition:.2s;
+    }
+
+    .tech:hover{
+      color:var(--text);
+      border-color:var(--amber-dark);
+    }
+
+    /* PROCESS */
+
+    .process{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    .process-item{
+      position:relative;
+      padding:24px 20px;
+      border:1px solid var(--border);
+      border-radius:15px;
+      background:var(--card);
+    }
+
+    .process-number{
+      display:block;
+      margin-bottom:12px;
+      direction:ltr;
+      font-family:var(--mono);
+      color:var(--amber);
+      font-weight:800;
+    }
+
+    .process-item h3{
+      margin-bottom:6px;
+      font-size:1rem;
+    }
+
+    .process-item p{
+      color:var(--muted);
+      font-size:.86rem;
+    }
+
+    /* SERVICE STATUS */
+
+    .status-panel{
+      padding:25px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:var(--card);
+    }
+
+    .status-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      margin-bottom:20px;
+    }
+
+    .status-head h3{
+      font-size:1.1rem;
+    }
+
+    .status-live{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      color:var(--green);
+      font-size:.78rem;
+    }
+
+    .status-live i{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 12px var(--green);
+    }
+
+    .status-list{
+      display:grid;
+      gap:9px;
+    }
+
+    .status-row{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      padding:11px 13px;
+      border:1px solid var(--border);
+      border-radius:9px;
+      background:var(--surface);
+      font-size:.84rem;
+    }
+
+    .status-ok{
+      direction:ltr;
+      color:var(--green);
+      font-family:var(--mono);
+      font-size:.72rem;
+    }
+
+    /* FAQ */
+
+    .faq{
+      display:grid;
+      gap:10px;
+      max-width:850px;
+    }
+
+    .faq details{
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:var(--card);
+    }
+
+    .faq summary{
+      padding:18px 20px;
+      cursor:pointer;
+      font-weight:800;
+      list-style:none;
+    }
+
+    .faq summary::-webkit-details-marker{
+      display:none;
+    }
+
+    .faq summary::after{
+      content:"+";
+      float:left;
+      direction:ltr;
+      color:var(--amber);
+      font-family:var(--mono);
+      font-size:1.2rem;
+    }
+
+    .faq details[open] summary::after{
+      content:"−";
+    }
+
+    .faq-answer{
+      padding:0 20px 19px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    /* CONTACT */
+
+    .contact-wrap{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:35px;
+      align-items:start;
+    }
+
+    .contact-box,
+    .form{
+      border:1px solid var(--border);
+      border-radius:20px;
+      background:var(--card);
+    }
+
+    .contact-box{
+      padding:33px;
+      background:
+        radial-gradient(circle at 20% 0,rgba(255,180,84,.09),transparent 55%),
+        var(--card);
+    }
+
+    .contact-box h2{
+      margin-bottom:10px;
+      font-size:clamp(1.8rem,3.5vw,2.4rem);
+      line-height:1.35;
+      font-weight:900;
+    }
+
+    .contact-box p{
+      margin-bottom:25px;
+      color:var(--muted);
+    }
+
+    .direct-line{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:8px;
+      padding-top:20px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    .direct-line a{
+      direction:ltr;
+      color:var(--cyan);
+    }
+
+    .form{
+      display:grid;
+      gap:15px;
+      padding:30px;
+      background:var(--surface);
+    }
+
+    .field{
+      display:grid;
+      gap:6px;
+    }
+
+    .field label{
+      color:var(--muted);
+      font-size:.84rem;
+    }
+
+    .field input,
+    .field textarea{
+      width:100%;
+      padding:12px 13px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      outline:0;
+      background:var(--bg);
+      color:var(--text);
+      font-size:.92rem;
+    }
+
+    .field input:focus,
+    .field textarea:focus{
+      border-color:var(--amber);
+    }
+
+    .field textarea{
+      min-height:125px;
+      resize:vertical;
+    }
+
+    .form-note{
+      color:var(--muted-2);
+      font-size:.76rem;
+    }
+
+    .form-status{
+      display:none;
+      padding:10px 13px;
+      border-radius:9px;
+      font-size:.82rem;
+    }
+
+    .form-status.show{
+      display:block;
+    }
+
+    .form-status.ok{
+      border:1px solid rgba(99,230,190,.25);
+      background:rgba(99,230,190,.08);
+      color:var(--green);
+    }
+
+    /* FOOTER */
+
+    footer{
+      padding:32px 0;
+      border-top:1px solid var(--border);
+    }
+
+    .footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .copyright,
+    .footer a{
+      color:var(--muted);
+      font-size:.8rem;
+    }
+
+    .footer-links{
+      display:flex;
+      gap:20px;
+    }
+
+    .footer a:hover{
+      color:var(--text);
+    }
+
+    /* REVEAL */
+
+    .reveal{
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .7s ease,transform .7s ease;
+    }
+
+    .reveal.visible{
+      opacity:1;
+      transform:none;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:1000px){
+      .hero-grid{
+        grid-template-columns:1fr;
+        gap:45px;
+      }
+
+      .hero-text{
+        max-width:750px;
+      }
+
+      .grid-3{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .trust-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .tech-grid{
+        grid-template-columns:repeat(3,1fr);
+      }
+
+      .process{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .nav-links{
+        display:none;
+      }
+
+      .nav-toggle{
+        display:flex;
+      }
+
+      .grid-3,
+      .checklist,
+      .contact-wrap{
+        grid-template-columns:1fr;
+      }
+
+      .tech-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .hero{
+        padding-top:75px;
+      }
+
+      h1{
+        font-size:3rem;
+      }
+    }
+
+    @media(max-width:520px){
+      section{
+        padding:65px 0;
+      }
+
+      h1{
+        font-size:2.35rem;
+      }
+
+      .hero-text{
+        font-size:.98rem;
+      }
+
+      .actions{
+        flex-direction:column;
+      }
+
+      .button{
+        width:100%;
+      }
+
+      .trust-grid,
+      .process{
+        grid-template-columns:1fr;
+      }
+
+      .tech-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .contact-box,
+      .form{
+        padding:22px;
+      }
+
+      .footer{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      html{
+        scroll-behavior:auto;
+      }
+
+      .top-line,
+      .terminal-scan{
+        display:none;
+      }
+
+      .reveal{
+        opacity:1;
+        transform:none;
+        transition:none;
+      }
+
+      *,
+      *::before,
+      *::after{
+        animation:none!important;
+        transition:none!important;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <div class="top-line" aria-hidden="true"></div>
+
+  <a class="skip" href="#main">رفتن به محتوای اصلی</a>
+
+  <header>
+    <div class="container nav">
+
+      <a class="logo" href="/" aria-label="صفحه اصلی">
+        VORIX<span>.SECURITY</span>
+      </a>
+
+      <nav class="nav-links" aria-label="منوی اصلی">
+        <a href="#services">خدمات</a>
+        <a href="#security">امنیت</a>
+        <a href="#projects">پروژه‌ها</a>
+        <a href="#technology">فناوری</a>
+        <a href="#faq">سؤالات</a>
+        <a class="nav-cta" href="#contact">تماس</a>
+      </nav>
+
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobilePanel"
+        aria-label="باز کردن منو"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+
+    <div class="container">
+      <nav
+        class="mobile-panel"
+        id="mobilePanel"
+        aria-label="منوی موبایل"
+      >
+        <a href="#services">خدمات</a>
+        <a href="#security">امنیت</a>
+        <a href="#projects">پروژه‌ها</a>
+        <a href="#technology">فناوری</a>
+        <a href="#faq">سؤالات متداول</a>
+        <a href="#contact">تماس</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+
+    <section class="hero">
+      <div class="container hero-grid">
+
+        <div class="reveal">
+
+          <div class="eyebrow">
+            <span class="dot" aria-hidden="true"></span>
+            SEC-BY-DESIGN
+          </div>
+
+          <h1>
+            مهندسیِ امن،<br>
+            از خط اول <span class="accent">کد</span>.
+          </h1>
+
+          <p class="hero-text">
+            طراحی و توسعه وب، نرم‌افزار و زیرساخت فناوری با تمرکز هم‌زمان
+            بر امنیت، عملکرد، قابلیت نگهداری و تجربه کاربری.
+            امنیت از مرحله معماری شروع می‌شود، نه بعد از وقوع مشکل.
+          </p>
+
+          <div class="actions">
+            <a class="button primary" href="#services">
+              مشاهده خدمات
+            </a>
+
+            <a class="button secondary" href="#contact">
+              شروع یک پروژه
+            </a>
+          </div>
+
+        </div>
+
+        <aside
+          class="terminal reveal"
+          aria-label="نمایش وضعیت امنیتی"
+        >
+
+          <div class="terminal-scan" aria-hidden="true"></div>
+
+          <div class="terminal-head">
+            <div class="lights" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <div class="terminal-title">
+              VORIX // SECURITY BASELINE
+            </div>
+          </div>
+
+          <div class="terminal-body">
+
+            <div class="terminal-row">
+              <span class="terminal-key">پروتکل انتقال</span>
+              <span class="terminal-value ok">TLS 1.3</span>
+            </div>
+
+            <div class="terminal-row">
+              <span class="terminal-key">رمزنگاری داده</span>
+              <span class="terminal-value ok">AES-256</span>
+            </div>
+
+            <div class="terminal-row">
+              <span class="terminal-key">حداقل سطح دسترسی</span>
+              <span class="terminal-value ok">ENFORCED</span>
+            </div>
+
+            <div class="terminal-row">
+              <span class="terminal-key">بررسی وابستگی</span>
+              <span class="terminal-value warn">WEEKLY</span>
+            </div>
+
+            <div class="terminal-row">
+              <span class="terminal-key">پایش سیستم</span>
+              <span class="terminal-value ok">ACTIVE</span>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- TRUST -->
+
+    <section class="trust">
+      <div class="container">
+
+        <div class="trust-grid reveal">
+
+          <div class="trust-item">
+            <span class="trust-number">01</span>
+            <span>امنیت از طراحی</span>
+          </div>
+
+          <div class="trust-item">
+            <span class="trust-number">02</span>
+            <span>معماری قابل نگهداری</span>
+          </div>
+
+          <div class="trust-item">
+            <span class="trust-number">03</span>
+            <span>حریم خصوصی داده</span>
+          </div>
+
+          <div class="trust-item">
+            <span class="trust-number">04</span>
+            <span>پایش و بهبود مستمر</span>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+
+    <section id="services">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <div class="label">SERVICES</div>
+          <h2>فناوری که امنیت را جدی می‌گیرد.</h2>
+          <p>
+            خدمات دیجیتال کاربردی برای ساخت و نگهداری سیستم‌هایی
+            که امنیت بخشی از معماری آن‌هاست.
+          </p>
+        </div>
+
+        <div class="grid-3">
+
+          <article class="card reveal">
+            <span class="tag">SVC-01</span>
+            <h3>توسعه وب امن</h3>
+            <p>
+              طراحی وب‌سایت و وب‌اپلیکیشن با معماری تمیز،
+              اعتبارسنجی ورودی، مدیریت نشست و اصول امنیتی مدرن.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag">SVC-02</span>
+            <h3>توسعه نرم‌افزار</h3>
+            <p>
+              ساخت نرم‌افزارهای قابل توسعه با مدیریت صحیح اسرار،
+              تفکیک مسئولیت‌ها و توجه به امنیت در چرخه توسعه.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag">SVC-03</span>
+            <h3>زیرساخت و DevSecOps</h3>
+            <p>
+              هاردنینگ، کنترل دسترسی، پشتیبان‌گیری،
+              پایش و وارد کردن کنترل‌های امنیتی به فرایند استقرار.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+
+    <section class="security" id="security">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <div class="label">SECURITY</div>
+          <h2>امنیت به‌عنوان بخشی از مهندسی</h2>
+          <p>
+            هدف، ساخت سیستمی است که از ابتدا با درنظرگرفتن
+            ریسک‌ها طراحی شده باشد.
+          </p>
+        </div>
+
+        <div class="checklist">
+
+          <article class="check reveal">
+            <div class="check-code">
+              REQ-01<br>
+              <span class="check-mark">✓</span>
+            </div>
+
+            <div>
+              <h3>حداقل سطح دسترسی</h3>
+              <p>
+                هر کاربر و سرویس فقط دسترسی موردنیاز خود را دریافت می‌کند.
+              </p>
+            </div>
+          </article>
+
+          <article class="check reveal">
+            <div class="check-code">
+              REQ-02<br>
+              <span class="check-mark">✓</span>
+            </div>
+
+            <div>
+              <h3>امنیت از طراحی</h3>
+              <p>
+                تهدیدها و نقاط حساس از مرحله معماری بررسی می‌شوند.
+              </p>
+            </div>
+          </article>
+
+          <article class="check reveal">
+            <div class="check-code">
+              REQ-03<br>
+              <span class="check-mark">✓</span>
+            </div>
+
+            <div>
+              <h3>حفاظت از داده</h3>
+              <p>
+                داده حساس باید تا حد امکان محدود، محافظت و رمزنگاری شود.
+              </p>
+            </div>
+          </article>
+
+          <article class="check reveal">
+            <div class="check-code">
+              REQ-04<br>
+              <span class="check-mark">✓</span>
+            </div>
+
+            <div>
+              <h3>کد قابل نگهداری</h3>
+              <p>
+                کد ساده، مستند و قابل بازبینی، سطح ریسک نگهداری را کاهش می‌دهد.
+              </p>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+
+    <section id="projects">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <div class="label">PROJECTS</div>
+          <h2>نمونه حوزه‌های قابل اجرا</h2>
+          <p>
+            معماری و پیاده‌سازی را می‌توان متناسب با نیاز واقعی پروژه طراحی کرد.
+          </p>
+        </div>
+
+        <div class="grid-3">
+
+          <article class="card project reveal">
+
+            <div class="project-top">
+              <span class="tag">PROJECT-A</span>
+
+              <span class="project-status">
+                <i></i>
+                آماده توسعه
+              </span>
+            </div>
+
+            <h3>پلتفرم وب سازمانی</h3>
+
+            <p>
+              ساخت پنل‌ها و سامانه‌های تحت وب با احراز هویت،
+              کنترل دسترسی و معماری قابل توسعه.
+            </p>
+
+            <div class="project-list">
+              <span>AUTH</span>
+              <span>RBAC</span>
+              <span>API</span>
+              <span>LOGGING</span>
+            </div>
+
+          </article>
+
+          <article class="card project reveal">
+
+            <div class="project-top">
+              <span class="tag">PROJECT-B</span>
+
+              <span class="project-status">
+                <i></i>
+                آماده توسعه
+              </span>
+            </div>
+
+            <h3>زیرساخت امن</h3>
+
+            <p>
+              طراحی ساختار استقرار، مدیریت دسترسی،
+              پشتیبان‌گیری و کنترل‌های امنیتی زیرساخت.
+            </p>
+
+            <div class="project-list">
+              <span>LINUX</span>
+              <span>DOCKER</span>
+              <span>CI/CD</span>
+              <span>MONITORING</span>
+            </div>
+
+          </article>
+
+          <article class="card project reveal">
+
+            <div class="project-top">
+              <span class="tag">PROJECT-C</span>
+
+              <span class="project-status">
+                <i></i>
+                آماده توسعه
+              </span>
+            </div>
+
+            <h3>ارزیابی و بهبود امنیت</h3>
+
+            <p>
+              بررسی معماری و پیکربندی موجود و شناسایی نقاطی
+              که نیاز به سخت‌سازی یا اصلاح دارند.
+            </p>
+
+            <div class="project-list">
+              <span>AUDIT</span>
+              <span>HARDENING</span>
+              <span>REVIEW</span>
+              <span>RISK</span>
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TECHNOLOGY -->
+
+    <section class="technology" id="technology">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <div class="label">TECH STACK</div>
+          <h2>فناوری، ابزار است؛ امنیت، رویکرد.</h2>
+          <p>
+            انتخاب فناوری بر اساس نیاز پروژه، قابلیت نگهداری
+            و الزامات امنیتی انجام می‌شود.
+          </p>
+        </div>
+
+        <div class="tech-grid reveal">
+
+          <div class="tech">HTML5</div>
+          <div class="tech">CSS3</div>
+          <div class="tech">JavaScript</div>
+          <div class="tech">Node.js</div>
+          <div class="tech">Python</div>
+          <div class="tech">Linux</div>
+          <div class="tech">Docker</div>
+          <div class="tech">Git</div>
+          <div class="tech">CI/CD</div>
+          <div class="tech">REST API</div>
+          <div class="tech">SQL</div>
+          <div class="tech">TLS</div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+
+    <section>
+      <div class="container">
+
+        <div class="section-head reveal">
+          <div class="label">PROCESS</div>
+          <h2>فرآیند اجرای پروژه</h2>
+          <p>
+            مسیر پروژه از شناخت نیاز تا استقرار و بهبود مستمر.
+          </p>
+        </div>
+
+        <div class="process">
+
+          <article class="process-item reveal">
+            <span class="process-number">01</span>
+            <h3>تحلیل</h3>
+            <p>
+              شناخت هدف، محدودیت‌ها، داده‌ها و نیازمندی‌های پروژه.
+            </p>
+          </article>
+
+          <article class="process-item reveal">
+            <span class="process-number">02</span>
+            <h3>معماری</h3>
+            <p>
+              طراحی ساختار سیستم با توجه به عملکرد و ریسک‌های امنیتی.
+            </p>
+          </article>
+
+          <article class="process-item reveal">
+            <span class="process-number">03</span>
+            <h3>توسعه</h3>
+            <p>
+              پیاده‌سازی مرحله‌ای، تست و بازبینی بخش‌های حساس.
+            </p>
+          </article>
+
+          <article class="process-item reveal">
+            <span class="process-number">04</span>
+            <h3>استقرار</h3>
+            <p>
+              آماده‌سازی محیط، پایش و برنامه‌ریزی برای نگهداری مستمر.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STATUS -->
+
+    <section>
+      <div class="container">
+
+        <div class="status-panel reveal">
+
+          <div class="status-head">
+            <h3>وضعیت سرویس‌های نمونه</h3>
+
+            <div class="status-live">
+              <i></i>
+              ALL SYSTEMS OPERATIONAL
+            </div>
+          </div>
+
+          <div class="status-list">
+
+            <div class="status-row">
+              <span>وب‌سایت</span>
+              <span class="status-ok">OPERATIONAL</span>
+            </div>
+
+            <div class="status-row">
+              <span>API</span>
+              <span class="status-ok">OPERATIONAL</span>
+            </div>
+
+            <div class="status-row">
+              <span>مانیتورینگ</span>
+              <span class="status-ok">ACTIVE</span>
+            </div>
+
+            <div class="status-row">
+              <span>پشتیبان‌گیری</span>
+              <span class="status-ok">ACTIVE</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FAQ -->
+
+    <section id="faq">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <div class="label">FAQ</div>
+          <h2>سؤالات متداول</h2>
+          <p>
+            پاسخ کوتاه به چند سؤال رایج درباره خدمات و رویکرد VORIX.SECURITY.
+          </p>
+        </div>
+
+        <div class="faq">
+
+          <details class="reveal">
+            <summary>
+              VORIX.SECURITY چه خدماتی ارائه می‌دهد؟
+            </summary>
+
+            <div class="faq-answer">
+              طراحی و توسعه وب، توسعه نرم‌افزار، زیرساخت،
+              DevSecOps، هاردنینگ و بررسی امنیتی.
+            </div>
+          </details>
+
+          <details class="reveal">
+            <summary>
+              امنیت از چه مرحله‌ای وارد پروژه می‌شود؟
+            </summary>
+
+            <div class="faq-answer">
+              امنیت از مرحله تحلیل و معماری در نظر گرفته می‌شود
+              و در توسعه، تست و استقرار ادامه پیدا می‌کند.
+            </div>
+          </details>
+
+          <details class="reveal">
+            <summary>
+              آیا پروژه موجود هم قابل بررسی است؟
+            </summary>
+
+            <div class="faq-answer">
+              بله. پروژه موجود می‌تواند از نظر معماری،
+              پیکربندی، وابستگی‌ها و کنترل‌های امنیتی بررسی شود.
+            </div>
+          </details>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+
+    <section id="about">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <div class="label">ABOUT</div>
+          <h2>VORIX.SECURITY</h2>
+          <p>
+            تمرکز بر مهندسی دیجیتال، توسعه نرم‌افزار و ساخت سیستم‌هایی
+            که از ابتدا با نگاه امنیتی طراحی شده‌اند.
+          </p>
+        </div>
+
+        <div class="grid-3">
+
+          <article class="card reveal">
+            <span class="tag">IDX-A</span>
+            <h3>قابلیت اطمینان</h3>
+            <p>
+              طراحی سیستم‌های پایدار، قابل فهم و مناسب برای نگهداری بلندمدت.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag">IDX-B</span>
+            <h3>حریم خصوصی</h3>
+            <p>
+              کاهش جمع‌آوری غیرضروری داده و حفاظت مسئولانه از اطلاعات حساس.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag">IDX-C</span>
+            <h3>کیفیت اجرا</h3>
+            <p>
+              کدنویسی تمیز، تجربه کاربری حرفه‌ای و مستندسازی روشن.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+
+    <section id="contact">
+      <div class="container contact-wrap">
+
+        <div class="contact-box reveal">
+
+          <div class="label">CONTACT</div>
+
+          <h2>
+            یک پروژه امن بسازیم.
+          </h2>
+
+          <p>
+            برای پروژه‌های وب، نرم‌افزار یا زیرساخت فناوری،
+            مشخصات پروژه را ارسال کنید تا بتوانیم درباره
+            نیازمندی‌ها و مسیر اجرا صحبت کنیم.
+          </p>
+
+          <div class="direct-line">
+            <span>ایمیل مستقیم:</span>
+            <a href="mailto:contact@vorix.security">
+              contact@vorix.security
+            </a>
+          </div>
+
+        </div>
+
+        <form
+          class="form reveal"
+          id="contactForm"
+          novalidate
+        >
+
+          <div class="field">
+            <label for="name">نام</label>
+
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              minlength="2"
+              maxlength="80"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="email">ایمیل</label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="160"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="message">توضیح پروژه</label>
+
+            <textarea
+              id="message"
+              name="message"
+              minlength="10"
+              maxlength="3000"
+              required
+            ></textarea>
+          </div>
+
+          <button
+            class="button primary"
+            type="submit"
+          >
+            ارسال درخواست
+          </button>
+
+          <p class="form-note">
+            در نسخه فعلی، ارسال فرم از طریق برنامه ایمیل دستگاه انجام می‌شود.
+          </p>
+
+          <div
+            class="form-status"
+            id="formStatus"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+
+    <div class="container footer">
+
+      <div class="copyright">
+        © ۲۰۲۶ VORIX.SECURITY — تمامی حقوق محفوظ است.
+      </div>
+
+      <nav class="footer-links" aria-label="لینک‌های پایین صفحه">
+        <a href="#services">خدمات</a>
+        <a href="#security">امنیت</a>
+        <a href="#projects">پروژه‌ها</a>
+        <a href="#contact">تماس</a>
+      </nav>
 
-<header>
+    </div>
 
-<div class="container nav">
+  </footer>
 
+  <script>
+    (function () {
 
-<div class="logo">
-VORIX<span>.SECURITY</span>
-</div>
+      "use strict";
 
+      /* Mobile navigation */
 
-<nav>
+      var navToggle = document.getElementById("navToggle");
+      var mobilePanel = document.getElementById("mobilePanel");
 
-<a href="#services">
-Services
-</a>
+      if (navToggle && mobilePanel) {
 
-<a href="#security">
-Security
-</a>
+        navToggle.addEventListener("click", function () {
 
-<a href="#about">
-About
-</a>
+          var isOpen = mobilePanel.classList.toggle("open");
 
-<a href="#contact">
-Contact
-</a>
+          navToggle.setAttribute(
+            "aria-expanded",
+            isOpen ? "true" : "false"
+          );
 
+        });
 
-</nav>
+        mobilePanel.querySelectorAll("a").forEach(function (link) {
 
+          link.addEventListener("click", function () {
 
-</div>
+            mobilePanel.classList.remove("open");
 
-</header>
+            navToggle.setAttribute(
+              "aria-expanded",
+              "false"
+            );
 
+          });
 
-<main>
+        });
 
+      }
 
-<section class="hero">
 
+      /* Reveal animation */
 
-<div class="container hero-grid">
+      var revealItems = document.querySelectorAll(".reveal");
 
+      if ("IntersectionObserver" in window) {
 
-<div>
+        var observer = new IntersectionObserver(
+          function (entries, obs) {
 
+            entries.forEach(function (entry) {
 
-<div class="badge">
-Security First Technology
-</div>
+              if (entry.isIntersecting) {
 
+                entry.target.classList.add("visible");
 
-<h1>
+                obs.unobserve(entry.target);
 
-VORIX<span>.</span><br>
-SECURITY
+              }
 
-</h1>
+            });
 
+          },
+          {
+            threshold:0.08,
+            rootMargin:"0px 0px -40px 0px"
+          }
+        );
 
-<p>
-Secure web, software and technology solutions
-built with reliability, privacy and security at the core.
-</p>
+        revealItems.forEach(function (item) {
+          observer.observe(item);
+        });
 
+      } else {
 
-<div class="buttons">
+        revealItems.forEach(function (item) {
+          item.classList.add("visible");
+        });
 
-<a class="btn primary" href="#services">
-Explore Services
-</a>
+      }
 
 
-<a class="btn secondary" href="#contact">
-Contact
-</a>
+      /* Contact form */
 
+      var form = document.getElementById("contactForm");
+      var status = document.getElementById("formStatus");
 
-</div>
+      if (form && status) {
 
+        form.addEventListener("submit", function (event) {
 
-</div>
+          event.preventDefault();
 
+          var name = form.elements.name.value.trim();
+          var email = form.elements.email.value.trim();
+          var message = form.elements.message.value.trim();
 
+          if (name.length < 2) {
 
-<div class="card security-card">
+            status.textContent = "لطفاً نام معتبر وارد کنید.";
+            status.className = "form-status show ok";
 
+            form.elements.name.focus();
 
-<div class="shield">
-🛡
-</div>
+            return;
+          }
 
+          if (!email || !form.elements.email.checkValidity()) {
 
-<h2>
-Built Secure
-</h2>
+            status.textContent = "لطفاً یک ایمیل معتبر وارد کنید.";
+            status.className = "form-status show ok";
 
+            form.elements.email.focus();
 
-<p>
-Modern engineering with security-focused architecture
-and responsible development practices.
-</p>
+            return;
+          }
 
+          if (message.length < 10) {
 
-</div>
+            status.textContent =
+              "لطفاً توضیح بیشتری درباره پروژه وارد کنید.";
 
+            status.className = "form-status show ok";
 
-</div>
+            form.elements.message.focus();
 
+            return;
+          }
 
-</section>
-<section id="services">
+          var subject = encodeURIComponent(
+            "درخواست پروژه از " + name
+          );
 
-<div class="container">
+          var body = encodeURIComponent(
+            "نام: " + name +
+            "\nایمیل: " + email +
+            "\n\nتوضیح پروژه:\n" + message
+          );
 
+          status.textContent =
+            "برنامه ایمیل شما در حال باز شدن است...";
 
-<div class="title">
+          status.className = "form-status show ok";
 
-<h2>
-Technology Services
-</h2>
+          window.location.href =
+            "mailto:contact@vorix.security" +
+            "?subject=" + subject +
+            "&body=" + body;
 
-<p>
-Secure and reliable digital solutions designed
-for modern businesses.
-</p>
+        });
 
-</div>
+      }
 
-
-
-<div class="services">
-
-
-<div class="service">
-
-<strong>
-01 — Secure Web
-</strong>
-
-<p>
-Professional responsive websites built with
-performance and security in mind.
-</p>
-
-</div>
-
-
-
-<div class="service">
-
-<strong>
-02 — Software Development
-</strong>
-
-<p>
-Clean architecture, scalable systems and
-maintainable software solutions.
-</p>
-
-</div>
-
-
-
-<div class="service">
-
-<strong>
-03 — Technology Solutions
-</strong>
-
-<p>
-Modern technology consulting focused on
-security and reliability.
-</p>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-</section>
-
-
-
-<section id="security" class="security">
-
-
-<div class="container">
-
-
-<div class="title">
-
-<h2>
-Security Principles
-</h2>
-
-<p>
-Security is part of the engineering process.
-</p>
-
-</div>
-
-
-
-<div class="security-list">
-
-
-<div class="security-item">
-
-<h3>
-Secure By Design
-</h3>
-
-<p>
-Security decisions are considered from
-architecture to deployment.
-</p>
-
-</div>
-
-
-
-<div class="security-item">
-
-<h3>
-Privacy First
-</h3>
-
-<p>
-Responsible handling of information and
-minimizing unnecessary data exposure.
-</p>
-
-</div>
-
-
-
-<div class="security-item">
-
-<h3>
-Least Privilege
-</h3>
-
-<p>
-Reducing unnecessary permissions and access.
-</p>
-
-</div>
-
-
-
-<div class="security-item">
-
-<h3>
-Clean Code
-</h3>
-
-<p>
-Maintainable code creates safer systems.
-</p>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-
-<section id="about">
-
-
-<div class="container">
-
-
-<div class="title">
-
-<h2>
-About VORIX.SECURITY
-</h2>
-
-<p>
-A technology brand focused on secure digital
-engineering.
-</p>
-
-</div>
-
-
-
-<div class="about">
-
-
-<div>
-
-<h3>
-Reliability
-</h3>
-
-<p>
-Building stable and dependable systems.
-</p>
-
-</div>
-
-
-
-<div>
-
-<h3>
-Privacy
-</h3>
-
-<p>
-Protecting information through responsible design.
-</p>
-
-</div>
-
-
-
-<div>
-
-<h3>
-Quality
-</h3>
-
-<p>
-Delivering clean and professional technology.
-</p>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-
-<section id="contact">
-
-
-<div class="container">
-
-
-<div class="contact-box">
-
-
-<h2>
-Build Something Secure
-</h2>
-
-
-<p>
-Start your next web, software or technology
-project with VORIX.SECURITY.
-</p>
-
-
-<a
-class="btn primary"
-href="mailto:contact@vorix.security">
-
-Contact VORIX.SECURITY
-
-</a>
-
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-</main>
-
-
-
-<footer>
-
-
-<div class="container footer">
-
-
-<div>
-© 2026 VORIX.SECURITY
-</div>
-
-
-<div>
-Secure Technology Solutions
-</div>
-
-
-</div>
-
-
-</footer>
-
-
+    })();
+  </script>
 
 </body>
-
 </html>
