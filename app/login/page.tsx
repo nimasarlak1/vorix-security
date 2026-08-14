@@ -10,15 +10,7 @@ export default function LoginPage() {
   const handleLogin = () => {
     if (!email || !password) {
       setMessage("لطفا ایمیل و رمز عبور را وارد کنید");
-     function handleLogin() {
-  if (!email || !password) {
-    setMessage("لطفا ایمیل و رمز عبور را وارد کنید");
-    return;
-  }
-
-  setMessage("ورود انجام شد");
-}
-      return
+      return;
     }
 
     setMessage("ورود انجام شد");
