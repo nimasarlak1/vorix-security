@@ -287,3 +287,7 @@ footer{
     display: block;
     margin: 20px auto;
 }
+.logo {
+    width: 120px !important;
+    height: auto !important;
+}
