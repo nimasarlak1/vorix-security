@@ -59,3 +59,48 @@ section {
   transform: translateY(-3px);
   box-shadow:0 0 30px #00bfff;
 }
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 18px;
+  line-height: 2;
+}
+
+.hero-buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 14px 30px;
+  border-radius: 50px;
+  text-decoration: none;
+}
+
+.hero-logo {
+  margin-top: 40px;
+}
