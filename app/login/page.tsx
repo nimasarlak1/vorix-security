@@ -20,7 +20,7 @@ export default function ورودPage() {
     <main className="min-h-screen flex items-center justify-center">
       <div className="p-8 border rounded-lg">
         <h1 className="text-2xl font-bold mb-4">
-          Login
+          vorix test 123
         </h1>
 
         <input
