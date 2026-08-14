@@ -9,7 +9,7 @@ export default function LoginPage() {
 
   function handleLogin() {
     if (!email || !password) {
-      setMessage("لطفا ایمیل و رمز عبور را وارد کنید");
+      setMessage("لطفاً ایمیل و رمز عبور را وارد کنید");
       return;
     }
 
@@ -18,18 +18,18 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <div>
-        <h1 className="text-3xl mb-5">ورود</h1>
+      <div className="w-full max-w-md p-6">
+        <h1 className="text-3xl mb-6">ورود</h1>
 
         <input
-          className="border p-2 m-1"
+          className="border p-2 w-full mb-3"
           placeholder="ایمیل"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          className="border p-2 m-1"
+          className="border p-2 w-full mb-3"
           placeholder="رمز عبور"
           type="password"
           value={password}
@@ -37,13 +37,17 @@ export default function LoginPage() {
         />
 
         <button
-          className="border p-2 m-1"
+          className="border px-4 py-2"
           onClick={handleLogin}
         >
           ورود
         </button>
 
-        <p>{message}</p>
+        {message && (
+          <p className="mt-4">
+            {message}
+          </p>
+        )}
       </div>
     </main>
   );
