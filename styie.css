@@ -276,13 +276,13 @@ footer{
 
 }
 .logo {
-    width: 120px;
+    width: 120 !important;
     height: auto;
     display: block;
     margin: 0 auto 20px;
 }
 .logo {
-    width: 120px;
+    width: 120 !important;
     height: auto;
     display: block;
     margin: 20px auto;
