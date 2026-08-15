@@ -1,45 +1,45 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-100 py-20 px-6" dir="rtl">
-      <div className="max-w-4xl mx-auto space-y-12">
-        {/* Header Section */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight text-cyan-400">درباره Vorix Security</h1>
-          <p className="text-neutral-400 text-lg">
-            پیشرو در امنیت دیجیتال، هوش مصنوعی و راهکارهای پیشرفته سایبری
+    <main className="min-h-screen bg-neutral-950 text-neutral-100 p-6 md:p-12" dir="rtl">
+      <div className="max-w-4xl mx-auto space-y-10">
+        
+        <div className="text-center space-y-3">
+          <div className="inline-block bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-4 py-1.5 rounded-full">
+            درباره VORIX.SECURITY
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black text-white">پیشرو در امنیت دیجیتال و خدمات مهندسی</h1>
+          <p className="text-neutral-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+            مجموعه تخصصی VORIX با تمرکز بر امنیت شبکه، بازیابی پیشرفته اطلاعات، سیستم‌های نظارتی و راهکارهای هوش مصنوعی فعالیت می‌کند.
           </p>
         </div>
 
-        {/* Content Section */}
-        <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-8 shadow-xl space-y-6">
-          <h2 className="text-2xl font-semibold text-neutral-200">ما چه کسانی هستیم؟</h2>
-          <p className="text-neutral-300 leading-relaxed">
-            برند <span className="text-cyan-400 font-semibold">VORIX.SECURITY</span> با بهره‌گیری از متخصصان مجرب در حوزه امنیت سایبری، توسعه نرم‌افزار، هوش مصنوعی و زیرساخت‌های شبکه، به کسب‌وکارها و افراد کمک می‌کند تا دارایی‌های دیجیتال خود را در برابر تهدیدات پیچیده محافظت کنند.
+        <div className="bg-neutral-900/40 border border-neutral-800/80 p-8 rounded-3xl space-y-6 shadow-xl">
+          <h2 className="text-xl font-bold text-white border-b border-neutral-800 pb-4">ماموریت و حوزه فعالیت ما</h2>
+          <p className="text-sm text-neutral-300 leading-relaxed">
+            ما در <span className="text-cyan-400 font-semibold">VORIX.SECURITY</span> با بهره‌گیری از به‌روزترین متدها و تخصص فنی، به کسب‌وکارها و اشخاص کمک می‌کنیم تا دارایی‌های دیجیتال خود را ایمن نگه دارند. فعالیت‌های اصلی ما شامل ارزیابی امنیت فایل‌ها و شبکه‌ها، ریکاوری تخصصی پیج‌های اینستاگرام و تجهیزات دیجیتال، و نصب و بهینه‌سازی سیستم‌های مداربسته است.
           </p>
-          <p className="text-neutral-300 leading-relaxed">
-            تمرکز اصلی ما روی ارائه راهکارهای نوین، امنیت حساب‌ها و شبکه‌های اجتماعی، بازیابی پیشرفته اطلاعات، و نصب و بهینه‌سازی سیستم‌های نظارتی با بالاترین استانداردهای جهانی است.
-          </p>
+          <div className="grid sm:grid-cols-2 gap-4 pt-2">
+            <div className="bg-neutral-950/60 border border-neutral-800/60 p-4 rounded-2xl space-y-1">
+              <div className="font-bold text-white text-sm">موقعیت فعالیت</div>
+              <div className="text-xs text-neutral-400">استان لرستان و پشتیبانی آنلاین سراسری</div>
+            </div>
+            <div className="bg-neutral-950/60 border border-neutral-800/60 p-4 rounded-2xl space-y-1">
+              <div className="font-bold text-white text-sm">تخصص اصلی</div>
+              <div className="text-xs text-neutral-400">امنیت سایبری، ریکاوری و نظارت تصویری</div>
+            </div>
+          </div>
         </div>
 
-        {/* Mission & Vision Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-3">
-            <h3 className="text-xl font-semibold text-cyan-400">ماموریت ما</h3>
-            <p className="text-neutral-300 text-sm leading-relaxed">
-              تضمین امنیت فضای دیجیتال مشتریان با ارائه سرویس‌های دقیق، سریع و قابل اعتماد، و ارتقای سطح حفاظتی در دنیای مدرن فناوری.
-            </p>
-          </div>
-          <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-3">
-            <h3 className="text-xl font-semibold text-cyan-400">چشم‌انداز ما</h3>
-            <p className="text-neutral-300 text-sm leading-relaxed">
-              تبدیل شدن به معتبرترین مرجع ارائه‌دهنده خدمات تخصصی امنیت دیجیتال و هوش مصنوعی با تکیه بر استانداردهای پیشرفته فنی.
-            </p>
-          </div>
+        <div className="text-center pt-4">
+          <Link href="/" className="text-xs text-cyan-400 hover:underline">
+            ← بازگشت به صفحه اصلی
+          </Link>
         </div>
+
       </div>
     </main>
   );
 }
-
