@@ -1,11 +1,10 @@
-// @ts-nocheck
-import { NextResponse }/from 'next/server';
+import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const db = process.env.DB;
+    const db = process.env.DB as any;
 
     if (!db) {
       return NextResponse.json(
@@ -14,7 +13,7 @@ export async function GET() {
       );
     }
 
-    // خواندن لیست سفارش‌ها از دیتابیس D1
+    // خواندن لیست سفارش‌ها از دیتابیس D1 با کست کردن نوع داده
     const { results } = await db.prepare(
       'SELECT * FROM orders ORDER BY id DESC'
     ).all();
