@@ -1,4 +1,5 @@
-'client use'; // اگر از Next.js App Router استفاده می‌کنید، برای کدهای تعاملی 'use client' بالای فایل قرار می‌گیرد
+'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 
@@ -40,7 +41,6 @@ export default function OrderPage() {
     <main className="min-h-screen bg-neutral-950 text-neutral-100 p-6 md:p-12" dir="rtl">
       <div className="max-w-2xl mx-auto space-y-8">
         
-        {/* هدر صفحه */}
         <div className="text-center space-y-3">
           <div className="inline-block bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-4 py-1.5 rounded-full">
             ثبت سفارش آنلاین VORIX.SECURITY
@@ -51,7 +51,6 @@ export default function OrderPage() {
           </p>
         </div>
 
-        {/* فرم ثبت سفارش */}
         <form onSubmit={handleSubmit} className="bg-neutral-900/40 border border-neutral-800/80 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
           
           {status.message && (
@@ -116,7 +115,7 @@ export default function OrderPage() {
             disabled={status.loading}
             className="w-full bg-cyan-500 hover:bg-cyan-400 text-neutral-950 font-bold py-3.5 rounded-xl text-xs transition shadow-lg shadow-cyan-500/20 disabled:opacity-50"
           >
-            {status.message && status.loading ? 'در حال ثبت...' : 'ثبت نهایی و ارسال سفارش'}
+            {status.loading ? 'در حال ثبت...' : 'ثبت نهایی و ارسال سفارش'}
           </button>
         </form>
 
