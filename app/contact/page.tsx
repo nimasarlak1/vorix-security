@@ -13,20 +13,18 @@ export default function ContactPage() {
           </div>
           <h1 className="text-3xl md:text-5xl font-black text-white">راه‌های ارتباطی و پشتیبانی</h1>
           <p className="text-neutral-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            برای دریافت مشاوره، ثبت سفارش یا پشتیبانی سرویس‌ها از راه‌های زیر با ما در ارتباط باشید.
+            برای دریافت مشاوره، ثبت سفارش یا پیگیری خدمات از راه‌های زیر با ما در ارتباط باشید.
           </p>
         </div>
 
-        {/* کارت‌های اطلاعات تماس */}
+        {/* کارت‌های اطلاعات تماس (شماره تلفن و موقعیت) */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-neutral-900/40 border border-neutral-800/80 p-8 rounded-3xl space-y-4 shadow-xl">
             <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl font-bold">
               📞
             </div>
             <h2 className="text-lg font-bold text-white">شماره تماس مستقیم</h2>
-            <p className="text-xs text-neutral-400 leading-relaxed">
-              پشتیبانی و هماهنگی خدمات فنی و امنیتی:
-            </p>
+            <p className="text-xs text-neutral-400 leading-relaxed">پشتیبانی و هماهنگی خدمات فنی و امنیتی:</p>
             <div className="text-cyan-400 font-mono text-sm font-bold" dir="ltr">
               09357781529
             </div>
@@ -37,31 +35,26 @@ export default function ContactPage() {
               📍
             </div>
             <h2 className="text-lg font-bold text-white">موقعیت دفتر مرکزی</h2>
-            <p className="text-xs text-neutral-400 leading-relaxed">
-              ارائه خدمات حضوری در استان لرستان و پشتیبانی آنلاین برای سراسر کشور.
-            </p>
-            <div className="text-white text-xs font-medium">
-              ایران، لرستان
-            </div>
+            <p className="text-xs text-neutral-400 leading-relaxed">ارائه خدمات حضوری در استان لرستان و پشتیبانی آنلاین سراسری.</p>
+            <div className="text-white text-xs font-medium">ایران، لرستان</div>
           </div>
         </div>
 
-        {/* شبکه‌های اجتماعی و آیدی‌ها */}
+        {/* بخش اینستاگرام */}
         <div className="bg-neutral-900/40 border border-neutral-800/80 p-8 rounded-3xl space-y-6 shadow-xl text-center">
-          <h2 className="text-lg font-bold text-white">ارتباط سریع در شبکه‌های اجتماعی</h2>
+          <h2 className="text-lg font-bold text-white">صفحه رسمی اینستاگرام</h2>
           <p className="text-xs text-neutral-400">
-            می‌توانید برای پیگیری سریع‌تر یا ارسال مستندات از طریق آیدی زیر در ارتباط باشید:
+            برای مشاهده نمونه کارها و ارتباط سریع‌تر، پیج ما را دنبال کنید:
           </p>
-          <div className="inline-block bg-neutral-950/80 border border-neutral-800 px-6 py-3 rounded-2xl text-cyan-400 font-mono text-sm font-bold" dir="ltr">
-            ID: nimaslk0
-          </div>
           <div className="pt-2">
-            <Link 
-              href="/order" 
-              className="inline-block bg-cyan-500 hover:bg-cyan-400 text-neutral-950 font-bold px-6 py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-500/20"
+            <a 
+              href="https://instagram.com/vorix.security" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block bg-neutral-800 hover:bg-neutral-700 text-cyan-400 font-mono font-bold px-8 py-3 rounded-xl text-xs transition border border-neutral-700"
             >
-              ثبت سفارش آنلاین از طریق فرم
-            </Link>
+              @vorix.security
+            </a>
           </div>
         </div>
 
