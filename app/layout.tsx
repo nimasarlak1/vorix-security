@@ -1,9 +1,9 @@
 import './globals.css';
-import Navbar from './components/Navbar';
+import Navbar from '@/styles/components/Navbar'; // یا مسیر صحیح پوشه کامپوننت‌ها
 
 export const metadata = {
-  title: 'VORIX.SECURITY | سامانه تخصصی امنیت دیجیتال',
-  description: 'امنیت شبکه، ریکاوری پیشرفته اطلاعات و تجهیزات نظارتی در استان لرستان',
+  title: 'VORIX.SECURITY | امنیت دیجیتال',
+  description: 'ارائه خدمات تخصصی امنیت سایبری، ریکاوری و هوش مصنوعی',
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="bg-neutral-950 text-neutral-100 min-h-screen selection:bg-cyan-500 selection:text-neutral-950">
+      <body className="bg-neutral-950 text-neutral-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-black">
         <Navbar />
         {children}
       </body>
