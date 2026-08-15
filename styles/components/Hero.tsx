@@ -63,7 +63,7 @@ export default function Hero() {
       >
 
         <img
-  src="/vorix-security/logo.png
+  src="/logo.png
   alt="Vorix Security"
   width="300"
   height="300"
