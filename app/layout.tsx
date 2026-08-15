@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import './globals.css';
+import Navbar from './components/Navbar';
 
-export const metadata: Metadata = {
-  title: "Vorix Security",
-  description: "Security platform",
+export const metadata = {
+  title: 'VORIX.SECURITY | سامانه تخصصی امنیت دیجیتال',
+  description: 'امنیت شبکه، ریکاوری پیشرفته اطلاعات و تجهیزات نظارتی در استان لرستان',
 };
 
 export default function RootLayout({
@@ -12,8 +12,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="fa" dir="rtl">
+      <body className="bg-neutral-950 text-neutral-100 min-h-screen selection:bg-cyan-500 selection:text-neutral-950">
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }
