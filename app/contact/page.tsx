@@ -1,48 +1,78 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-100 py-20 px-6" dir="rtl">
+    <main className="min-h-screen bg-neutral-950 text-neutral-100 p-6 md:p-12" dir="rtl">
       <div className="max-w-4xl mx-auto space-y-12">
-        {/* Header */}
+        
+        {/* هدر صفحه */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight text-cyan-400">ارتباط با Vorix Security</h1>
-          <p className="text-neutral-400 text-lg">
-            برای مشاوره تخصصی، ثبت سفارش یا پیگیری خدمات با ما در ارتباط باشید
+          <div className="inline-block bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-4 py-1.5 rounded-full">
+            ارتباط با VORIX.SECURITY
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black text-white">راه‌های ارتباطی و پشتیبانی</h1>
+          <p className="text-neutral-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+            برای دریافت مشاوره، ثبت سفارش یا پشتیبانی سرویس‌ها از راه‌های زیر با ما در ارتباط باشید.
           </p>
         </div>
 
-        {/* Contact Info Grid */}
+        {/* کارت‌های اطلاعات تماس */}
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Phone / WhatsApp */}
-          <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-8 space-y-4 shadow-xl">
-            <h3 className="text-xl font-semibold text-cyan-400">تماس مستقیم و واتساپ</h3>
-            <p className="text-neutral-300 text-sm leading-relaxed">
-              جهت هماهنگی فوری و مشاوره خدمات امنیت دیجیتال و ریکاوری:
+          <div className="bg-neutral-900/40 border border-neutral-800/80 p-8 rounded-3xl space-y-4 shadow-xl">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl font-bold">
+              📞
+            </div>
+            <h2 className="text-lg font-bold text-white">شماره تماس مستقیم</h2>
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              پشتیبانی و هماهنگی خدمات فنی و امنیتی:
             </p>
-            <div className="pt-2">
-              <a 
-                href="tel:09357781529" 
-                className="inline-block bg-cyan-500 hover:bg-cyan-400 text-neutral-950 font-semibold px-6 py-3 rounded-xl transition duration-300"
-              >
-                ۰۹۳۵۷۷۸۱۵۲۹
-              </a>
+            <div className="text-cyan-400 font-mono text-sm font-bold" dir="ltr">
+              09357781529
             </div>
           </div>
 
-          {/* Location / Info */}
-          <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-8 space-y-4 shadow-xl">
-            <h3 className="text-xl font-semibold text-cyan-400">موقعیت و خدمات حضوری</h3>
-            <p className="text-neutral-300 text-sm leading-relaxed">
-              ارائه خدمات تخصصی در استان لرستان و پشتیبانی آنلاین سراسری.
+          <div className="bg-neutral-900/40 border border-neutral-800/80 p-8 rounded-3xl space-y-4 shadow-xl">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl font-bold">
+              📍
+            </div>
+            <h2 className="text-lg font-bold text-white">موقعیت دفتر مرکزی</h2>
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              ارائه خدمات حضوری در استان لرستان و پشتیبانی آنلاین برای سراسر کشور.
             </p>
-            <div className="pt-2 text-neutral-200 font-medium">
-              موقعیت: <span className="text-cyan-400">ایران، لرستان</span>
+            <div className="text-white text-xs font-medium">
+              ایران، لرستان
             </div>
           </div>
         </div>
+
+        {/* شبکه‌های اجتماعی و آیدی‌ها */}
+        <div className="bg-neutral-900/40 border border-neutral-800/80 p-8 rounded-3xl space-y-6 shadow-xl text-center">
+          <h2 className="text-lg font-bold text-white">ارتباط سریع در شبکه‌های اجتماعی</h2>
+          <p className="text-xs text-neutral-400">
+            می‌توانید برای پیگیری سریع‌تر یا ارسال مستندات از طریق آیدی زیر در ارتباط باشید:
+          </p>
+          <div className="inline-block bg-neutral-950/80 border border-neutral-800 px-6 py-3 rounded-2xl text-cyan-400 font-mono text-sm font-bold" dir="ltr">
+            ID: nimaslk0
+          </div>
+          <div className="pt-2">
+            <Link 
+              href="/order" 
+              className="inline-block bg-cyan-500 hover:bg-cyan-400 text-neutral-950 font-bold px-6 py-3 rounded-xl text-xs transition shadow-lg shadow-cyan-500/20"
+            >
+              ثبت سفارش آنلاین از طریق فرم
+            </Link>
+          </div>
+        </div>
+
+        {/* دکمه بازگشت */}
+        <div className="text-center pt-2">
+          <Link href="/" className="text-xs text-neutral-400 hover:text-cyan-400 transition">
+            ← بازگشت به صفحه اصلی سایت
+          </Link>
+        </div>
+
       </div>
     </main>
   );
 }
-
