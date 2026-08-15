@@ -62,12 +62,14 @@ export default function Hero() {
         }}
       >
 
-        <img
-  src="/logo.png
+<img
+  src="/logo.png"
   alt="Vorix Security"
-  width="300"
-  height="300"
+  width={300}
+  height={300}
+  className="object-contain mx-auto"
 />
+
         
       </motion.div>
 
