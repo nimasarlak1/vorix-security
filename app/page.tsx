@@ -1,66 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 
-export default function DashboardPage() {
-  return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-100 p-6 md:p-12" dir="rtl">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* هدر داشبورد */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-neutral-800 pb-6">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white">داشبورد مدیریت و امنیت</h1>
-            <p className="text-neutral-400 text-sm mt-1">پنل کنترل اختصاصی خدمات VORIX.SECURITY</p>
-          </div>
-          <Link 
-            href="/" 
-            className="bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-200 px-4 py-2 rounded-xl text-sm transition duration-300"
-          >
-            بازگشت به سایت
-          </Link>
-        </div>
-
-        {/* کارت‌های آمار و وضعیت */}
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-neutral-900/50 border border-neutral-800 p-6 rounded-2xl shadow-lg">
-            <div className="text-neutral-400 text-sm">وضعیت سامانه امنیتی</div>
-            <div className="text-2xl font-bold text-cyan-400 mt-2">فعال و ایمن</div>
-            <div className="text-xs text-neutral-500 mt-1">بدون تهدید فعال در شبکه</div>
-          </div>
-
-          <div className="bg-neutral-900/50 border border-neutral-800 p-6 rounded-2xl shadow-lg">
-            <div className="text-neutral-400 text-sm">درخواست‌های ثبت‌شده</div>
-            <div className="text-2xl font-bold text-white mt-2">۳ مورد فعال</div>
-            <div className="text-xs text-cyan-400 mt-1">در حال پردازش و بررسی</div>
-          </div>
-
-          <div className="bg-neutral-900/50 border border-neutral-800 p-6 rounded-2xl shadow-lg">
-            <div className="text-neutral-400 text-sm">پشتیبانی استان لرستان</div>
-            <div className="text-2xl font-bold text-emerald-400 mt-2">آنلاین</div>
-            <div className="text-xs text-neutral-500 mt-1">آماده ارائه خدمات حضوری و غیرحضوری</div>
-          </div>
-        </div>
-
-        {/* بخش مدیریت خدمات */}
-        <div className="bg-neutral-900/40 border border-neutral-800 rounded-2xl p-6 space-y-4 shadow-lg">
-          <h2 className="text-lg font-semibold text-white">مدیریت سریع خدمات VORIX</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 bg-neutral-900/80 border border-neutral-800 rounded-xl space-y-1">
-              <div className="font-medium text-cyan-400 text-sm">ارزیابی فایل و امنیت اکانت</div>
-              <p className="text-xs text-neutral-400 leading-relaxed">بررسی فایل‌های مشکوک دریافتی و بازیابی پیج‌های از دست رفته اینستاگرام.</p>
-            </div>
-
-            <div className="p-4 bg-neutral-900/80 border border-neutral-800 rounded-xl space-y-1">
-              <div className="font-medium text-cyan-400 text-sm">دوربین مداربسته و ریکاوری</div>
-              <p className="text-xs text-neutral-400 leading-relaxed">تنظیمات تخصصی دوربین، افزایش کیفیت فیلم‌ها و بازیابی اطلاعات هارد و موبایل.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
-}import React from 'react';
-import Link from 'next/link';
-
 export default function LoginPage() {
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center p-6" dir="rtl">
@@ -113,4 +53,3 @@ export default function LoginPage() {
     </main>
   );
 }
-
