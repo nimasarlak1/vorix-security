@@ -1,24 +1,29 @@
-import { NextResponse } from 'next/server';
+// @ts-nocheck
+import { NextResponse }/from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    // دسترسی به دیتابیس D1
-    // @ts-ignore
     const db = process.env.DB;
 
     if (!db) {
-      return NextResponse.json({ success: false, error: 'دیتابیس متصل نیست.' }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: 'دیتابیس متصل نیست.' },
+        { status: 500 }
+      );
     }
 
+    // خواندن لیست سفارش‌ها از دیتابیس D1
     const { results } = await db.prepare(
       'SELECT * FROM orders ORDER BY id DESC'
     ).all();
 
     return NextResponse.json({ success: true, orders: results || [] });
   } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: err.message || 'خطای سرور' },
+      { status: 500 }
+    );
   }
 }
-
