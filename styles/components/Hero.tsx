@@ -67,7 +67,7 @@ export default function Hero() {
   alt="Vorix Security"
   width={300}
   height={300}
-          
+  priority
 />
 
       </motion.div>
