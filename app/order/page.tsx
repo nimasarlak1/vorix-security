@@ -1,5 +1,4 @@
-'use client';
-
+'client use'; // اگر از Next.js App Router استفاده می‌کنید، برای کدهای تعاملی 'use client' بالای فایل قرار می‌گیرد
 import React, { useState } from 'react';
 import Link from 'next/link';
 
@@ -7,20 +6,18 @@ export default function OrderPage() {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    service: 'امنیت سایبری و ریکاوری',
-    description: ''
+    service: 'امنیت و ریکاوری پیج اینستاگرام',
+    description: '',
   });
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+
+  const [status, setStatus] = useState({ loading: false, message: '', error: false });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
+    setStatus({ loading: true, message: '', error: false });
 
     try {
-      const res = await fetch('/api/order', {
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -28,114 +25,104 @@ export default function OrderPage() {
 
       const data = await res.json();
 
-      if (res.ok && data.success) {
-        setSuccess(true);
-        setFormData({ name: '', phone: '', service: 'امنیت سایبری و ریکاوری', description: '' });
+      if (data.success) {
+        setStatus({ loading: false, message: 'سفارش شما با موفقیت در دیتابیس ثبت شد و به زودی بررسی می‌گردد.', error: false });
+        setFormData({ name: '', phone: '', service: 'امنیت و ریکاوری پیج اینستاگرام', description: '' });
       } else {
-        setError(data.message || 'خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.');
+        setStatus({ loading: false, message: data.error || 'خطایی در ثبت سفارش رخ داد.', error: true });
       }
     } catch (err) {
-      setError('خطا در ارتباط با سرور.');
-    } finally {
-      setLoading(false);
+      setStatus({ loading: false, message: 'خطا در ارتباط با سرور.', error: true });
     }
   };
 
   return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-100 p-6 md:p-12 flex items-center justify-center" dir="rtl">
-      <div className="max-w-xl w-full bg-neutral-900/60 backdrop-blur-xl border border-neutral-800/80 p-8 rounded-3xl shadow-2xl space-y-6">
+    <main className="min-h-screen bg-neutral-950 text-neutral-100 p-6 md:p-12" dir="rtl">
+      <div className="max-w-2xl mx-auto space-y-8">
         
-        <div className="text-center space-y-2">
-          <div className="inline-block bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-3 py-1 rounded-full">
-            VORIX.SECURITY
+        {/* هدر صفحه */}
+        <div className="text-center space-y-3">
+          <div className="inline-block bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold px-4 py-1.5 rounded-full">
+            ثبت سفارش آنلاین VORIX.SECURITY
           </div>
-          <h1 className="text-2xl font-bold text-white">ثبت سفارش و درخواست مشاوره</h1>
-          <p className="text-xs text-neutral-400">اطلاعات خود را وارد کنید تا در سریع‌ترین زمان با شما تماس بگیریم.</p>
+          <h1 className="text-2xl md:text-4xl font-black text-white">درخواست خدمات و مشاوره تخصصی</h1>
+          <p className="text-neutral-400 text-xs md:text-sm">
+            فرم زیر را تکمیل کنید تا اطلاعات مستقیماً برای بررسی و اقدام ثبت شود.
+          </p>
         </div>
 
-        {success ? (
-          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-6 rounded-2xl text-center space-y-3">
-            <div className="font-bold text-sm">سفارش شما با موفقیت ثبت شد!</div>
-            <p className="text-xs text-neutral-300">پیام شما مستقیماً برای مدیریت ارسال شد. به زودی با شما ارتباط خواهیم گرفت.</p>
-            <button 
-              onClick={() => setSuccess(false)}
-              className="mt-2 bg-emerald-500 text-neutral-950 font-bold text-xs px-4 py-2 rounded-xl transition hover:bg-emerald-400"
-            >
-              ثبت سفارش جدید
-            </button>
+        {/* فرم ثبت سفارش */}
+        <form onSubmit={handleSubmit} className="bg-neutral-900/40 border border-neutral-800/80 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+          
+          {status.message && (
+            <div className={`p-4 rounded-xl text-xs font-medium ${status.error ? 'bg-red-500/10 border border-red-500/30 text-red-400' : 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-400'}`}>
+              {status.message}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-neutral-300">نام و نام خانوادگی</label>
+            <input 
+              type="text" 
+              required
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              placeholder="مثال: علی رضایی" 
+              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
+            />
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-neutral-300 mb-1.5">نام و نام خانوادگی</label>
-              <input 
-                type="text" 
-                required
-                placeholder="مثال: علی رضایی"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full bg-neutral-950/80 border border-neutral-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition"
-              />
-            </div>
 
-            <div>
-              <label className="block text-xs font-medium text-neutral-300 mb-1.5">شماره تماس (موبایل)</label>
-              <input 
-                type="tel" 
-                required
-                placeholder="09123456789"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full bg-neutral-950/80 border border-neutral-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition text-left"
-                dir="ltr"
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-neutral-300">شماره تماس (موبایل)</label>
+            <input 
+              type="tel" 
+              required
+              value={formData.phone}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              placeholder="09123456789" 
+              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-white font-mono focus:outline-none focus:border-cyan-500 transition"
+              dir="ltr"
+            />
+          </div>
 
-            <div>
-              <label className="block text-xs font-medium text-neutral-300 mb-1.5">انتخاب خدمت مورد نظر</label>
-              <select 
-                value={formData.service}
-                onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                className="w-full bg-neutral-950/80 border border-neutral-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition"
-              >
-                <option value="امنیت سایبری و ارزیابی فایل">امنیت سایبری و ارزیابی فایل</option>
-                <option value="ریکاوری پیج اینستاگرام">ریکاوری پیج اینستاگرام</option>
-                <option value="نصب و بهینه‌سازی دوربین مداربسته">نصب و بهینه‌سازی دوربین مداربسته</option>
-                <option value="بازیابی اطلاعات (هارد و گوشی)">بازیابی اطلاعات (هارد و گوشی)</option>
-                <option value="مشاوره هوش مصنوعی و سئو">مشاوره هوش مصنوعی و سئو</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-neutral-300 mb-1.5">توضیحات یا شرح پروژه</label>
-              <textarea 
-                rows={3}
-                placeholder="جزئیات درخواست خود را بنویسید..."
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full bg-neutral-950/80 border border-neutral-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition resize-none"
-              />
-            </div>
-
-            {error && (
-              <div className="text-red-400 text-xs text-center bg-red-500/10 border border-red-500/30 py-2 rounded-xl">
-                {error}
-              </div>
-            )}
-
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full bg-cyan-500 hover:bg-cyan-400 text-neutral-950 font-bold py-3.5 rounded-xl transition duration-300 shadow-lg shadow-cyan-500/20 text-sm disabled:opacity-50"
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-neutral-300">انتخاب خدمت مورد نظر</label>
+            <select 
+              value={formData.service}
+              onChange={(e) => setFormData({...formData, service: e.target.value})}
+              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
             >
-              {loading ? 'در حال ارسال اطلاعات...' : 'ثبت نهایی سفارش'}
-            </button>
-          </form>
-        )}
+              <option value="امنیت و ریکاوری پیج اینستاگرام">امنیت و ریکاوری پیج اینستاگرام</option>
+              <option value="نصب و بهینه‌سازی دوربین مداربسته">نصب و بهینه‌سازی دوربین مداربسته</option>
+              <option value="ریکاوری اطلاعات (هارد، گوشی، دوربین)">ریکاوری اطلاعات (هارد، گوشی، دوربین)</option>
+              <option value="راهکارها و برنامه‌نویسی هوش مصنوعی">راهکارها و برنامه‌نویسی هوش مصنوعی</option>
+              <option value="سایر خدمات فنی و امنیتی">سایر خدمات فنی و امنیتی</option>
+            </select>
+          </div>
 
-        <div className="text-center pt-2 border-t border-neutral-800/60">
-          <Link href="/" className="text-xs text-cyan-400 hover:underline">
-            ← بازگشت به صفحه اصلی سایت
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-neutral-300">توضیحات تکمیلی (اختیاری)</label>
+            <textarea 
+              rows={4}
+              value={formData.description}
+              onChange={(e) => setFormData({...formData, description: e.target.value})}
+              placeholder="جزئیات درخواست خود را بنویسید..." 
+              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-500 transition resize-none"
+            ></textarea>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={status.loading}
+            className="w-full bg-cyan-500 hover:bg-cyan-400 text-neutral-950 font-bold py-3.5 rounded-xl text-xs transition shadow-lg shadow-cyan-500/20 disabled:opacity-50"
+          >
+            {status.message && status.loading ? 'در حال ثبت...' : 'ثبت نهایی و ارسال سفارش'}
+          </button>
+        </form>
+
+        <div className="text-center pt-2">
+          <Link href="/" className="text-xs text-neutral-400 hover:text-cyan-400 transition">
+            ← بازگشت به صفحه اصلی
           </Link>
         </div>
 
