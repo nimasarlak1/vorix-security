@@ -18,15 +18,6 @@ export default function AdminDashboard() {
       status: 'در حال بررسی',
       created_at: '۱۴۰۵/۰۵/۲۴',
       message: 'هارد اکسترنال فرمت شده و اطلاعات کاری مهم روی آن بوده است.'
-    },
-    {
-      id: 2,
-      name: 'محمد رضایی',
-      phone: '09359876543',
-      service: 'نصب دوربین مداربسته',
-      status: 'تکمیل شده',
-      created_at: '۱۴۰۵/۰۵/۲۵',
-      message: 'نصب ۴ عدد دوربین تحت شبکه برای مجتمع مسکونی در لرستان.'
     }
   ]);
 
@@ -51,14 +42,14 @@ export default function AdminDashboard() {
 
       const data = await res.json();
 
-      if (data.success) {
+      if (res.ok && data.success) {
         setIsAuthenticated(true);
         sessionStorage.setItem('vorix_admin_auth', 'true');
       } else {
-        setLoginError('رمز عبور اشتباه است!');
+        setLoginError(data.error || 'رمز عبور اشتباه است!');
       }
     } catch (err) {
-      setLoginError('خطا در ارتباط با سرور امنیتی');
+      setLoginError('خطا در ارتباط با سرور. لطفاً مطمئن شوید فایل API روی گیت‌هاب قرار گرفته است.');
     } finally {
       setLoadingLogin(false);
     }
