@@ -83,7 +83,12 @@ export default function LoginPage() {
         >
           ورود
         </button>
-
+<p className="text-center mt-4">
+  حساب ندارید؟{" "}
+  <a href="/register" className="text-blue-600 underline">
+    ثبت نام مشتری
+  </a>
+</p>
 
         {
           message &&
