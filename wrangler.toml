@@ -2,3 +2,7 @@ name = "vorix-security"
 compatibility_date = "2024-03-20"
 compatibility_flags = ["nodejs_compat"]
 
+[[d1_databases]]
+binding = "DB"
+database_name = "vorix-db"
+database_id = "اینجا_باید_آیدی_دیتابیس_را_بگذاریم"
