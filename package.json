@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx @cloudflare/next-on-pages",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -20,7 +20,6 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "tailwindcss": "^3.4.17",
-    "@cloudflare/next-on-pages": "latest"
+    "tailwindcss": "^3.4.17"
   }
 }
