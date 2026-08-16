@@ -3,64 +3,46 @@ export const runtime = 'edge';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, details } = body;
+    const { name, phone, details, service } = body;
 
-    // ۱. بررسی پر بودن فیلدهای ضروری
+    // ۱. اعتبارسنجی اولیه
     if (!name || !phone) {
-      return Response.json(
-        { success: false, error: 'وارد کردن نام و شماره تلفن الزامی است.' },
-        { status: 400 }
-      );
+      return Response.json({ success: false, error: 'اطلاعات ناقص است' }, { status: 400 });
     }
 
-    // ۲. پاک‌سازی و ایمن‌سازی ورودی‌ها
-    const safeName = String(name).trim().slice(0, 50);
-    const safePhone = String(phone).trim().slice(0, 20);
-    const safeDetails = details ? String(details).trim().slice(0, 500) : 'ثبت سفارش بدون توضیحات';
+    // ۲. تعریف متغیر KV
+    // @ts-ignore
+    const kv = typeof ORDERS_KV !== 'undefined' ? ORDERS_KV : null;
+    if (!kv) return Response.json({ success: false, error: 'دیتابیس متصل نیست' }, { status: 500 });
 
-    // ۳. خواندن متغیرهای محیطی از کلادفلر
-    const BOT_TOKEN = process.env.BOT_TOKEN;
-    const CHAT_ID = process.env.CHAT_ID;
+    // ۳. ذخیره امن در KV
+    const orderId = 'order_' + Date.now();
+    const orderData = {
+      id: orderId,
+      name: String(name).trim(),
+      phone: String(phone).trim(),
+      service: String(service || 'عمومی').trim(),
+      details: String(details || '').trim(),
+      status: 'در حال بررسی',
+      date: new Date().toLocaleDateString('fa-IR')
+    };
 
-    if (!BOT_TOKEN || !CHAT_ID) {
-      return Response.json(
-        { success: false, error: 'تنظیمات سرور ناقص است.' },
-        { status: 500 }
-      );
-    }
+    await kv.put(orderId, JSON.stringify(orderData));
 
-    // ۴. ساخت متن پیام برای تلگرام
-    const message = `🚨 ثبت سفارش امن (VORIX.SECURITY):
+    // ۴. ارسال به تلگرام
+    const message = `🚨 سفارش جدید (${orderData.service}):
+👤 نام: ${orderData.name}
+📞 تلفن: ${orderData.phone}
+📝 توضیحات: ${orderData.details}`;
 
-👤 نام: ${safeName}
-📞 تلفن: ${safePhone}
-📝 توضیحات: ${safeDetails}`;
-
-    // ۵. ارسال درخواست به تلگرام
-    const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    const response = await fetch(telegramUrl, {
+    await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      }),
+      body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: message, parse_mode: 'HTML' }),
     });
 
-    if (!response.ok) {
-      return Response.json(
-        { success: false, error: 'خطا در ارتباط با سرور تلگرام' },
-        { status: 502 }
-      );
-    }
-
-    return Response.json({ success: true });
-
-  } catch (error) {
-    return Response.json(
-      { success: false, error: 'خطای داخلی سرور رخ داده است.' },
-      { status: 500 }
-    );
+    return Response.json({ success: true, orderId });
+  } catch (e) {
+    return Response.json({ success: false }, { status: 500 });
   }
 }
