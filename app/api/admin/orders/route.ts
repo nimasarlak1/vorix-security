@@ -1,4 +1,4 @@
-export conts runtime = 'edge';
+export const runtime = 'edge';
 // @ts-nocheck
 import { NextResponse } from 'next/server';
 
