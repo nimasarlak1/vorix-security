@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic'; export conts runtime = 'edge';
+export const dynamic = 'force-dynamic'; 
+export conts runtime = 'edge';
 
 export async function POST(request: Request) {
   try {
