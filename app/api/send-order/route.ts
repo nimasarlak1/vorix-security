@@ -1,46 +1,41 @@
 export async function POST(request: Request) {
   try {
+    // دریافت و بررسی داده‌ها
     const body = await request.json();
     const { name, phone, details } = body;
 
-    // ۱. اعتبارسنجی امنیتی نام (جلوگیری از ارسال مقادیر خالی یا خیلی طولانی)
-    if (!name || typeof name !== 'string' || name.trim() === '' || name.length > 100) {
-      return Response.json({ success: false, error: 'نام نامعتبر است' }, { status: 400 });
+    // ۱. اعتبارسنجی دقیق ورودی‌ها (Security Validation)
+    if (!name || name.trim().length < 2 || name.length > 50) {
+      return Response.json({ error: 'نام نامعتبر' }, { status: 400 });
+    }
+    
+    // اعتبارسنجی ساده شماره موبایل
+    if (!phone || phone.length < 10 || phone.length > 15) {
+      return Response.json({ error: 'شماره تماس نامعتبر' }, { status: 400 });
     }
 
-    // ۲. اعتبارسنجی امنیتی شماره تلفن
-    if (!phone || typeof phone !== 'string' || phone.trim() === '' || phone.length > 20) {
-      return Response.json({ success: false, error: 'شماره تلفن نامعتبر است' }, { status: 400 });
+    // ۲. استفاده از متغیرهای محیطی امن (برای جلوگیری از لو رفتن توکن)
+    const BOT_TOKEN = process.env.BOT_TOKEN;
+    const CHAT_ID = process.env.CHAT_ID;
+
+    if (!BOT_TOKEN || !CHAT_ID) {
+      console.error('Environment variables missing!');
+      return Response.json({ error: 'خطای سیستمی' }, { status: 500 });
     }
 
-    // ۳. پاکسازی و ایمن‌سازی داده‌ها (Sanitization)
-    const safeName = name.trim().slice(0, 100);
-    const safePhone = phone.trim().slice(0, 20);
-    const safeDetails = details ? String(details).trim().slice(0, 500) : 'بدون توضیحات';
+    // ۳. ارسال پیام به تلگرام
+    const message = `🛡️ VORIX.SECURITY Order\n👤 Name: ${name.trim()}\n📞 Phone: ${phone.trim()}\n📝 Note: ${details?.trim() || 'No detail'}`;
 
-    const BOT_TOKEN = "8949625828:AAG9f6Ve6HXLI4cCOxsLrNicNlQYRGnQSZM";
-    const CHAT_ID = "1039217150";
-
-    const message = `🛡️ ثبت سفارش جدید (VORIX.SECURITY):
-👤 نام: ${safeName}
-📞 تلفن: ${safePhone}
-📝 توضیحات: ${safeDetails}`;
-
-    const telegramResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        chat_id: CHAT_ID, 
-        text: message
-      }),
+      body: JSON.stringify({ chat_id: CHAT_ID, text: message }),
     });
 
-    if (!telegramResponse.ok) {
-      throw new Error('خطا در ارتباط با سرور تلگرام');
-    }
+    if (!response.ok) throw new Error('Telegram API Error');
 
     return Response.json({ success: true });
   } catch (error) {
-    return Response.json({ success: false, error: 'خطای داخلی سرور' }, { status: 500 });
+    return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
