@@ -1,4 +1,4 @@
-export conts runtime = 'edge';
+export const runtime = 'edge';
 import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
