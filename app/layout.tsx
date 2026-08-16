@@ -1,5 +1,6 @@
 import './globals.css';
-import Navbar from '@/components/Navbar'; // بررسی کنید که پوشه components در ریشه یا پوشه app قرار دارد
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 export const metadata = {
   title: 'VORIX.SECURITY',
@@ -13,9 +14,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="bg-neutral-950 text-white selection:bg-cyan-500 selection:text-neutral-950">
+      <body className="bg-neutral-950 text-white selection:bg-cyan-500 selection:text-neutral-950 min-h-screen flex flex-col justify-between">
         <Navbar />
-        {children}
+        <main className="flex-grow">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
