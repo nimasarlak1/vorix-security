@@ -1,1 +1,4 @@
+name = "vorix-security"
+compatibility_date = "2024-03-20"
+compatibility_flags = ["nodejs_compat"]
 
