@@ -2,104 +2,36 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
-// ۱. دریافت لیست سفارش‌ها (GET) با امنیت کامل
 export async function GET(request: Request) {
   try {
-    // بررسی هدر احراز هویت برای جلوگیری از دسترسی غیرمجاز
-    const adminPassword = request.headers.get('x-admin-password');
-    
-    if (!adminPassword || adminPassword !== process.env.ADMIN_PASSWORD) {
-      return NextResponse.json(
-        { error: 'Unauthorized - دسترسی غیرمجاز' }, 
-        { status: 401 }
-      );
-    }
-
-    // اتصال به Cloudflare KV برای خواندن سفارش‌ها
     // @ts-ignore
-    const kv = process.env.ORDERS_KV || globalThis.ORDERS_KV;
-    let orders = [];
-
-    if (kv) {
-      const data = await kv.get('all_orders');
-      orders = data ? JSON.parse(data) : [];
+    const db = process.env.DB;
+    if (!db) {
+      return NextResponse.json({ success: false, error: 'Database DB binding not found' }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, orders }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'خطای سرور در دریافت اطلاعات' }, 
-      { status: 500 }
-    );
+    // تست اینکه جدول orders اصلاً وجود داره یا نه و خوندن اطلاعات
+    const { results } = await db.prepare('SELECT * FROM orders ORDER BY id DESC').all();
+
+    return NextResponse.json({ success: true, orders: results || [] });
+  } catch (err: any) {
+    // اگر جدول یا دیتابیس خطا داشته باشه، دقیقاً متن خطا رو برمی‌گردونیم تا بفهمیم مشکل چیه
+    return NextResponse.json({ success: false, error: 'DB Error: ' + (err.message || JSON.stringify(err)) }, { status: 500 });
   }
 }
 
-// ۲. ویرایش و به‌روزرسانی وضعیت سفارش (POST) با امنیت کامل
 export async function POST(request: Request) {
   try {
-    // بررسی هدر احراز هویت ادمین
-    const adminPassword = request.headers.get('x-admin-password');
-    
-    if (!adminPassword || adminPassword !== process.env.ADMIN_PASSWORD) {
-      return NextResponse.json(
-        { error: 'Unauthorized - دسترسی غیرمجاز' }, 
-        { status: 401 }
-      );
-    }
-
-    const body = await request.json();
-    const { orderId, newStatus } = body;
-
-    if (!orderId || !newStatus) {
-      return NextResponse.json(
-        { error: 'اطلاعات ارسالی ناقص است' }, 
-        { status: 400 }
-      );
-    }
-
-    // اتصال به دیتابیس KV
+    const { orderId, newStatus } = await request.json();
     // @ts-ignore
-    const kv = process.env.ORDERS_KV || globalThis.ORDERS_KV;
+    const db = process.env.DB;
     
-    if (!kv) {
-      return NextResponse.json(
-        { error: 'دیتابیس در دسترس نیست' }, 
-        { status: 500 }
-      );
-    }
+    await db.prepare('UPDATE orders SET status = ? WHERE id = ?')
+      .bind(newStatus, orderId)
+      .run();
 
-    const data = await kv.get('all_orders');
-    let orders = data ? JSON.parse(data) : [];
-
-    // جستجو و تغییر وضعیت سفارش مورد نظر
-    let found = false;
-    orders = orders.map((order: any) => {
-      if (order.id === orderId) {
-        found = true;
-        return { ...order, status: newStatus };
-      }
-      return order;
-    });
-
-    if (!found) {
-      return NextResponse.json(
-        { error: 'سفارش مورد نظر پیدا نشد' }, 
-        { status: 404 }
-      );
-    }
-
-    // ذخیره تغییرات جدید در KV
-    await kv.put('all_orders', JSON.stringify(orders));
-
-    return NextResponse.json(
-      { success: true, message: 'وضعیت با موفقیت به‌روزرسانی شد' }, 
-      { status: 200 }
-    );
-
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'خطا در پردازش درخواست' }, 
-      { status: 500 }
-    );
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
