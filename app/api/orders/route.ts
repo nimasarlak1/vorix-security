@@ -1,58 +1,46 @@
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
-// ۱. خواندن لیست سفارش‌ها از دیتابیس D1
-export async function GET(request: Request) {
-  try {
-    const adminPassword = request.headers.get('x-admin-password');
-    if (!adminPassword || adminPassword !== process.env.ADMIN_PASSWORD) {
-      return NextResponse.json({ error: 'Unauthorized - دسترسی غیرمجاز' }, { status: 401 });
-    }
-
-    // @ts-ignore
-    const db = process.env.DB;
-    if (!db) {
-      return NextResponse.json({ error: 'Database binding (DB) is not configured!' }, { status: 500 });
-    }
-
-    const { results } = await db.prepare('SELECT * FROM orders ORDER BY id DESC').all();
-
-    return NextResponse.json({ success: true, orders: results || [] }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: 'خطای سرور در دریافت اطلاعات' }, { status: 500 });
-  }
-}
-
-// ۲. آپدیت کردن وضعیت سفارش در دیتابیس D1
 export async function POST(request: Request) {
   try {
-    const adminPassword = request.headers.get('x-admin-password');
-    if (!adminPassword || adminPassword !== process.env.ADMIN_PASSWORD) {
-      return NextResponse.json({ error: 'Unauthorized - دسترسی غیرمجاز' }, { status: 401 });
-    }
-
     const body = await request.json();
-    const { orderId, newStatus } = body;
+    const { name, phone, service, details, description, message } = body;
+    
+    // پشتیبانی از هر نامی که فرم سایت بفرستد
+    const finalMessage = details || description || message || 'بدون توضیحات';
 
-    if (!orderId || !newStatus) {
-      return NextResponse.json({ error: 'اطلاعات ارسالی ناقص است' }, { status: 400 });
+    if (!name || !phone || !service) {
+      return NextResponse.json(
+        { success: false, error: 'لطفاً فیلدهای ضروری را پر کنید' }, 
+        { status: 400 }
+      );
     }
 
     // @ts-ignore
     const db = process.env.DB;
     if (!db) {
-      return NextResponse.json({ error: 'Database binding (DB) is not configured!' }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: 'Database not configured' }, 
+        { status: 500 }
+      );
     }
+    
+    // درج سفارش در جدول D1 با وضعیت پیش‌فرض
+    await db.prepare(`
+      INSERT INTO orders (name, phone, service, message, status) 
+      VALUES (?, ?, ?, ?, 'در حال بررسی')
+    `)
+    .bind(name, phone, service, finalMessage)
+    .run();
 
-    // به‌روزرسانی وضعیت در جدول orders
-    await db.prepare('UPDATE orders SET status = ? WHERE id = ?')
-      .bind(newStatus, orderId)
-      .run();
-
-    return NextResponse.json({ success: true, message: 'وضعیت با موفقیت به‌روزرسانی شد' }, { status: 200 });
-
-  } catch (error) {
-    return NextResponse.json({ error: 'خطا در پردازش درخواست' }, { status: 500 });
+    return NextResponse.json({ success: true, message: 'سفارش با موفقیت ثبت شد' });
+    
+  } catch (err: any) {
+    console.error('API Error:', err);
+    return NextResponse.json(
+      { success: false, error: err.message || 'خطای سرور' }, 
+      { status: 500 }
+    );
   }
 }
