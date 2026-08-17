@@ -16,7 +16,9 @@ export default function AdminPage() {
         headers: { 'x-admin-password': password }
       });
       const data = await res.json();
+      
       if (res.ok && data.success) {
+        // اینجا دقیقاً همون چیزی که از سرور میاد رو میذاریم، بدون هیچ داده فیک یا هاردکدی!
         setOrders(data.orders || []);
         setAuthed(true);
       } else {
@@ -29,41 +31,15 @@ export default function AdminPage() {
     }
   };
 
-  const updateStatus = async (orderId: number, currentStatus: string) => {
-    const newStatus = currentStatus === 'در حال بررسی' ? 'تایید و انجام شد' : 'در حال بررسی';
-    try {
-      const res = await fetch('/api/admin/orders', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-admin-password': password 
-        },
-        body: JSON.stringify({ orderId, newStatus })
-      });
-      if (res.ok) {
-        // آپدیت لیست بعد از تغییر وضعیت
-        const updatedRes = await fetch('/api/admin/orders', {
-          headers: { 'x-admin-password': password }
-        });
-        const updatedData = await updatedRes.json();
-        if (updatedData.success) {
-          setOrders(updatedData.orders || []);
-        }
-      }
-    } catch (err) {
-      alert('خطا در بروزرسانی وضعیت');
-    }
-  };
-
   if (!authed) {
     return (
       <main className="min-h-screen bg-neutral-950 text-white flex items-center justify-center p-4" dir="rtl">
         <form onSubmit={handleLogin} className="bg-neutral-900 p-8 rounded-2xl border border-neutral-800 w-full max-w-md shadow-2xl">
-          <h1 className="text-xl font-bold text-cyan-400 mb-4">ورود به پنل مدیریت VORIX</h1>
-          <p className="text-neutral-400 text-sm mb-6">لطفاً رمز عبور ادمین را وارد کنید:</p>
+          <h1 className="text-xl font-bold text-cyan-400 mb-2">ورود به پنل مدیریت</h1>
+          <p className="text-neutral-400 text-sm mb-6">VORIX.SECURITY - دسترسی ادمین</p>
           <input 
             type="password" 
-            placeholder="رمز عبور..." 
+            placeholder="رمز عبور مدیریت..." 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-4 py-3 text-white mb-4 focus:outline-none focus:border-cyan-400"
@@ -87,7 +63,7 @@ export default function AdminPage() {
         <div className="flex justify-between items-center mb-8 border-b border-neutral-800 pb-4">
           <div>
             <h1 className="text-2xl font-extrabold text-cyan-400">داشبورد مدیریت VORIX.SECURITY</h1>
-            <p className="text-neutral-400 text-sm mt-1">مدیریت و پایش درخواست‌ها و سفارش‌های کاربران</p>
+            <p className="text-neutral-400 text-sm mt-1">مدیریت سفارش‌ها و درخواست‌های کاربران</p>
           </div>
           <button 
             onClick={() => setAuthed(false)}
@@ -99,7 +75,7 @@ export default function AdminPage() {
 
         {orders.length === 0 ? (
           <div className="bg-neutral-900/80 p-12 rounded-2xl border border-neutral-800 text-center text-neutral-400">
-            هیچ سفارشی در دیتابیس ثبت نشده است. (اطلاعات کاملاً پاکسازی شد)
+            هیچ سفارشی در دیتابیس ثبت نشده است.
           </div>
         ) : (
           <div className="overflow-x-auto bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-xl">
@@ -117,21 +93,14 @@ export default function AdminPage() {
               </thead>
               <tbody>
                 {orders.map((ord: any) => (
-                  <tr key={ord.id} className="border-b border-neutral-900/80 hover:bg-neutral-900 transition-all">
-                    <td className="p-4 font-mono text-cyan-400">#{ord.id}</td>
+                  <tr key={ord.id || ord.name} className="border-b border-neutral-900/80 hover:bg-neutral-900 transition-all">
+                    <td className="p-4 font-mono text-cyan-400">#{ord.id || '---'}</td>
                     <td className="p-4 font-semibold">{ord.name}</td>
                     <td className="p-4 font-mono text-neutral-300" dir="ltr">{ord.phone}</td>
                     <td className="p-4 text-cyan-300">{ord.service}</td>
-                    <td className="p-4 text-neutral-300 max-w-xs truncate">{ord.message}</td>
-                    <td className="p-4">
-                      <button 
-                        onClick={() => updateStatus(ord.id, ord.status)}
-                        className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
-                      >
-                        {ord.status || 'در حال بررسی'}
-                      </button>
-                    </td>
-                    <td className="p-4 text-neutral-500 text-xs font-mono">{ord.created_at || 'الان'}</td>
+                    <td className="p-4 text-neutral-300 max-w-xs truncate">{ord.message || ord.description}</td>
+                    <td className="p-4 text-cyan-400">{ord.status || 'در حال بررسی'}</td>
+                    <td className="p-4 text-neutral-500 text-xs font-mono">{ord.created_at || 'ثبت شده'}</td>
                   </tr>
                 ))}
               </tbody>
