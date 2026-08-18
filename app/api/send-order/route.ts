@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { getStore } from '@netlify/blobs';
 
 export const runtime = 'edge';
 
@@ -12,33 +11,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'اطلاعات ناقص است' }, { status: 400 });
     }
 
-    const orderData = {
-      name: String(name).trim(),
-      phone: String(phone).trim(),
-      service: String(service || 'عمومی').trim(),
-      details: String(description || 'بدون توضیحات').trim(),
-      date: new Date().toISOString()
-    };
-
-    // ۱. ذخیره در دیتابیس نتلیفای
-    const store = getStore('orders');
-    await store.set(Date.now().toString(), JSON.stringify(orderData));
-
-    // ۲. ارسال به تلگرام
     const message = `🚨 سفارش جدید:
-👤 نام: ${orderData.name}
-📞 شماره: ${orderData.phone}
-🛠 خدمت: ${orderData.service}
-💬 توضیحات: ${orderData.details}`;
+👤 نام: ${String(name).trim()}
+📞 شماره: ${String(phone).trim()}
+🛠 خدمت: ${String(service || 'عمومی').trim()}
+💬 توضیحات: ${String(description || 'بدون توضیحات').trim()}`;
 
-    await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        chat_id: process.env.CHAT_ID, 
-        text: message 
-      })
-    });
+    const botToken = process.env.BOT_TOKEN;
+    const chatId = process.env.CHAT_ID;
+
+    if (botToken && chatId) {
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+      });
+    }
 
     return NextResponse.json({ success: true, message: 'سفارش ثبت شد' });
   } catch (err: any) {
