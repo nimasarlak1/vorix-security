@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { getStore } from '@netlify/blobs';
 
 export const runtime = 'edge';
 
@@ -12,24 +11,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'اطلاعات ناقص است.' }, { status: 400 });
     }
 
-    const orderId = 'order_' + Date.now();
     const orderData = {
-      id: orderId,
       name: String(name).trim(),
       phone: String(phone).trim(),
       service: String(service || 'عمومی').trim(),
       details: String(details || '').trim(),
-      status: 'در حال بررسی',
       date: new Date().toLocaleDateString('fa-IR')
     };
-
-    // ذخیره در Netlify Blobs (دیتابیس ابری نتلیفای)
-    try {
-      const ordersStore = getStore('orders');
-      await ordersStore.setJSON(orderId, orderData);
-    } catch (e) {
-      console.error('Database error:', e);
-    }
 
     // ارسال به تلگرام
     const botToken = process.env.BOT_TOKEN;
@@ -45,7 +33,7 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json({ success: true, orderId });
+    return NextResponse.json({ success: true, message: 'سفارش ثبت شد' });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
