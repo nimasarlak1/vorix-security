@@ -2,29 +2,10 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
-// ذخیره‌سازی موقت در حافظه سرور برای پنل ادمین
-declare global {
-  var globalOrders: any[];
-}
-
-if (!global.globalOrders) {
-  global.globalOrders = [];
-}
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { name, phone, service, description } = body;
-
-    const newOrder = {
-      id: Date.now().toString(),
-      data: { name, phone, service, description },
-      status: 'در حال بررسی',
-      created_at: new Date().toISOString()
-    };
-
-    // اضافه کردن به لیست سفارش‌ها
-    global.globalOrders.unshift(newOrder);
 
     const message = `🚨 سفارش جدید:
 👤 نام: ${name}
