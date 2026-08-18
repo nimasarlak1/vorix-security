@@ -1,21 +1,17 @@
+import { NextResponse } from 'next/server';
+import { getStore } from '@netlify/blobs';
+
 export const runtime = 'edge';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, details, service } = body;
+    const { name, phone, service, details } = body;
 
-    // ۱. اعتبارسنجی اولیه
     if (!name || !phone) {
-      return Response.json({ success: false, error: 'اطلاعات ناقص است' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'اطلاعات ناقص است.' }, { status: 400 });
     }
 
-    // ۲. تعریف متغیر KV
-    // @ts-ignore
-    const kv = typeof ORDERS_KV !== 'undefined' ? ORDERS_KV : null;
-    if (!kv) return Response.json({ success: false, error: 'دیتابیس متصل نیست' }, { status: 500 });
-
-    // ۳. ذخیره امن در KV
     const orderId = 'order_' + Date.now();
     const orderData = {
       id: orderId,
@@ -27,22 +23,30 @@ export async function POST(request: Request) {
       date: new Date().toLocaleDateString('fa-IR')
     };
 
-    await kv.put(orderId, JSON.stringify(orderData));
+    // ذخیره در Netlify Blobs (دیتابیس ابری نتلیفای)
+    try {
+      const ordersStore = getStore('orders');
+      await ordersStore.setJSON(orderId, orderData);
+    } catch (e) {
+      console.error('Database error:', e);
+    }
 
-    // ۴. ارسال به تلگرام
-    const message = `🚨 سفارش جدید (${orderData.service}):
-👤 نام: ${orderData.name}
-📞 تلفن: ${orderData.phone}
-📝 توضیحات: ${orderData.details}`;
+    // ارسال به تلگرام
+    const botToken = process.env.BOT_TOKEN;
+    const chatId = process.env.CHAT_ID;
 
-    await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: message, parse_mode: 'HTML' }),
-    });
+    if (botToken && chatId) {
+      const message = `🚨 سفارش جدید در VORIX.SECURITY\n\n👤 نام: ${orderData.name}\n📞 شماره: ${orderData.phone}\n🛠 خدمت: ${orderData.service}\n💬 توضیحات: ${orderData.details}`;
 
-    return Response.json({ success: true, orderId });
-  } catch (e) {
-    return Response.json({ success: false }, { status: 500 });
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+      });
+    }
+
+    return NextResponse.json({ success: true, orderId });
+  } catch (err: any) {
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
