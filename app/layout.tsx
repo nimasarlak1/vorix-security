@@ -3,8 +3,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
 export const metadata = {
-  title: 'VORIX.SECURITY',
-  description: 'امنیت دیجیتال و راهکارهای هوش مصنوعی',
+  title: 'VORIX.SECURITY | امنیت سایبری، هوش مصنوعی و ریکاوری اطلاعات',
+description: 'VORIX.SECURITY ارائه‌دهنده خدمات امنیت دیجیتال، هوش مصنوعی، ریکاوری اطلاعات، سیستم‌های نظارتی و راهکارهای حفاظتی حرفه‌ای.',
 };
 
 export default function RootLayout({
