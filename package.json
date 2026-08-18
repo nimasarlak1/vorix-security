@@ -13,8 +13,7 @@
     "react": "latest",
     "react-dom": "latest",
     "framer-motion": "latest",
-    "lucide-react": "latest",
-    "@netlify/blobs": "latest"
+    "lucide-react": "latest"
   },
   "devDependencies": {
     "typescript": "latest",
