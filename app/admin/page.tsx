@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function AdminPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -8,27 +8,39 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const fetchOrders = async () => {
-    const res = await fetch('/api/admin/orders', {
-      headers: { 'x-admin-password': password }
-    });
-    const data = await res.json();
-    if (data.success) setOrders(data.orders);
+  const fetchOrders = async (currentPassword: string) => {
+    try {
+      const res = await fetch('/api/admin/orders', {
+        headers: { 'x-admin-password': currentPassword },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders(data.orders || []);
+      }
+    } catch (err) {
+      console.error('خطا در دریافت اطلاعات');
+    }
   };
 
-  const updateStatus = async (orderId: any, currentStatus: string) => {
-    // اگر قبلاً تایید شده، میتونه تغییر کنه یا روی همین بمونه
-    const newStatus = currentStatus === 'بررسی شد' ? 'در حال بررسی' : 'بررسی شد';
+  const updateStatus = async (orderId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'در حال بررسی' ? 'تایید و انجام شد' : 'در حال بررسی';
     
-    const res = await fetch('/api/admin/orders', {
-      method: 'POST',
-      headers: { 
-        'x-admin-password': password,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ orderId, newStatus })
-    });
-    if (res.ok) fetchOrders();
+    try {
+      const res = await fetch('/api/admin/orders', {
+        method: 'POST',
+        headers: {
+          'x-admin-password': password,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId, status: newStatus }),
+      });
+
+      if (res.ok) {
+        fetchOrders(password);
+      }
+    } catch (err) {
+      console.error('خطا در بروزرسانی وضعیت');
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -36,7 +48,7 @@ export default function AdminPage() {
     setLoading(true);
     try {
       const res = await fetch('/api/admin/orders', {
-        headers: { 'x-admin-password': password }
+        headers: { 'x-admin-password': password },
       });
       const data = await res.json();
       if (res.ok && data.success) {
@@ -55,21 +67,21 @@ export default function AdminPage() {
   if (!authed) {
     return (
       <main className="min-h-screen bg-neutral-950 text-white flex items-center justify-center p-4" dir="rtl">
-        <form onSubmit={handleLogin} className="bg-neutral-900 p-8 rounded-2xl border border-neutral-800 w-full max-w-md shadow-2xl">
-          <h1 className="text-xl font-bold text-cyan-400 mb-2">ورود به پنل مدیریت</h1>
-          <p className="text-neutral-400 text-sm mb-6">VORIX.SECURITY - دسترسی ادمین</p>
-          <input 
-            type="password" 
-            placeholder="رمز عبور مدیریت..." 
+        <form onSubmit={handleLogin} className="bg-neutral-900 border border-neutral-800 p-8 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl">
+          <h1 className="text-xl font-bold text-cyan-400 text-center">ورود به پنل مدیریت</h1>
+          <p className="text-neutral-400 text-xs text-center">VORIX.SECURITY - دسترسی امن</p>
+          <input
+            type="password"
+            placeholder="رمز عبور مدیریت"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-4 py-3 text-white mb-4 focus:outline-none focus:border-cyan-400"
+            className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-500"
             required
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={loading}
-            className="w-full bg-cyan-400 hover:bg-cyan-500 text-neutral-950 font-bold py-3 rounded-xl transition-all"
+            className="w-full bg-cyan-400 hover:bg-cyan-500 text-neutral-950 font-bold py-3 rounded-xl text-xs transition disabled:opacity-50"
           >
             {loading ? 'در حال بررسی...' : 'ورود به داشبورد'}
           </button>
@@ -79,31 +91,31 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 text-white p-6 md:p-10" dir="rtl">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8 border-b border-neutral-800 pb-4">
+    <main className="min-h-screen bg-neutral-950 text-neutral-100 p-6 md:p-10" dir="rtl">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex justify-between items-center bg-neutral-900 border border-neutral-800 p-6 rounded-2xl shadow-xl">
           <div>
             <h1 className="text-2xl font-extrabold text-cyan-400">داشبورد مدیریت VORIX.SECURITY</h1>
-            <p className="text-neutral-400 text-sm mt-1">مدیریت سفارش‌ها و درخواست‌های کاربران</p>
+            <p className="text-neutral-400 text-xs mt-1">مدیریت سفارش‌ها و درخواست‌های کاربران</p>
           </div>
-          <button 
+          <button
             onClick={() => setAuthed(false)}
-            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-xl text-sm transition-all"
+            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-xl text-xs font-bold transition"
           >
             خروج از حساب
           </button>
         </div>
 
         {orders.length === 0 ? (
-          <div className="bg-neutral-900/80 p-12 rounded-2xl border border-neutral-800 text-center text-neutral-400">
+          <div className="bg-neutral-900 border border-neutral-800 p-12 rounded-2xl text-center text-neutral-400 text-xs">
             هیچ سفارشی در دیتابیس ثبت نشده است.
           </div>
         ) : (
-          <div className="overflow-x-auto bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-xl">
+          <div className="overflow-x-auto bg-neutral-900 border border-neutral-800 rounded-2xl shadow-xl">
             <table className="w-full text-right border-collapse">
               <thead>
-                <tr className="border-b border-neutral-800 text-neutral-400 text-sm">
-                  <th className="p-4">شناسه</th>
+                <tr className="border-b border-neutral-800 text-neutral-400 text-xs">
+                  <th className="p-4">کد</th>
                   <th className="p-4">نام مشتری</th>
                   <th className="p-4">شماره تماس</th>
                   <th className="p-4">نوع خدمت</th>
@@ -113,28 +125,33 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((ord: any) => {
-                  const isChecked = ord.status === 'بررسی شد';
+                {orders.map((ord: any, index: number) => {
+                  const orderData = ord.data || ord;
+                  const currentStatus = ord.status || 'در حال بررسی';
+                  const isChecked = currentStatus === 'تایید و انجام شد';
+
                   return (
-                    <tr key={ord.id} className="border-b border-neutral-900/80 hover:bg-neutral-900 transition-all">
-                      <td className="p-4 font-mono text-cyan-400">#{ord.id}</td>
-                      <td className="p-4 font-semibold">{ord.name}</td>
-                      <td className="p-4 font-mono text-neutral-300" dir="ltr">{ord.phone}</td>
-                      <td className="p-4 text-cyan-300">{ord.service}</td>
-                      <td className="p-4 text-neutral-300 max-w-xs truncate">{ord.message || ord.description || 'بدون توضیحات'}</td>
+                    <tr key={ord.id || index} className="border-b border-neutral-800/60 hover:bg-neutral-850 transition text-xs">
+                      <td className="p-4 text-cyan-400 font-mono">{index + 1}</td>
+                      <td className="p-4 font-semibold text-white">{orderData.name || '---'}</td>
+                      <td className="p-4 font-mono text-neutral-300" dir="ltr">{orderData.phone || '---'}</td>
+                      <td className="p-4 text-cyan-300">{orderData.service || '---'}</td>
+                      <td className="p-4 text-neutral-300 max-w-xs truncate">{orderData.description || 'بدون توضیحات'}</td>
                       <td className="p-4">
-                        <button 
-                          onClick={() => updateStatus(ord.id, ord.status)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
-                            isChecked 
-                              ? 'bg-green-500/20 text-green-400 border-green-500/30' 
+                        <button
+                          onClick={() => updateStatus(ord.id, currentStatus)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border ${
+                            isChecked
+                              ? 'bg-green-500/20 text-green-400 border-green-500/30'
                               : 'bg-orange-500/20 text-orange-400 border-orange-500/30'
                           }`}
                         >
-                          {isChecked ? 'تایید و انجام شد' : 'در حال بررسی'}
+                          {currentStatus}
                         </button>
                       </td>
-                      <td className="p-4 text-neutral-500 text-xs font-mono">{ord.created_at || 'ثبت شده'}</td>
+                      <td className="p-4 text-neutral-500 text-xs font-mono">
+                        {new Date(ord.created_at || Date.now()).toLocaleString('fa-IR')}
+                      </td>
                     </tr>
                   );
                 })}
