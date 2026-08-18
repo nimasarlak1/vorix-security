@@ -5,25 +5,20 @@ import Footer from './components/Footer';
 export const metadata = {
   title: 'VORIX.SECURITY | امنیت سایبری، هوش مصنوعی و ریکاوری اطلاعات',
   description:
-    'VORIX.SECURITY ارائه‌دهنده خدمات امنیت دیجیتال، ریکاوری اطلاعات، هوش مصنوعی، سیستم‌های نظارتی و راهکارهای حفاظتی حرفه‌ای در ایران.',
+    'VORIX.SECURITY ارائه‌دهنده خدمات امنیت دیجیتال، ریکاوری اطلاعات، هوش مصنوعی، سیستم‌های نظارتی و راهکارهای حفاظتی در ایران.',
 
   keywords: [
     'امنیت سایبری',
-    'امنیت دیجیتال',
     'ریکاوری اطلاعات',
-    'ریکاوری هارد',
     'هوش مصنوعی',
+    'امنیت دیجیتال',
     'دوربین مداربسته',
     'امنیت پیج',
     'OSINT',
     'VORIX.SECURITY',
   ],
 
-  authors: [
-    {
-      name: 'VORIX.SECURITY',
-    },
-  ],
+  authors: [{ name: 'VORIX.SECURITY' }],
 
   robots: {
     index: true,
