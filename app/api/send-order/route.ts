@@ -4,36 +4,24 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { name, phone, service, details } = body;
+    const { name, phone, service, details } = await request.json();
 
-    if (!name || !phone) {
-      return NextResponse.json({ success: false, error: 'اطلاعات ناقص است.' }, { status: 400 });
-    }
+    const message = `سفارش جدید:
+نام: ${name}
+شماره: ${phone}
+خدمت: ${service}
+توضیحات: ${details}`;
 
-    const orderData = {
-      name: String(name).trim(),
-      phone: String(phone).trim(),
-      service: String(service || 'عمومی').trim(),
-      details: String(details || '').trim(),
-      date: new Date().toLocaleDateString('fa-IR')
-    };
+    await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        chat_id: process.env.CHAT_ID, 
+        text: message 
+      })
+    });
 
-    // ارسال به تلگرام
-    const botToken = process.env.BOT_TOKEN;
-    const chatId = process.env.CHAT_ID;
-
-    if (botToken && chatId) {
-      const message = `🚨 سفارش جدید در VORIX.SECURITY\n\n👤 نام: ${orderData.name}\n📞 شماره: ${orderData.phone}\n🛠 خدمت: ${orderData.service}\n💬 توضیحات: ${orderData.details}`;
-
-      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
-      });
-    }
-
-    return NextResponse.json({ success: true, message: 'سفارش ثبت شد' });
+    return NextResponse.json({ success: true });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
