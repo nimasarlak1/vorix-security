@@ -27,7 +27,7 @@ export default function OrderPage() {
       const data = await res.json();
 
       if (data.success) {
-        setStatus({ loading: false, message: 'سفارش شما با موفقیت در دیتابیس ثبت شد و به زودی بررسی می‌گردد.', error: false });
+        setStatus({ loading: false, message: 'سفارش شما با موفقیت ثبت شد و به زودی بررسی می‌گردد.', error: false });
         setFormData({ name: '', phone: '', service: 'امنیت و ریکاوری پیج اینستاگرام', description: '' });
       } else {
         setStatus({ loading: false, message: data.error || 'خطایی در ثبت سفارش رخ داد.', error: true });
@@ -51,7 +51,7 @@ export default function OrderPage() {
           </p>
         </div>
 
-        {/* اضافه شدن name و data-netlify برای ذخیره در دیتابیس نتلیفای */}
+        {/* تگ name و data-netlify برای ثبت خودکار در پنل نتلیفای */}
         <form onSubmit={handleSubmit} name="orders" data-netlify="true" className="bg-neutral-900/40 border border-neutral-800/80 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
           
           {status.message && (
@@ -64,6 +64,7 @@ export default function OrderPage() {
             <label className="text-xs font-bold text-neutral-300">نام و نام خانوادگی</label>
             <input 
               type="text" 
+              name="name"
               required
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -76,6 +77,7 @@ export default function OrderPage() {
             <label className="text-xs font-bold text-neutral-300">شماره تماس (موبایل)</label>
             <input 
               type="tel" 
+              name="phone"
               required
               value={formData.phone}
               onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -88,6 +90,7 @@ export default function OrderPage() {
           <div className="space-y-2">
             <label className="text-xs font-bold text-neutral-300">انتخاب خدمت مورد نظر</label>
             <select 
+              name="service"
               value={formData.service}
               onChange={(e) => setFormData({...formData, service: e.target.value})}
               className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
@@ -103,6 +106,7 @@ export default function OrderPage() {
           <div className="space-y-2">
             <label className="text-xs font-bold text-neutral-300">توضیحات تکمیلی (اختیاری)</label>
             <textarea 
+              name="description"
               rows={4}
               value={formData.description}
               onChange={(e) => setFormData({...formData, description: e.target.value})}
