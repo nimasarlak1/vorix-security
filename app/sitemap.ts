@@ -1,8 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://vorix-security.nimasarlak380.workers.dev';
-  
+  const baseUrl = 'https://vorixsecurity.ir';
   return [
     {
       url: baseUrl,
