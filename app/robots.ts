@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://vorix-security.nimasarlak380.workers.dev';
+  const baseUrl = 'https://vorixsecurity.ir';
 
   return {
     rules: {
