@@ -51,7 +51,8 @@ export default function OrderPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-neutral-900/40 border border-neutral-800/80 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        {/* اضافه شدن name و data-netlify برای ذخیره در دیتابیس نتلیفای */}
+        <form onSubmit={handleSubmit} name="orders" data-netlify="true" className="bg-neutral-900/40 border border-neutral-800/80 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
           
           {status.message && (
             <div className={`p-4 rounded-xl text-xs font-medium ${status.error ? 'bg-red-500/10 border border-red-500/30 text-red-400' : 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-400'}`}>
