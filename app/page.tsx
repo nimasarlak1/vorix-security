@@ -156,7 +156,7 @@ export default function MaintenancePage() {
           </div>
 
           <p className="mt-4 text-xs leading-7 text-neutral-500">
-            الیگودرز، میدان امام، پاساژ سینا، طبقه دوم
+            استان لرستان الیگودرز، میدان امام، پاساژ سینا، طبقه دوم
             <br />
             شنبه تا پنجشنبه، ۹ صبح تا ۸ شب
           </p>
