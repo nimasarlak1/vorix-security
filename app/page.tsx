@@ -1,170 +1,167 @@
-'use client';
+const css = `
+.vx-grid {
+  background-image:
+    linear-gradient(to right, rgba(0, 174, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 174, 255, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 100%);
+}
+.vx-glow {
+  background: radial-gradient(circle at 50% 42%, rgba(0, 120, 255, 0.28), transparent 60%);
+  animation: vx-pulse 5s ease-in-out infinite;
+}
+.vx-logo {
+  filter: drop-shadow(0 0 18px rgba(0, 170, 255, 0.55));
+}
+.vx-edge {
+  fill: none;
+  stroke: #7fdcff;
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: vx-draw 1.6s ease-out 0.2s forwards;
+}
+.vx-fill {
+  opacity: 0;
+  animation: vx-fade 1s ease-out 1.3s forwards;
+}
+.vx-rise {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: vx-up 0.9s ease-out forwards;
+}
+.vx-bar {
+  position: relative;
+  height: 3px;
+  width: 200px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.vx-bar span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0066ff, #00d4ff);
+  animation: vx-slide 1.8s ease-in-out infinite;
+}
+@keyframes vx-draw { to { stroke-dashoffset: 0; } }
+@keyframes vx-fade { to { opacity: 1; } }
+@keyframes vx-up { to { opacity: 1; transform: none; } }
+@keyframes vx-pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+@keyframes vx-slide { 0% { left: -40%; } 100% { left: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .vx-glow, .vx-bar span { animation: none; }
+  .vx-bar span { left: 30%; }
+  .vx-edge { animation: none; stroke-dashoffset: 0; }
+  .vx-fill { animation: none; opacity: 1; }
+  .vx-rise { animation: none; opacity: 1; transform: none; }
+}
+`;
 
-import React, { useState } from 'react';
-
-export default function Home() {
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get('name');
-    const phone = formData.get('phone');
-    const service = formData.get('service');
-    const details = formData.get('details');
-
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, service, details })
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        alert('سفارش شما با موفقیت ثبت شد و به ادمین ارسال گردید!');
-        (e.target as HTMLFormElement).reset();
-      } else {
-        alert('خطا در ثبت سفارش: ' + (data.error || 'لطفاً دوباره تلاش کنید'));
-      }
-    } catch (err) {
-      alert('خطا در ارتباط با سرور. لطفاً اینترنت خود را بررسی کنید.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function MaintenancePage() {
   return (
-    <main className="min-h-screen bg-neutral-950 text-white selection:bg-cyan-500 selection:text-neutral-950" dir="rtl">
-      {/* بخش هیرو (بالای صفحه) */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-4 pt-40 pb-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.12),_transparent_70%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293708_1px,transparent_1px),linear-gradient(to_bottom,#1f293708_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+    <div
+      dir="rtl"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-[#05070d] px-6 py-10 text-white"
+    >
+      <style dangerouslySetInnerHTML={{ __html: css }} />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center space-y-6">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-loose">
-            حفاظت از دارایی‌های دیجیتال با <br />
-            <span className="text-cyan-400 drop-shadow-[0_0_25px_rgba(6,182,212,0.4)]">
-              VORIX.SECURITY
-            </span>
-          </h1>
-          <p className="text-neutral-300 text-xs sm:text-sm md:text-lg max-w-2xl leading-relaxed px-2">
-            ریکاوری پیشرفته اطلاعات، نصب و بهینه‌سازی دوربین‌های مداربسته و راهکارهای هوش مصنوعی در استان لرستان و پشتیبانی آنلاین
+      <div className="vx-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="vx-glow pointer-events-none absolute inset-0" aria-hidden="true" />
+
+      <main className="relative z-10 flex w-full max-w-lg flex-col items-center text-center">
+        <svg
+          className="vx-logo mb-6 h-24 w-auto"
+          viewBox="-2 -2 104 84"
+          role="img"
+          aria-label="لوگوی VORIX.SECURITY"
+        >
+          <defs>
+            <linearGradient id="vxL" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#1f6bff" />
+              <stop offset="1" stopColor="#0033b8" />
+            </linearGradient>
+            <linearGradient id="vxR" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#2af0ff" />
+              <stop offset="1" stopColor="#00a2ff" />
+            </linearGradient>
+          </defs>
+          <polygon className="vx-fill" points="0,0 16,8 50,62 50,80" fill="url(#vxL)" />
+          <polygon className="vx-fill" points="100,0 84,8 50,62 50,80" fill="url(#vxR)" />
+          <polygon className="vx-edge" pathLength={1} points="0,0 16,8 50,62 50,80" />
+          <polygon className="vx-edge" pathLength={1} points="100,0 84,8 50,62 50,80" />
+        </svg>
+
+        <p
+          className="vx-rise text-lg font-bold tracking-[0.35em] text-cyan-300"
+          style={{ animationDelay: "1.1s" }}
+          dir="ltr"
+        >
+          VORIX.SECURITY
+        </p>
+
+        <h1
+          className="vx-rise mt-6 text-3xl font-black leading-relaxed sm:text-4xl"
+          style={{ animationDelay: "1.4s" }}
+        >
+          سایت در حال بروزرسانی است
+        </h1>
+
+        <p
+          className="vx-rise mt-4 max-w-md text-sm leading-8 text-neutral-400 sm:text-base"
+          style={{ animationDelay: "1.6s" }}
+        >
+          در حال ساخت نسخه‌ای جدید، سریع‌تر و امن‌تر هستیم. به‌زودی برمی‌گردیم.
+        </p>
+
+        <div
+          className="vx-rise vx-bar mt-8"
+          style={{ animationDelay: "1.8s" }}
+          role="status"
+          aria-label="در حال بروزرسانی"
+        >
+          <span />
+        </div>
+
+        <div
+          className="vx-rise mt-12 w-full rounded-2xl border border-cyan-500/20 bg-white/[0.03] p-5 text-sm text-neutral-300"
+          style={{ animationDelay: "2s" }}
+        >
+          <p className="mb-3 text-neutral-400">
+            برای ثبت سفارش و مشاوره در این مدت با ما در ارتباط باشید:
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6 w-full justify-center px-4">
+
+          <div className="flex flex-col items-center gap-2">
             <a
-              href="#contact"
-              className="bg-cyan-400 hover:bg-cyan-500 text-neutral-950 font-bold px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-cyan-500/20 text-center"
+              href="tel:09357781529"
+              dir="ltr"
+              className="font-mono text-lg font-bold text-cyan-300 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
             >
-              درخواست مشاوره و ثبت سفارش
+              09357781529
             </a>
             <a
-              href="#services"
-              className="bg-neutral-900/95 hover:bg-neutral-800 text-neutral-200 border border-neutral-700 font-semibold px-6 py-3.5 rounded-xl transition-all text-center"
+              href="https://instagram.com/vorix.security"
+              target="_blank"
+              rel="noopener noreferrer"
+              dir="ltr"
+              className="text-neutral-200 hover:text-cyan-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
             >
-              مشاهده خدمات تخصصی
+              @vorix.security
             </a>
           </div>
+
+          <p className="mt-4 text-xs leading-7 text-neutral-500">
+            الیگودرز، میدان امام، پاساژ سینا، طبقه دوم
+            <br />
+            شنبه تا پنجشنبه، ۹ صبح تا ۸ شب
+          </p>
         </div>
-      </section>
-
-      {/* بخش خدمات تخصصی */}
-      <section id="services" className="py-24 px-4 bg-neutral-900/40 border-t border-neutral-800/60 scroll-mt-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-4xl font-extrabold text-cyan-400 mb-4">خدمات تخصصی VORIX</h2>
-            <p className="text-neutral-400 text-sm md:text-base">ارائه راهکارهای امنیت دیجیتال و فناوری در استان لرستان</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-neutral-900/80 p-6 rounded-2xl border border-neutral-800 hover:border-cyan-500/50 transition-all">
-              <h3 className="text-xl font-bold mb-2 text-cyan-400">01 / ریکاوری پیشرفته اطلاعات</h3>
-              <p className="text-neutral-400 text-sm leading-relaxed">ریکاوری گوشی، هارد، دوربین و تجهیزات دیجیتال با بالاترین ضریب موفقیت.</p>
-            </div>
-            <div className="bg-neutral-900/80 p-6 rounded-2xl border border-neutral-800 hover:border-cyan-500/50 transition-all">
-              <h3 className="text-xl font-bold mb-2 text-cyan-400">02 / دوربین‌های مداربسته</h3>
-              <p className="text-neutral-400 text-sm leading-relaxed">مکانیابی حرفه‌ای و افزایش کیفیت و بررسی فیلم‌های دوربین مداربسته.</p>
-            </div>
-            <div className="bg-neutral-900/80 p-6 rounded-2xl border border-neutral-800 hover:border-cyan-500/50 transition-all">
-              <h3 className="text-xl font-bold mb-2 text-cyan-400">03 / امنیت و راهکارهای هوش مصنوعی</h3>
-              <p className="text-neutral-400 text-sm leading-relaxed">امنیت، ریکاوری پیج‌های از دست رفته و راهکارهای نوین هوش مصنوعی.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* بخش ثبت سفارش و ارتباط با ما */}
-      <section id="contact" className="py-24 px-4 border-t border-neutral-850/60 scroll-mt-20">
-        <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-2xl md:text-4xl font-extrabold text-cyan-400 mb-4">ثبت سفارش و ارتباط با ما</h2>
-          <p className="text-neutral-400 text-sm md:text-base mb-10">برای دریافت مشاوره یا ثبت درخواست خدمات، فرم زیر را پر کنید:</p>
-
-          <form onSubmit={handleSubmit} className="bg-neutral-900/90 p-8 rounded-3xl border border-neutral-800 shadow-2xl flex flex-col gap-5 text-right">
-            <div>
-              <label className="block text-sm text-neutral-300 mb-2">نام و نام خانوادگی:</label>
-              <input 
-                type="text" 
-                name="name" 
-                required 
-                placeholder="مثلاً: علی رضایی" 
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-400 transition-all"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-neutral-300 mb-2">شماره تماس:</label>
-              <input 
-                type="tel" 
-                name="phone" 
-                required 
-                placeholder="0916XXXXXXX" 
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-400 transition-all text-left"
-                dir="ltr"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-neutral-300 mb-2">انتخاب خدمت:</label>
-              <select 
-                name="service" 
-                required 
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-400 transition-all"
-              >
-                <option value="">یک خدمت را انتخاب کنید...</option>
-                <option value="ریکاوری اطلاعات هارد">ریکاوری اطلاعات هارد و گوشی</option>
-                <option value="نصب دوربین مداربسته">نصب و تنظیم دوربین مداربسته</option>
-                <option value="امنیت پیج و شبکه">امنیت پیج و شبکه / OSINT</option>
-                <option value="سایر خدمات دیجیتال">سایر خدمات دیجیتال</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm text-neutral-300 mb-2">توضیحات درخواست:</label>
-              <textarea 
-                name="details" 
-                rows={4}
-                placeholder="توضیحات کامل درباره مشکل یا سفارش خود را بنویسید..." 
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-400 transition-all resize-none"
-              ></textarea>
-            </div>
-
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full bg-cyan-400 hover:bg-cyan-500 text-neutral-950 font-bold py-4 rounded-xl transition-all shadow-lg shadow-cyan-500/20 mt-2 disabled:opacity-50"
-            >
-              {loading ? 'در حال ثبت سفارش...' : 'ثبت نهایی سفارش'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-neutral-400 text-sm">
-            شماره پشتیبانی مستقیم: <a href="tel:09357781529" className="text-cyan-400 font-mono font-bold hover:underline">09357781529</a>
-          </div>
-        </div>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }
