@@ -44,6 +44,10 @@ function fail(error: string, status: number) {
 }
 
 export async function POST(request: Request) {
+  // مهم: کانتکست Cloudflare (دیتابیس) باید همین اول و قبل از هر await گرفته شود؛
+  // بعد از خواندن بدنه‌ی درخواست ممکن است در بعضی درخواست‌ها از دست برود.
+  const dbInfo = getDBInfo();
+
   if (!originAllowed(request)) return fail('درخواست نامعتبر است.', 403);
 
   const ip =
@@ -87,7 +91,7 @@ export async function POST(request: Request) {
   // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
   let saved = false;
   let dbNote = '';
-  const { db, reason: dbReason } = getDBInfo();
+  const { db, reason: dbReason } = dbInfo;
   if (db) {
     try {
       await db
