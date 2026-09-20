@@ -49,6 +49,16 @@ export default function Footer() {
               </a>
             </li>
             <li>
+              <a href={SITE.whatsappUrl} target="_blank" rel="noopener noreferrer" className="nav-link">
+                واتساپ
+              </a>
+            </li>
+            <li>
+              <a href={SITE.telegramUrl} target="_blank" rel="noopener noreferrer" dir="ltr" className="nav-link">
+                @{SITE.telegram}
+              </a>
+            </li>
+            <li>
               <a href={`mailto:${SITE.email}`} dir="ltr" className="nav-link">
                 {SITE.email}
               </a>

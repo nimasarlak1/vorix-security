@@ -42,8 +42,12 @@ export async function verifySessionToken(secret: string, token: string | undefin
 
 export async function isAuthorizedRequest(request: Request, secret: string): Promise<boolean> {
   const cookieHeader = request.headers.get('cookie') || '';
-  const match = cookieHeader.match(new RegExp(`${SESSION_COOKIE}=([^;]+)`));
-  return verifySessionToken(secret, match?.[1]);
+  // نام کوکی باید دقیقاً برابر باشد (نه فقط انتهای اسم یک کوکی دیگر)
+  const pair = cookieHeader
+    .split(';')
+    .map((c) => c.trim())
+    .find((c) => c.startsWith(`${SESSION_COOKIE}=`));
+  return verifySessionToken(secret, pair ? pair.slice(SESSION_COOKIE.length + 1) : undefined);
 }
 
 function timingSafeEqualHex(a: string, b: string): boolean {

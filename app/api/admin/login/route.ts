@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDB, getEnv } from '../../../lib/db';
+import { getDBSafe, getEnv, NO_DB_MESSAGE } from '../../../lib/db';
 import { createSessionToken, SESSION_COOKIE, SESSION_TTL_SECONDS, timingSafeEqualString } from '../../../lib/session';
 
 export const runtime = 'edge';
@@ -21,7 +21,11 @@ export async function POST(request: Request) {
     return fail('ورود موقتاً ممکن نیست. با پشتیبانی فنی تماس بگیرید.', 503);
   }
 
-  const db = getDB();
+  const db = getDBSafe();
+  if (!db) {
+    console.error('D1 binding DB is missing');
+    return fail(NO_DB_MESSAGE, 503);
+  }
   await db
     .prepare(
       `CREATE TABLE IF NOT EXISTS login_attempts (

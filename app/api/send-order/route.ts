@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cleanText, isValidMobile, normalizePhone } from '../../lib/validate';
-import { getDB } from '../../lib/db';
+import { getDBSafe } from '../../lib/db';
 
 export const runtime = 'edge';
 
@@ -80,39 +80,40 @@ export async function POST(request: Request) {
 
   const token = process.env.BOT_TOKEN;
   const chatId = process.env.CHAT_ID;
-  if (!token || !chatId) {
-    console.error('BOT_TOKEN or CHAT_ID is not set');
-    return fail('ثبت سفارش موقتاً ممکن نیست. لطفاً تماس بگیرید.', 503);
-  }
 
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
 
   // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
-  try {
-    const db = getDB();
-    await db
-      .prepare(
-        `CREATE TABLE IF NOT EXISTS orders (
-          id TEXT PRIMARY KEY,
-          created_at TEXT NOT NULL,
-          name TEXT NOT NULL,
-          phone TEXT NOT NULL,
-          service TEXT NOT NULL,
-          description TEXT,
-          status TEXT NOT NULL DEFAULT 'جدید'
-        )`
-      )
-      .run();
-    await db
-      .prepare(
-        'INSERT INTO orders (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
-      )
-      .bind(id, createdAt, name, phone, service, description, 'جدید')
-      .run();
-  } catch (e) {
-    // حتی اگر ذخیره در دیتابیس ناموفق شود، سفارش از طریق تلگرام ارسال می‌شود تا از دست نرود
-    console.error('D1 insert failed', e);
+  let saved = false;
+  const db = getDBSafe();
+  if (db) {
+    try {
+      await db
+        .prepare(
+          `CREATE TABLE IF NOT EXISTS orders (
+            id TEXT PRIMARY KEY,
+            created_at TEXT NOT NULL,
+            name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            service TEXT NOT NULL,
+            description TEXT,
+            status TEXT NOT NULL DEFAULT 'جدید'
+          )`
+        )
+        .run();
+      await db
+        .prepare(
+          'INSERT INTO orders (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
+        )
+        .bind(id, createdAt, name, phone, service, description, 'جدید')
+        .run();
+      saved = true;
+    } catch (e) {
+      console.error('D1 insert failed', e);
+    }
+  } else {
+    console.error('D1 binding DB is missing');
   }
 
   const time = new Date().toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' });
@@ -125,25 +126,32 @@ export async function POST(request: Request) {
     `🕒 ${time}`,
   ].join('\n');
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
-  try {
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text }),
-      signal: controller.signal,
-    });
-    if (!res.ok) {
-      console.error('Telegram responded with status', res.status);
-      return fail('ارسال سفارش انجام نشد. لطفاً با دفتر تماس بگیرید.', 502);
+  // اعلان تلگرام
+  let notified = false;
+  if (token && chatId) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text }),
+        signal: controller.signal,
+      });
+      if (res.ok) notified = true;
+      else console.error('Telegram responded with status', res.status);
+    } catch {
+      console.error('Telegram request failed');
+    } finally {
+      clearTimeout(timer);
     }
-  } catch {
-    console.error('Telegram request failed');
-    return fail('ارسال سفارش انجام نشد. لطفاً با دفتر تماس بگیرید.', 502);
-  } finally {
-    clearTimeout(timer);
+  } else {
+    console.error('BOT_TOKEN or CHAT_ID is not set');
   }
 
+  // اگر سفارش حداقل یک‌جا (دیتابیس یا تلگرام) ثبت شده باشد، برای مشتری موفق است
+  if (!saved && !notified) {
+    return fail('ارسال سفارش انجام نشد. لطفاً با دفتر تماس بگیرید.', 502);
+  }
   return NextResponse.json({ success: true });
 }

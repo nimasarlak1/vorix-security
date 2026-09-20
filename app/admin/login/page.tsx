@@ -17,11 +17,16 @@ export default function AdminLoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
       });
-      const data = await res.json();
-      if (data.success) {
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        data = null;
+      }
+      if (data?.success) {
         window.location.href = '/admin';
       } else {
-        setError(data.error || 'ورود ناموفق بود.');
+        setError(data?.error || `پاسخ نامعتبر از سرور (کد ${res.status}). تنظیمات Cloudflare (Binding و Secretها) را بررسی کنید.`);
       }
     } catch {
       setError('خطا در اتصال. دوباره امتحان کنید.');
