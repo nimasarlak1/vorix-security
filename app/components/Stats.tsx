@@ -31,13 +31,30 @@ const css = `
 
 export default function Stats() {
   const ref = useRef<HTMLDivElement | null>(null);
+  const [targetJobs, setTargetJobs] = useState(COMPLETED_JOBS);
   const [value, setValue] = useState(COMPLETED_JOBS);
 
+  // ۱. دریافت عدد زنده از دیتابیس
+  useEffect(() => {
+    fetch('/api/get-order-count')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.count && typeof data.count === 'number') {
+          setTargetJobs(data.count);
+        }
+      })
+      .catch((err) => console.error('Error fetching stats count:', err));
+  }, []);
+
+  // ۲. انیمیشن شمارش تا رسیدن به targetJobs
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce || typeof IntersectionObserver === 'undefined') return;
+    if (reduce || typeof IntersectionObserver === 'undefined') {
+      setValue(targetJobs);
+      return;
+    }
 
     setValue(0);
     let raf = 0;
@@ -52,7 +69,7 @@ export default function Stats() {
         const tick = (now: number) => {
           const p = Math.min(1, (now - t0) / dur);
           const eased = 1 - Math.pow(1 - p, 3);
-          setValue(Math.round(COMPLETED_JOBS * eased));
+          setValue(Math.round(targetJobs * eased));
           if (p < 1) raf = requestAnimationFrame(tick);
         };
         raf = requestAnimationFrame(tick);
@@ -64,16 +81,16 @@ export default function Stats() {
       io.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [targetJobs]);
 
-  const progress = value / COMPLETED_JOBS;
+  const progress = targetJobs > 0 ? value / targetJobs : 0;
 
   return (
     <section className="st" aria-label="آمار کارهای انجام‌شده">
       <style>{css}</style>
       <div className="container-x">
         <div className="st-in">
-          <div ref={ref} className="st-ring" role="img" aria-label={`${fa(COMPLETED_JOBS)} کار انجام‌شده`}>
+          <div ref={ref} className="st-ring" role="img" aria-label={`${fa(targetJobs)} کار انجام‌شده`}>
             <span className="st-pulse" aria-hidden="true" />
             <span className="st-pulse b" aria-hidden="true" />
             <svg viewBox="0 0 260 260" aria-hidden="true">
