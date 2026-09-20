@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cleanText, isValidMobile, normalizePhone } from '../../lib/validate';
-import { getDBSafe } from '../../lib/db';
+import { getDBSafe, ORDERS_TABLE } from '../../lib/db';
 
 export const runtime = 'edge';
 
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
     try {
       await db
         .prepare(
-          `CREATE TABLE IF NOT EXISTS orders (
+          `CREATE TABLE IF NOT EXISTS ${ORDERS_TABLE} (
             id TEXT PRIMARY KEY,
             created_at TEXT NOT NULL,
             name TEXT NOT NULL,
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
         .run();
       await db
         .prepare(
-          'INSERT INTO orders (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
+          `INSERT INTO ${ORDERS_TABLE} (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)`
         )
         .bind(id, createdAt, name, phone, service, description, 'جدید')
         .run();

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDBSafe, getEnv, NO_DB_MESSAGE } from '../../../../lib/db';
+import { getDBSafe, getEnv, NO_DB_MESSAGE, ORDERS_TABLE } from '../../../../lib/db';
 import { isAuthorizedRequest } from '../../../../lib/session';
 
 export const runtime = 'edge';
@@ -36,13 +36,14 @@ export async function PATCH(request: Request, context: Ctx) {
   if (!db) return NextResponse.json({ success: false, error: NO_DB_MESSAGE }, { status: 503 });
 
   try {
-    const result = await db.prepare('UPDATE orders SET status = ? WHERE id = ?').bind(status, id).run();
+    const result = await db.prepare(`UPDATE ${ORDERS_TABLE} SET status = ? WHERE id = ?`).bind(status, id).run();
     if (result?.meta?.changes === 0) {
       return NextResponse.json({ success: false, error: 'سفارش پیدا نشد.' }, { status: 404 });
     }
   } catch (e) {
     console.error('order status update failed', e);
-    return NextResponse.json({ success: false, error: 'ذخیره‌ی وضعیت انجام نشد.' }, { status: 500 });
+    const detail = String((e as any)?.message || e).slice(0, 300);
+    return NextResponse.json({ success: false, error: 'ذخیره‌ی وضعیت انجام نشد.', detail }, { status: 500 });
   }
   return NextResponse.json({ success: true });
 }

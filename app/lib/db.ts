@@ -26,3 +26,6 @@ export function getEnv(): Record<string, string> {
 
 export const NO_DB_MESSAGE =
   'دیتابیس D1 هنوز به پروژه وصل نشده است. در Cloudflare یک Binding با نام DB بسازید و دوباره Deploy کنید.';
+
+// اسم جدول سفارش‌ها. عمداً «orders» نیست تا با جدول قدیمیِ احتمالیِ داخل دیتابیس تداخل نکند.
+export const ORDERS_TABLE = 'vx_orders';

@@ -49,7 +49,10 @@ export default function AdminPage() {
         setOrders(data.orders);
         if (!silent) setError('');
       } else if (!silent) {
-        setError(data?.error || `خطا در دریافت اطلاعات (کد ${res.status}). تنظیمات Cloudflare را بررسی کنید.`);
+        setError(
+          (data?.error || `خطا در دریافت اطلاعات (کد ${res.status}). تنظیمات Cloudflare را بررسی کنید.`) +
+            (data?.detail ? ` — جزئیات فنی: ${data.detail}` : '')
+        );
       }
     } catch {
       if (!silent) setError('خطا در اتصال به سرور.');
@@ -85,7 +88,7 @@ export default function AdminPage() {
         window.location.href = '/admin/login';
         return;
       }
-      if (!res.ok || !data?.success) throw new Error(data?.error || `کد ${res.status}`);
+      if (!res.ok || !data?.success) throw new Error((data?.error || `کد ${res.status}`) + (data?.detail ? ` — ${data.detail}` : ''));
     } catch (e: any) {
       // اگر ذخیره نشد، وضعیت قبلی را برگردان تا چیزی اشتباه نمایش داده نشود
       setOrders((list) => (list ? list.map((o) => (o.id === order.id ? { ...o, status: prev } : o)) : list));
