@@ -86,6 +86,7 @@ export async function POST(request: Request) {
 
   // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
   let saved = false;
+  let dbNote = '';
   const db = getDBSafe();
   if (db) {
     try {
@@ -108,12 +109,20 @@ export async function POST(request: Request) {
         )
         .bind(id, createdAt, name, phone, service, description, 'جدید')
         .run();
+
+      // بعد از ذخیره، مطمئن می‌شویم سفارش واقعاً در جدول هست
+      const check = await db
+        .prepare(`SELECT COUNT(*) AS c FROM ${ORDERS_TABLE}`)
+        .first();
       saved = true;
+      dbNote = `ذخیره شد (تعداد کل سفارش‌های پنل: ${check?.c ?? '?'})`;
     } catch (e) {
       console.error('D1 insert failed', e);
+      dbNote = `ذخیره نشد — ${String((e as any)?.message || e).slice(0, 200)}`;
     }
   } else {
     console.error('D1 binding DB is missing');
+    dbNote = 'ذخیره نشد — Binding دیتابیس با نام DB پیدا نشد';
   }
 
   const time = new Date().toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' });
@@ -124,6 +133,7 @@ export async function POST(request: Request) {
     `🛠 خدمت: ${service}`,
     `💬 توضیحات: ${description || 'بدون توضیحات'}`,
     `🕒 ${time}`,
+    `${saved ? '🗄' : '⚠️'} پنل: ${dbNote}`,
   ].join('\n');
 
   // اعلان تلگرام
