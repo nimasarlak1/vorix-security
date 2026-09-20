@@ -3,7 +3,7 @@ import { Vazirmatn } from 'next/font/google';
 import './globals.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { SITE } from './data/site';
+import { SITE, FAQS } from './data/site';
 
 const vazir = Vazirmatn({
   subsets: ['arabic', 'latin'],
@@ -15,6 +15,23 @@ const TITLE = 'VORIX.SECURITY | ریکاوری اطلاعات و دوربین م
 const DESCRIPTION =
   'دفتر خدمات دیجیتال VORIX.SECURITY در الیگودرز: ریکاوری اطلاعات هارد و گوشی، نصب دوربین مداربسته، امنیت پیج و حساب‌ها، طراحی سایت و هوش مصنوعی.';
 
+// کلمات کلیدی محلی و مرتبط با خدمات، برای کمک به موتورهای جستجو
+// (تأثیر اصلی سئو از عنوان، توضیحات، محتوای صفحه و بک‌لینک می‌آید، نه این تگ به‌تنهایی)
+const KEYWORDS = [
+  'ریکاوری اطلاعات الیگودرز',
+  'بازیابی اطلاعات هارد الیگودرز',
+  'تعمیر هارد الیگودرز',
+  'دوربین مداربسته الیگودرز',
+  'نصب دوربین مداربسته لرستان',
+  'امنیت پیج اینستاگرام',
+  'بازیابی پیج اینستاگرام هک‌شده',
+  'طراحی سایت الیگودرز',
+  'طراحی سایت لرستان',
+  'ریکاوری اطلاعات فلش و کارت حافظه',
+  'مشاوره امنیت دیجیتال',
+  'وریکس سکیوریتی',
+];
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
@@ -22,6 +39,7 @@ export const metadata: Metadata = {
     template: '%s | VORIX.SECURITY',
   },
   description: DESCRIPTION,
+  keywords: KEYWORDS,
   applicationName: SITE.name,
   authors: [{ name: SITE.legalName }],
   alternates: { canonical: '/' },
@@ -93,6 +111,16 @@ const jsonLd = {
         },
       ],
       sameAs: [SITE.instagramUrl],
+    },
+    // اسکیمای FAQPage از همان سؤالات واقعی صفحه گرفته شده تا در نتایج گوگل هم قابل نمایش باشد
+    {
+      '@type': 'FAQPage',
+      '@id': `${SITE.url}/#faq`,
+      mainEntity: FAQS.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
     },
   ],
 };

@@ -1,16 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cleanText, isValidMobile, normalizePhone } from '../../lib/validate';
+import { getDB } from '../../lib/db';
 
 export const runtime = 'edge';
-
-// سازگاری با پنل ادمین قبلی (لیست موقت در حافظه؛ ماندگار نیست)
-declare global {
-  // eslint-disable-next-line no-var
-  var globalOrders: any[] | undefined;
-}
-if (!globalThis.globalOrders) {
-  globalThis.globalOrders = [];
-}
 
 // محدودیت تعداد درخواست (در حافظه‌ی همین سرور؛ کمک‌کننده است نه کامل)
 const hits = new Map<string, number[]>();
@@ -93,15 +85,34 @@ export async function POST(request: Request) {
     return fail('ثبت سفارش موقتاً ممکن نیست. لطفاً تماس بگیرید.', 503);
   }
 
-  const order = {
-    id: Date.now().toString(),
-    data: { name, phone, service, description },
-    status: 'در حال بررسی',
-    created_at: new Date().toISOString(),
-  };
-  globalThis.globalOrders?.unshift(order);
-  if (globalThis.globalOrders && globalThis.globalOrders.length > 200) {
-    globalThis.globalOrders.length = 200;
+  const id = crypto.randomUUID();
+  const createdAt = new Date().toISOString();
+
+  // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
+  try {
+    const db = getDB();
+    await db
+      .prepare(
+        `CREATE TABLE IF NOT EXISTS orders (
+          id TEXT PRIMARY KEY,
+          created_at TEXT NOT NULL,
+          name TEXT NOT NULL,
+          phone TEXT NOT NULL,
+          service TEXT NOT NULL,
+          description TEXT,
+          status TEXT NOT NULL DEFAULT 'جدید'
+        )`
+      )
+      .run();
+    await db
+      .prepare(
+        'INSERT INTO orders (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      )
+      .bind(id, createdAt, name, phone, service, description, 'جدید')
+      .run();
+  } catch (e) {
+    // حتی اگر ذخیره در دیتابیس ناموفق شود، سفارش از طریق تلگرام ارسال می‌شود تا از دست نرود
+    console.error('D1 insert failed', e);
   }
 
   const time = new Date().toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' });

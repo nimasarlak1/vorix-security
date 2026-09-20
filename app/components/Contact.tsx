@@ -1,9 +1,10 @@
 import Reveal from './Reveal';
-import { IconClock, IconInstagram, IconMail, IconPhone, IconPin } from './Icons';
+import { IconClock, IconInstagram, IconMail, IconPhone, IconPin, IconWhatsapp } from './Icons';
 import { SITE } from '../data/site';
 
 const ITEMS = [
   { icon: IconPhone, label: 'تلفن', value: SITE.phone, href: `tel:${SITE.phone}`, ltr: true },
+  { icon: IconWhatsapp, label: 'واتساپ', value: SITE.phone, href: SITE.whatsappUrl, ltr: true, external: true },
   { icon: IconInstagram, label: 'اینستاگرام', value: `@${SITE.instagram}`, href: SITE.instagramUrl, ltr: true, external: true },
   { icon: IconMail, label: 'ایمیل', value: SITE.email, href: `mailto:${SITE.email}`, ltr: true },
   { icon: IconPin, label: 'آدرس دفتر', value: SITE.address, href: SITE.mapsUrl, external: true },

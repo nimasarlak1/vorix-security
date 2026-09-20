@@ -1,6 +1,18 @@
 import Reveal from './Reveal';
 import { ServiceIconView } from './Icons';
 import { PROJECTS } from '../data/portfolio';
+import type { ServiceIcon } from '../data/site';
+
+// هر دسته‌ی خدمت یک ترکیب رنگی مخصوص به خودش می‌گیرد تا کارت‌ها حتی بدون عکس واقعی
+// از هم متمایز باشند و ظاهر یک‌دست و تکراری نداشته باشند.
+const COVER_STYLE: Record<ServiceIcon, string> = {
+  drive: 'from-[#0b1a3a] via-[#08121f] to-[#06202b]',
+  camera: 'from-[#1a0b3a] via-[#12081f] to-[#200626]',
+  shield: 'from-[#0b3a1e] via-[#081f16] to-[#062b20]',
+  code: 'from-[#3a230b] via-[#1f1508] to-[#2b1e06]',
+  ai: 'from-[#3a0b2a] via-[#1f0817] to-[#2b0620]',
+  chat: 'from-[#0b2a3a] via-[#081a1f] to-[#062028]',
+};
 
 export default function Portfolio() {
   const hasSamples = PROJECTS.some((p) => p.sample);
@@ -22,7 +34,7 @@ export default function Portfolio() {
           {PROJECTS.map((p, i) => (
             <Reveal key={p.title} delay={(i % 2) * 100}>
               <article className="card group h-full overflow-hidden">
-                <div className="relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-[#0b1a3a] via-[#08121f] to-[#06202b]">
+                <div className={`relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br ${COVER_STYLE[p.icon]}`}>
                   {p.image ? (
                     <img src={p.image} alt={p.title} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                   ) : (

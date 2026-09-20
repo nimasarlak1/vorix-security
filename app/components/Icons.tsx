@@ -77,6 +77,12 @@ export const IconInstagram = (p: IconProps) => (
     <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" />
   </Svg>
 );
+export const IconWhatsapp = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M7 17l-1.4 3.4L9 19a8 8 0 104-15 8 8 0 00-6 13z" />
+    <path d="M8.5 9.5c.2 2.6 2.4 4.8 5 5 .8.1 1-.4.9-.9l-.3-1-1.6-.5-.9.9a5 5 0 01-2.6-2.6l.9-.9-.5-1.6-1-.3c-.5-.1-1 .1-.9.9z" />
+  </Svg>
+);
 export const IconPin = (p: IconProps) => (
   <Svg {...p}>
     <path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z" />

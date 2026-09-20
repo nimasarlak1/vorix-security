@@ -6,6 +6,7 @@ export const SITE = {
   url: 'https://vorixsecurity.ir',
   phone: '09357781529',
   phoneIntl: '+989357781529',
+  whatsappUrl: 'https://wa.me/989357781529',
   email: 'vorixsecurity@gmail.com',
   instagram: 'vorix.security',
   instagramUrl: 'https://instagram.com/vorix.security',

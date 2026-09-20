@@ -12,8 +12,8 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "framer-motion": "latest",
-    "lucide-react": "latest"
+    "lucide-react": "latest",
+    "@cloudflare/next-on-pages": "latest"
   },
   "devDependencies": {
     "typescript": "latest",
