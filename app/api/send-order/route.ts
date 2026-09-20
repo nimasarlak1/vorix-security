@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cleanText, isValidMobile, normalizePhone } from '../../lib/validate';
-import { getDBSafe, ORDERS_TABLE } from '../../lib/db';
+import { getDBInfo, ORDERS_TABLE } from '../../lib/db';
 
 export const runtime = 'edge';
 
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
   // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
   let saved = false;
   let dbNote = '';
-  const db = getDBSafe();
+  const { db, reason: dbReason } = getDBInfo();
   if (db) {
     try {
       await db
@@ -121,8 +121,8 @@ export async function POST(request: Request) {
       dbNote = `ذخیره نشد — ${String((e as any)?.message || e).slice(0, 200)}`;
     }
   } else {
-    console.error('D1 binding DB is missing');
-    dbNote = 'ذخیره نشد — Binding دیتابیس با نام DB پیدا نشد';
+    console.error('D1 binding DB is missing:', dbReason);
+    dbNote = `ذخیره نشد — ${dbReason}`;
   }
 
   const time = new Date().toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' });

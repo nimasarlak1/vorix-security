@@ -1,5 +1,6 @@
 import Hero from './components/Hero';
 import Services from './components/Services';
+import Stats from './components/Stats';
 import Portfolio from './components/Portfolio';
 import About from './components/About';
 import OrderForm from './components/OrderForm';
@@ -22,6 +23,7 @@ export default function HomePage() {
     <main id="main">
       <Hero />
       <Services />
+      <Stats />
       <Portfolio />
       <About />
       <OrderForm />

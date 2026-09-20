@@ -1,9 +1,47 @@
 import { getRequestContext } from '@cloudflare/next-on-pages';
 
+// اتصال به دیتابیس D1.
+// اگر Binding با نام DB نبود، هر Binding دیگری که شبیه دیتابیس D1 باشد (تابع prepare داشته باشد) پیدا و استفاده می‌شود.
+// اگر هیچ‌کدام نبود، دلیل دقیق برگردانده می‌شود تا عیب‌یابی ساده باشد.
+
+export type DBInfo = { db: any | null; reason: string };
+
+export function getDBInfo(): DBInfo {
+  let env: Record<string, any>;
+  try {
+    env = (getRequestContext() as any).env || {};
+  } catch (e) {
+    return {
+      db: null,
+      reason: `کانتکست Cloudflare در دسترس نیست (${String((e as any)?.message || e).slice(0, 120)})`,
+    };
+  }
+
+  if (env.DB && typeof env.DB.prepare === 'function') {
+    return { db: env.DB, reason: '' };
+  }
+
+  // Binding با اسم دیگر (مثلاً vorix_db یا D1)
+  for (const key of Object.keys(env)) {
+    const v = env[key];
+    if (v && typeof v === 'object' && typeof v.prepare === 'function') {
+      return { db: v, reason: `از Binding «${key}» استفاده شد` };
+    }
+  }
+
+  const seen = Object.keys(env).filter((k) => {
+    const t = typeof env[k];
+    return t === 'object' || t === 'function';
+  });
+  return {
+    db: null,
+    reason: `هیچ Binding دیتابیسی در این Deploy نیست. Bindingهای دیده‌شده: ${seen.length ? seen.join('، ') : 'هیچ'}`,
+  };
+}
+
 // نسخه‌ی معمولی: اگر دیتابیس وصل نباشد خطا می‌دهد
 export function getDB(): any {
-  const { env } = getRequestContext();
-  const db = (env as any).DB;
+  const { db } = getDBInfo();
   if (!db) {
     throw new Error('D1 binding به اسم DB پیدا نشد. در تنظیمات Cloudflare Pages بررسی کنید.');
   }
@@ -12,11 +50,7 @@ export function getDB(): any {
 
 // نسخه‌ی امن: اگر دیتابیس وصل نبود null برمی‌گرداند تا API بتواند پیام واضح بدهد
 export function getDBSafe(): any | null {
-  try {
-    return getDB();
-  } catch {
-    return null;
-  }
+  return getDBInfo().db;
 }
 
 export function getEnv(): Record<string, string> {
