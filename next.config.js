@@ -8,6 +8,16 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
+  // آدرس‌های قدیمی سایت به بخش‌های مشابه صفحه‌ی اصلی هدایت می‌شوند (ریدایرکت ۳۰۱ برای حفظ سئو)
+  async redirects() {
+    return [
+      { source: '/about', destination: '/#about', permanent: true },
+      { source: '/contact', destination: '/#contact', permanent: true },
+      { source: '/order', destination: '/#order', permanent: true },
+      { source: '/security', destination: '/#services', permanent: true },
+    ];
+  },
+
   // هدرهای امنیتی برای حفاظت در برابر حملات رایج
   async headers() {
     return [
