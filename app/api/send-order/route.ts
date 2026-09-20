@@ -4,6 +4,8 @@ import { getDBInfo, ORDERS_TABLE } from '../../lib/db';
 
 export const runtime = 'edge';
 
+const STATS_TABLE = 'order_stats';
+
 // محدودیت تعداد درخواست (در حافظه‌ی همین سرور؛ کمک‌کننده است نه کامل)
 const hits = new Map<string, number[]>();
 const WINDOW_MS = 10 * 60 * 1000;
@@ -112,6 +114,28 @@ export async function POST(request: Request) {
           `INSERT INTO ${ORDERS_TABLE} (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)`
         )
         .bind(id, createdAt, name, phone, service, description, 'جدید')
+        .run();
+
+      // ساخت و به‌روزرسانی جدول آمار (شمارنده سفارش‌ها)
+      await db
+        .prepare(
+          `CREATE TABLE IF NOT EXISTS ${STATS_TABLE} (
+            id INTEGER PRIMARY KEY,
+            count INTEGER NOT NULL
+          )`
+        )
+        .run();
+
+      await db
+        .prepare(
+          `INSERT OR IGNORE INTO ${STATS_TABLE} (id, count) VALUES (1, 312)`
+        )
+        .run();
+
+      await db
+        .prepare(
+          `UPDATE ${STATS_TABLE} SET count = count + 1 WHERE id = 1`
+        )
         .run();
 
       // بعد از ذخیره، مطمئن می‌شویم سفارش واقعاً در جدول هست
