@@ -15,8 +15,6 @@ const TITLE = 'VORIX.SECURITY | ریکاوری اطلاعات و دوربین م
 const DESCRIPTION =
   'دفتر خدمات دیجیتال VORIX.SECURITY در الیگودرز: ریکاوری اطلاعات هارد و گوشی، نصب دوربین مداربسته، امنیت پیج و حساب‌ها، طراحی سایت و هوش مصنوعی.';
 
-// کلمات کلیدی محلی و مرتبط با خدمات، برای کمک به موتورهای جستجو
-// (تأثیر اصلی سئو از عنوان، توضیحات، محتوای صفحه و بک‌لینک می‌آید، نه این تگ به‌تنهایی)
 const KEYWORDS = [
   'ریکاوری اطلاعات الیگودرز',
   'بازیابی اطلاعات هارد الیگودرز',
@@ -43,7 +41,6 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   authors: [{ name: SITE.legalName }],
   alternates: { canonical: '/' },
-  // آیکون‌ها داخل public هستند (نه app) تا با Cloudflare Pages مشکل Edge Runtime ایجاد نکنند
   icons: {
     icon: [{ url: '/icon.png', type: 'image/png', sizes: '256x256' }],
     apple: [{ url: '/apple-icon.png', sizes: '180x180' }],
@@ -52,19 +49,18 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    url: '/',
+    url: SITE.url,
     siteName: SITE.name,
     locale: 'fa_IR',
     type: 'website',
-    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: SITE.name }],
+    images: [{ url: `${SITE.url}/og.jpg`, width: 1200, height: 630, alt: SITE.name }],
   },
   twitter: {
     card: 'summary_large_image',
     title: TITLE,
     description: DESCRIPTION,
-    images: ['/og.jpg'],
+    images: [`${SITE.url}/og.jpg`],
   },
-  // تأیید مالکیت در Google Search Console (از سایت قبلی حفظ شده)
   verification: { google: 'eWpLO4qdD5WZe49-VnjdBy2vx3uMrlMVBFnQBx7NvVk' },
 };
 
@@ -112,7 +108,6 @@ const jsonLd = {
       ],
       sameAs: [SITE.instagramUrl],
     },
-    // اسکیمای FAQPage از همان سؤالات واقعی صفحه گرفته شده تا در نتایج گوگل هم قابل نمایش باشد
     {
       '@type': 'FAQPage',
       '@id': `${SITE.url}/#faq`,
