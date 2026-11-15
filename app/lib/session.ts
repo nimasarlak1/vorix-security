@@ -3,7 +3,8 @@
 
 const encoder = new TextEncoder();
 
-export const SESSION_COOKIE = 'vorix_admin_session';
+// پیشوند __Host- یعنی مرورگر کوکی را فقط روی HTTPS و فقط برای همین دامنه (بدون زیردامنه) قبول می‌کند
+export const SESSION_COOKIE = '__Host-vorix_admin';
 export const SESSION_TTL_SECONDS = 8 * 60 * 60; // ۸ ساعت
 
 async function hmacKey(secret: string) {

@@ -1,17 +1,18 @@
-import { NextResponse } from 'next/server';
 import { getDBSafe, getEnv, NO_DB_MESSAGE, ORDERS_TABLE } from '../../../lib/db';
 import { isAuthorizedRequest } from '../../../lib/session';
+import { jsonNoStore } from '../../../lib/security';
 
 export const runtime = 'edge';
 
 export async function GET(request: Request) {
+  // کانتکست Cloudflare (دیتابیس) قبل از هر await گرفته می‌شود
+  const db = getDBSafe();
   const env = getEnv();
   if (!(await isAuthorizedRequest(request, env.SESSION_SECRET || ''))) {
-    return NextResponse.json({ success: false, error: 'لطفاً وارد شوید.' }, { status: 401 });
+    return jsonNoStore({ success: false, error: 'لطفاً وارد شوید.' }, 401);
   }
 
-  const db = getDBSafe();
-  if (!db) return NextResponse.json({ success: false, error: NO_DB_MESSAGE }, { status: 503 });
+  if (!db) return jsonNoStore({ success: false, error: NO_DB_MESSAGE }, 503);
 
   try {
     await db
@@ -34,14 +35,11 @@ export async function GET(request: Request) {
       )
       .all();
 
-    return NextResponse.json({ success: true, orders: results });
+    return jsonNoStore({ success: true, orders: results });
   } catch (e) {
     console.error('load orders failed', e);
     // این مسیر فقط برای ادمین واردشده است؛ متن خطا برای عیب‌یابی نمایش داده می‌شود
     const detail = String((e as any)?.message || e).slice(0, 300);
-    return NextResponse.json(
-      { success: false, error: 'خواندن سفارش‌ها از دیتابیس انجام نشد.', detail },
-      { status: 500 }
-    );
+    return jsonNoStore({ success: false, error: 'خواندن سفارش‌ها از دیتابیس انجام نشد.', detail }, 500);
   }
 }

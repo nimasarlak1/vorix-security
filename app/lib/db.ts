@@ -53,9 +53,14 @@ export function getDBSafe(): any | null {
   return getDBInfo().db;
 }
 
+// متغیرها و Secretها را می‌خواند. اگر کانتکست Cloudflare در دسترس نبود، به‌جای کرش از process.env استفاده می‌کند.
 export function getEnv(): Record<string, string> {
-  const { env } = getRequestContext();
-  return env as unknown as Record<string, string>;
+  try {
+    const { env } = getRequestContext();
+    return env as unknown as Record<string, string>;
+  } catch {
+    return (typeof process !== 'undefined' ? process.env : {}) as Record<string, string>;
+  }
 }
 
 export const NO_DB_MESSAGE =
