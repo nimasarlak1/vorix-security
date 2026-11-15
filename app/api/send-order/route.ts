@@ -1,63 +1,43 @@
 import { NextResponse } from 'next/server';
 import { cleanText, isValidMobile, normalizePhone } from '../../lib/validate';
-import { getDBInfo, ORDERS_TABLE } from '../../lib/db';
+import { getDBInfo, getEnv, ORDERS_TABLE } from '../../lib/db';
+import { clientIp, describePlatform, isAllowedOrigin } from '../../lib/security';
+import { hitRateLimit } from '../../lib/ratelimit';
 
 export const runtime = 'edge';
 
 const STATS_TABLE = 'order_stats';
 
-// محدودیت تعداد درخواست (در حافظه‌ی همین سرور؛ کمک‌کننده است نه کامل)
-const hits = new Map<string, number[]>();
-const WINDOW_MS = 10 * 60 * 1000;
-const MAX_HITS = 5;
-
-function isLimited(ip: string): boolean {
-  const now = Date.now();
-  const list = (hits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
-  list.push(now);
-  hits.set(ip, list);
-  if (hits.size > 500) {
-    hits.forEach((v, k) => {
-      if (!v.some((t) => now - t < WINDOW_MS)) hits.delete(k);
-    });
-  }
-  return list.length > MAX_HITS;
-}
-
-function originAllowed(request: Request): boolean {
-  const origin = request.headers.get('origin');
-  if (!origin) return true;
-  try {
-    const host = new URL(origin).hostname;
-    return (
-      host === 'vorixsecurity.ir' ||
-      host.endsWith('.vorixsecurity.ir') ||
-      host.endsWith('.pages.dev') ||
-      host.endsWith('.workers.dev') ||
-      host === 'localhost'
-    );
-  } catch {
-    return false;
-  }
-}
+// حداکثر ۵ سفارش در ۱۰ دقیقه برای هر IP، و ۱۰۰ سفارش در ساعت برای کل سایت (مانع حمله‌ی انبوه به تلگرام)
+const IP_MAX = 5;
+const IP_WINDOW_SEC = 10 * 60;
+const GLOBAL_MAX = 100;
+const GLOBAL_WINDOW_SEC = 60 * 60;
 
 function fail(error: string, status: number) {
-  return NextResponse.json({ success: false, error }, { status });
+  return NextResponse.json({ success: false, error }, { status, headers: { 'Cache-Control': 'no-store' } });
 }
 
 export async function POST(request: Request) {
-  // مهم: کانتکست Cloudflare (دیتابیس) باید همین اول و قبل از هر await گرفته شود؛
-  // بعد از خواندن بدنه‌ی درخواست ممکن است در بعضی درخواست‌ها از دست برود.
+  // مهم: کانتکست Cloudflare (دیتابیس) باید همین اول و قبل از هر await گرفته شود
   const dbInfo = getDBInfo();
+  const { db, reason: dbReason } = dbInfo;
 
-  if (!originAllowed(request)) return fail('درخواست نامعتبر است.', 403);
+  if (!isAllowedOrigin(request)) return fail('درخواست نامعتبر است.', 403);
 
-  const ip =
-    request.headers.get('cf-connecting-ip') ||
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    'unknown';
-  if (isLimited(ip)) {
+  const contentType = request.headers.get('content-type') || '';
+  if (!contentType.toLowerCase().includes('application/json')) {
+    return fail('اطلاعات ارسالی نامعتبر است.', 400);
+  }
+
+  const ip = clientIp(request);
+  const ipLimit = await hitRateLimit(db, `order:${ip}`, IP_MAX, IP_WINDOW_SEC);
+  if (ipLimit.limited) {
     return fail('تعداد درخواست‌ها زیاد است. کمی بعد دوباره تلاش کنید.', 429);
+  }
+  const globalLimit = await hitRateLimit(db, 'order:all', GLOBAL_MAX, GLOBAL_WINDOW_SEC);
+  if (globalLimit.limited) {
+    return fail('در حال حاضر ثبت آنلاین ممکن نیست. لطفاً تماس بگیرید.', 429);
   }
 
   let body: any;
@@ -84,8 +64,9 @@ export async function POST(request: Request) {
     return fail('شماره موبایل معتبر نیست (مثال: 09123456789).', 400);
   }
 
-  const token = process.env.BOT_TOKEN;
-  const chatId = process.env.CHAT_ID;
+  const env = getEnv();
+  const token = env.BOT_TOKEN;
+  const chatId = env.CHAT_ID;
 
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
@@ -93,7 +74,6 @@ export async function POST(request: Request) {
   // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
   let saved = false;
   let dbNote = '';
-  const { db, reason: dbReason } = dbInfo;
   if (db) {
     try {
       await db
@@ -125,28 +105,15 @@ export async function POST(request: Request) {
           )`
         )
         .run();
+      await db.prepare(`INSERT OR IGNORE INTO ${STATS_TABLE} (id, count) VALUES (1, 312)`).run();
+      await db.prepare(`UPDATE ${STATS_TABLE} SET count = count + 1 WHERE id = 1`).run();
 
-      await db
-        .prepare(
-          `INSERT OR IGNORE INTO ${STATS_TABLE} (id, count) VALUES (1, 312)`
-        )
-        .run();
-
-      await db
-        .prepare(
-          `UPDATE ${STATS_TABLE} SET count = count + 1 WHERE id = 1`
-        )
-        .run();
-
-      // بعد از ذخیره، مطمئن می‌شویم سفارش واقعاً در جدول هست
-      const check = await db
-        .prepare(`SELECT COUNT(*) AS c FROM ${ORDERS_TABLE}`)
-        .first();
+      const check = await db.prepare(`SELECT COUNT(*) AS c FROM ${ORDERS_TABLE}`).first();
       saved = true;
-      dbNote = `ذخیره شد (تعداد کل سفارش‌های پنل: ${check?.c ?? '?'})`;
+      dbNote = `ذخیره شد (تعداد کل سفارش‌ها در پنل: ${check?.c ?? '?'})`;
     } catch (e) {
       console.error('D1 insert failed', e);
-      dbNote = `ذخیره نشد — ${String((e as any)?.message || e).slice(0, 200)}`;
+      dbNote = `ذخیره نشد — ${String((e as any)?.message || e).slice(0, 150)}`;
     }
   } else {
     console.error('D1 binding DB is missing:', dbReason);
@@ -154,7 +121,7 @@ export async function POST(request: Request) {
   }
 
   const time = new Date().toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' });
-  const text = [
+  const lines = [
     '🚨 سفارش جدید',
     `👤 نام: ${name}`,
     `📞 شماره: ${phone}`,
@@ -162,7 +129,10 @@ export async function POST(request: Request) {
     `💬 توضیحات: ${description || 'بدون توضیحات'}`,
     `🕒 ${time}`,
     `${saved ? '🗄' : '⚠️'} پنل: ${dbNote}`,
-  ].join('\n');
+  ];
+  // فقط وقتی ذخیره نشده، محل اجرای سایت هم نوشته می‌شود تا علت مشکل مشخص شود
+  if (!saved) lines.push(`🔎 اجرا روی: ${describePlatform(request)}`);
+  const text = lines.join('\n');
 
   // اعلان تلگرام
   let notified = false;
@@ -187,9 +157,9 @@ export async function POST(request: Request) {
     console.error('BOT_TOKEN or CHAT_ID is not set');
   }
 
-  // اگر سفارش حداقل یک‌جا (دیتابیس یا تلگرام) ثبت شده باشد، برای مشتری موفق است
+  // اگر سفارش نه ذخیره شد و نه به تلگرام رسید، به مشتری خطا بده تا با دفتر تماس بگیرد
   if (!saved && !notified) {
     return fail('ارسال سفارش انجام نشد. لطفاً با دفتر تماس بگیرید.', 502);
   }
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true }, { headers: { 'Cache-Control': 'no-store' } });
 }
