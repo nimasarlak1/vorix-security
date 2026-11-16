@@ -7,12 +7,12 @@ import { ensureSchema } from '../../lib/schema';
 import { clean } from '../../lib/itemspec';
 import { SITE } from '../../data/site';
 import { SERVICES } from '../../data/services';
+import { runAI } from '../../lib/ai';
 
 export const runtime = 'edge';
 
 // دستیار هوشمند با Workers AI کلادفلر: نه کلید API لازم دارد نه سرویس خارجی (فقط یک Binding با نام AI).
-// مدل پیش‌فرض سبک و ارزان است؛ با متغیر AI_MODEL می‌شود عوضش کرد. هیچ گفتگویی ذخیره نمی‌شود.
-const DEFAULT_MODEL = '@cf/meta/llama-3.1-8b-instruct';
+// مدل‌ها در lib/ai.ts هستند (با مدل جایگزین)؛ با متغیر AI_MODEL می‌شود مدل اول را عوض کرد. هیچ گفتگویی ذخیره نمی‌شود.
 const IP_MAX = 15;
 const IP_WINDOW = 10 * 60;
 const GLOBAL_MAX = 300;
@@ -66,14 +66,10 @@ export async function POST(request: Request) {
     .slice(-8);
   if (!msgs.length || msgs[msgs.length - 1].role !== 'user') return fail('پیامی ارسال نشد.', 400);
 
-  try {
-    const run = ai.run(env.AI_MODEL || DEFAULT_MODEL, { messages: [{ role: 'system', content: SYSTEM }, ...msgs], max_tokens: 300, temperature: 0.3 });
-    const out: any = await Promise.race([run, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 20000))]);
-    const reply = clean(typeof out?.response === 'string' ? out.response : '', 1200);
-    if (!reply) return fail('پاسخی دریافت نشد. دوباره امتحان کنید.', 502);
-    return NextResponse.json({ success: true, reply }, { headers: { 'Cache-Control': 'no-store' } });
-  } catch (e) {
-    console.error('assistant failed', e);
+  const r = await runAI(ai, env.AI_MODEL, [{ role: 'system', content: SYSTEM }, ...msgs], 600);
+  if (!r.reply) {
+    console.error('assistant failed', JSON.stringify(r.errors));
     return fail('دستیار موقتاً پاسخ نمی‌دهد. لطفاً تماس بگیرید.', 502);
   }
+  return NextResponse.json({ success: true, reply: clean(r.reply, 1200) }, { headers: { 'Cache-Control': 'no-store' } });
 }
