@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { COMPLETED_JOBS } from '../data/stats';
 
 const fa = (n: number) => n.toLocaleString('fa-IR');
 
@@ -29,22 +28,10 @@ const css = `
 @media(prefers-reduced-motion:reduce){.st-pulse{animation:none;opacity:0}}
 `;
 
-export default function Stats() {
+export default function Stats({ jobs }: { jobs: number }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [targetJobs, setTargetJobs] = useState(COMPLETED_JOBS);
-  const [value, setValue] = useState(COMPLETED_JOBS);
-
-  // ۱. دریافت عدد زنده از دیتابیس
-  useEffect(() => {
-    fetch('/api/get-order-count')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.count && typeof data.count === 'number') {
-          setTargetJobs(data.count);
-        }
-      })
-      .catch((err) => console.error('Error fetching stats count:', err));
-  }, []);
+  const targetJobs = jobs;
+  const [value, setValue] = useState(jobs);
 
   // ۲. انیمیشن شمارش تا رسیدن به targetJobs
   useEffect(() => {
@@ -84,6 +71,8 @@ export default function Stats() {
   }, [targetJobs]);
 
   const progress = targetJobs > 0 ? value / targetJobs : 0;
+
+  if (targetJobs <= 0) return null;
 
   return (
     <section className="st" aria-label="آمار کارهای انجام‌شده">

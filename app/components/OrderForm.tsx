@@ -5,7 +5,7 @@ import Reveal from './Reveal';
 import { ORDER_SERVICES, SITE } from '../data/site';
 import { isValidMobile, normalizePhone } from '../lib/validate';
 
-type Form = { name: string; phone: string; service: string; description: string; hp: string };
+type Form = { name: string; phone: string; service: string; description: string; coupon: string; hp: string };
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 const INITIAL: Form = {
@@ -13,6 +13,7 @@ const INITIAL: Form = {
   phone: '',
   service: ORDER_SERVICES[0],
   description: '',
+  coupon: '',
   hp: '', // فیلد تله‌ی ربات‌ها؛ باید خالی بماند
 };
 
@@ -22,16 +23,44 @@ const STEPS = [
   'برای هماهنگی با شما تماس می‌گیریم.',
 ];
 
-export default function OrderForm() {
-  const [form, setForm] = useState<Form>(INITIAL);
+export default function OrderForm({ defaultService, defaultDescription }: { defaultService?: string; defaultDescription?: string } = {}) {
+  const start: Form = {
+    ...INITIAL,
+    service: defaultService && ORDER_SERVICES.includes(defaultService) ? defaultService : INITIAL.service,
+    description: defaultDescription || '',
+  };
+  const [form, setForm] = useState<Form>(start);
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
+  const [couponInfo, setCouponInfo] = useState<{ label: string; note: string } | null>(null);
+  const [couponMsg, setCouponMsg] = useState('');
+  const [couponBusy, setCouponBusy] = useState(false);
 
   const update =
     (key: keyof Form) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
       setForm((f) => ({ ...f, [key]: e.target.value }));
+      if (key === 'coupon' || key === 'service') { setCouponInfo(null); setCouponMsg(''); }
     };
+
+  async function applyCoupon() {
+    const code = form.coupon.trim();
+    if (!code || couponBusy) return;
+    setCouponBusy(true); setCouponMsg(''); setCouponInfo(null);
+    try {
+      const res = await fetch('/api/coupon/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, service: form.service }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) setCouponInfo({ label: data.label, note: data.note });
+      else setCouponMsg(data.error || 'کد تخفیف معتبر نیست.');
+    } catch {
+      setCouponMsg('ارتباط با سرور برقرار نشد.');
+    }
+    setCouponBusy(false);
+  }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -57,7 +86,9 @@ export default function OrderForm() {
       if (res.ok && data.success) {
         setStatus('success');
         setMessage('سفارش شما ثبت شد. به‌زودی با شما تماس می‌گیریم.');
-        setForm(INITIAL);
+        setForm(start);
+        setCouponInfo(null);
+        setCouponMsg('');
       } else {
         setStatus('error');
         setMessage(data.error || `ثبت سفارش انجام نشد. لطفاً با شماره ${SITE.phone} تماس بگیرید.`);
@@ -153,6 +184,35 @@ export default function OrderForm() {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div>
+              <label htmlFor="of-coupon" className="mb-2 block text-sm font-bold text-neutral-200">
+                کد تخفیف <span className="font-normal text-neutral-500">(اختیاری)</span>
+              </label>
+              <div className="flex gap-2">
+                <input
+                  id="of-coupon"
+                  type="text"
+                  name="coupon"
+                  dir="ltr"
+                  autoComplete="off"
+                  value={form.coupon}
+                  onChange={update('coupon')}
+                  placeholder="CODE"
+                  className="field text-left"
+                  maxLength={40}
+                />
+                <button type="button" onClick={applyCoupon} disabled={couponBusy || !form.coupon.trim()} className="btn-primary shrink-0 disabled:cursor-not-allowed disabled:opacity-60">
+                  {couponBusy ? '...' : 'اعمال'}
+                </button>
+              </div>
+              {couponInfo && (
+                <p className="mt-1.5 text-xs text-emerald-300">
+                  کد تأیید شد: {couponInfo.label}. {couponInfo.note}
+                </p>
+              )}
+              {couponMsg && <p className="mt-1.5 text-xs text-red-300">{couponMsg}</p>}
             </div>
 
             <div>

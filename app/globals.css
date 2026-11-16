@@ -298,3 +298,37 @@ article.card:hover {
     transform: none;
   }
 }
+
+/* ---------- بهینه‌سازی گوشی: افکت‌های سنگین حذف می‌شوند تا اسکرول روان باشد ---------- */
+@media (max-width: 899px) {
+  .backdrop-blur,
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  header.sticky {
+    background-color: rgba(5, 7, 13, 0.97) !important;
+  }
+  .blur-2xl {
+    display: none !important;
+  }
+  .scan::after,
+  .float,
+  .st-pulse {
+    animation: none !important;
+  }
+  .st-pulse {
+    display: none !important;
+  }
+  .scan::after {
+    display: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  /* ورود سریع‌تر عنصرهای بالای صفحه روی گوشی */
+  .rise {
+    animation-duration: 0.4s !important;
+    animation-delay: 0s !important;
+  }
+}

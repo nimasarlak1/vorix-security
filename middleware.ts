@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifySessionToken, SESSION_COOKIE } from './app/lib/session';
+import { parseSessionToken, SESSION_COOKIE } from './app/lib/session';
 
 export const config = {
   matcher: ['/admin/:path*'],
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
   const secret = process.env.SESSION_SECRET || '';
   const token = request.cookies.get(SESSION_COOKIE)?.value;
 
-  if (!(await verifySessionToken(secret, token))) {
+  if (!(await parseSessionToken(secret, token))) {
     const url = request.nextUrl.clone();
     url.pathname = '/admin/login';
     return NextResponse.redirect(url);

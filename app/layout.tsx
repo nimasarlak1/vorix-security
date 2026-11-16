@@ -3,7 +3,7 @@ import { Vazirmatn } from 'next/font/google';
 import './globals.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { SITE, FAQS } from './data/site';
+import { SITE } from './data/site';
 
 const vazir = Vazirmatn({
   subsets: ['arabic', 'latin'],
@@ -11,22 +11,27 @@ const vazir = Vazirmatn({
   variable: '--font-vazir',
 });
 
-const TITLE = 'VORIX.SECURITY | ریکاوری اطلاعات و دوربین مداربسته در الیگودرز';
+const TITLE = 'VORIX.SECURITY | ریکاوری اطلاعات، امنیت دیجیتال و دوربین مداربسته';
 const DESCRIPTION =
-  'دفتر خدمات دیجیتال VORIX.SECURITY در الیگودرز: ریکاوری اطلاعات هارد و گوشی، نصب دوربین مداربسته، امنیت پیج و حساب‌ها، طراحی سایت و هوش مصنوعی.';
+  'مرکز تخصصی ریکاوری اطلاعات و امنیت دیجیتال در الیگودرز: بازیابی اطلاعات هارد و گوشی، رفع هک اینستاگرام و حساب‌ها، دوربین مداربسته، آی‌پی ثابت و VPN، طراحی سایت و برنامه‌ی حسابداری. خدمات آنلاین برای همه‌ی شهرهای ایران.';
 
 const KEYWORDS = [
-  'ریکاوری اطلاعات الیگودرز',
-  'بازیابی اطلاعات هارد الیگودرز',
-  'تعمیر هارد الیگودرز',
-  'دوربین مداربسته الیگودرز',
-  'نصب دوربین مداربسته لرستان',
-  'امنیت پیج اینستاگرام',
-  'بازیابی پیج اینستاگرام هک‌شده',
-  'طراحی سایت الیگودرز',
-  'طراحی سایت لرستان',
-  'ریکاوری اطلاعات فلش و کارت حافظه',
+  'ریکاوری اطلاعات',
+  'بازیابی اطلاعات هارد',
+  'بازیابی اطلاعات گوشی',
+  'ریکاوری فلش و کارت حافظه',
+  'رفع هک اینستاگرام',
+  'ریکاوری پیج اینستاگرام',
+  'امنیت سایبری',
   'مشاوره امنیت دیجیتال',
+  'طراحی سایت',
+  'آی‌پی ثابت',
+  'خرید VPN',
+  'برنامه حسابداری اختصاصی',
+  'دوربین مداربسته',
+  'اتصال درگاه پرداخت به سایت',
+  'ریکاوری اطلاعات الیگودرز',
+  'دوربین مداربسته الیگودرز',
   'وریکس سکیوریتی',
 ];
 
@@ -97,7 +102,11 @@ const jsonLd = {
         addressRegion: SITE.region,
         addressCountry: 'IR',
       },
-      areaServed: { '@type': 'City', name: SITE.city },
+      description: SITE.tagline,
+      areaServed: [
+        { '@type': 'Country', name: 'ایران' },
+        { '@type': 'City', name: SITE.city },
+      ],
       openingHoursSpecification: [
         {
           '@type': 'OpeningHoursSpecification',
@@ -107,15 +116,6 @@ const jsonLd = {
         },
       ],
       sameAs: [SITE.instagramUrl],
-    },
-    {
-      '@type': 'FAQPage',
-      '@id': `${SITE.url}/#faq`,
-      mainEntity: FAQS.map((f) => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
-      })),
     },
   ],
 };
