@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { KINDS, KIND_LIST, PERMS, PERM_LABELS, imgSrc, type ItemKind, type Perm, type Field } from '../lib/itemspec';
 import { ORDER_SERVICES } from '../data/site';
+import { SERVICES } from '../data/services';
 
 // پنل مدیریت (موبایل‌محور). همه‌ی بخش‌ها در همین فایل‌اند و فقط بخش‌هایی که ادمین به آن‌ها دسترسی دارد دیده می‌شوند.
 
@@ -260,6 +261,14 @@ function ItemsTab({ kind }: { kind: ItemKind }) {
     load();
   }
 
+  async function importServices() {
+    if (!confirm('خدمات فعلی سایت با همان متن فعلی وارد پنل شوند؟ (خدمت‌هایی که قبلاً در پنل هستند دست نمی‌خورند)')) return;
+    setError('');
+    const r = await api('/api/admin/services-import', { method: 'POST', json: {} });
+    if (!r.res.ok || !r.data?.success) return setError(errText(r));
+    load();
+  }
+
   const setField = (f: Field, v: any) => setForm((s: any) => ({ ...s, data: { ...s.data, [f.key]: v } }));
 
   if (form) {
@@ -305,6 +314,12 @@ function ItemsTab({ kind }: { kind: ItemKind }) {
       <button className="ad-btn pri" onClick={() => setForm(blank())}>+ افزودن {spec.label}</button>
       {kind === 'credential' && <p className="ad-muted" style={{ marginTop: 10 }}>فقط موارد «تأییدشده» در سایت نمایش داده می‌شوند و هیچ موردی به‌صورت پیش‌فرض وجود ندارد. فقط مدرک واقعی اضافه کنید.</p>}
       {kind === 'portfolio' && <p className="ad-muted" style={{ marginTop: 10 }}>سایت‌هایی که کد امضای شما را بگذارند خودکار با وضعیت «در انتظار تأیید» اینجا اضافه می‌شوند و تا تأیید شما نمایش داده نمی‌شوند.</p>}
+      {kind === 'service' && items && SERVICES.some((s) => { const it = items.find((x: any) => x.slug === s.slug); return !it || it.icon === undefined; }) && (
+        <div className="ad-card" style={{ marginTop: 12 }}>
+          <p className="ad-muted">خدمات فعلی سایت (یا بخشی از اطلاعاتشان مثل روند کار) هنوز در پنل نیست. با دکمه‌ی زیر همه با همان متن فعلی وارد/کامل می‌شوند و می‌توانید ویرایششان کنید.</p>
+          <button className="ad-btn pri" onClick={importServices}>وارد کردن / تکمیل خدمات فعلی در پنل</button>
+        </div>
+      )}
       {error && <p className="ad-err" role="alert" style={{ marginTop: 10 }}>{error}</p>}
       {!items && !error && <p className="ad-muted">در حال بارگذاری…</p>}
       {items && items.length === 0 && <p className="ad-muted" style={{ marginTop: 10 }}>هنوز موردی اضافه نشده.</p>}

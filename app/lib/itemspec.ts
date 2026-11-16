@@ -1,3 +1,4 @@
+import { ORDER_SERVICES } from '../data/site';
 // مشخصات آیتم‌های قابل مدیریت از پنل (نمونه‌کار، محصول، خدمت، مجوز/همکاری).
 // این فایل هم در سرور (اعتبارسنجی) و هم در پنل (ساخت فرم) استفاده می‌شود؛ پس هیچ وابستگی سروری ندارد.
 
@@ -99,6 +100,30 @@ export const KINDS: Record<ItemKind, KindSpec> = {
       { key: 'text', label: 'توضیح کوتاه', type: 'long', max: 400 },
       { key: 'points', label: 'ویژگی‌ها (هر خط یکی)', type: 'list', max: 80 },
       { key: 'body', label: 'متن کامل صفحه‌ی خدمت', type: 'long', max: 4000 },
+      { key: 'steps', label: 'روند کار (هر خط یک مرحله، حداکثر ۸)', type: 'list', max: 120 },
+      { key: 'docs', label: 'مدارک موردنیاز (هر خط یکی، اختیاری)', type: 'list', max: 120 },
+      { key: 'docsNote', label: 'توضیح زیر مدارک (اختیاری)', type: 'long', max: 400 },
+      {
+        key: 'icon',
+        label: 'آیکون خدمت',
+        type: 'select',
+        max: 20,
+        options: [
+          { v: 'drive', l: 'هارد / ریکاوری' },
+          { v: 'camera', l: 'دوربین' },
+          { v: 'shield', l: 'امنیت' },
+          { v: 'code', l: 'کد / سایت' },
+          { v: 'ai', l: 'هوش مصنوعی' },
+          { v: 'chat', l: 'مشاوره / گفتگو' },
+        ],
+      },
+      {
+        key: 'orderLabel',
+        label: 'گزینه‌ی انتخاب‌شده در فرم سفارش این خدمت',
+        type: 'select',
+        max: 100,
+        options: ORDER_SERVICES.map((s) => ({ v: s, l: s })),
+      },
       { key: 'installment', label: 'شرایط قسطی (اختیاری؛ خالی = در سایت نمایش داده نمی‌شود). فقط شرایطی بنویسید که واقعاً اجرا می‌کنید', type: 'long', max: 800 },
       { key: 'seoTitle', label: 'عنوان سئو (اختیاری)', type: 'text', max: 70 },
       { key: 'seoDesc', label: 'توضیح سئو (اختیاری)', type: 'long', max: 170 },
