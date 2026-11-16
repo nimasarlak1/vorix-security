@@ -437,6 +437,12 @@ function SettingsTab() {
     setMsg('یک کار حضوری اضافه شد.');
     setLoadKey((k) => k + 1);
   }
+  async function testAi() {
+    setError(''); setMsg('در حال تست دستیار…');
+    const r = await api('/api/admin/ai-test', { method: 'POST' });
+    if (r.data?.success) setMsg(`دستیار کار می‌کند (مدل ${r.data.model}). پاسخ آزمایشی: ${r.data.reply}`);
+    else { setMsg(''); setError(`${r.data?.error || 'خطا'} ${r.data?.model ? `(مدل ${r.data.model})` : ''} ${r.data?.detail ? `— جزئیات: ${r.data.detail}` : ''}`); }
+  }
   async function copy() {
     try { await navigator.clipboard.writeText(SIG_SNIPPET); setMsg('کد کپی شد.'); } catch { setMsg('کپی نشد؛ کد را با انگشت انتخاب و کپی کنید.'); }
   }
@@ -459,6 +465,7 @@ function SettingsTab() {
           <label className="ad-chk"><input type="checkbox" checked={s.bale_enabled} onChange={(e) => setS({ ...s, bale_enabled: e.target.checked })} />ارسال سفارش‌ها به بله {conf.bale ? '' : '(BALE_BOT_TOKEN و BALE_CHAT_ID در Cloudflare تنظیم نشده)'}</label>
           <label className="ad-chk"><input type="checkbox" checked={!!s.ai_enabled} onChange={(e) => setS({ ...s, ai_enabled: e.target.checked })} />دستیار هوشمند در سایت {conf.ai ? '' : '(Binding با نام AI در Cloudflare ساخته نشده)'}</label>
           <button className="ad-btn pri" style={{ marginTop: 12 }} onClick={save}>ذخیره‌ی تنظیمات</button>
+          <button className="ad-btn" style={{ marginTop: 12, marginInlineStart: 8 }} onClick={testAi}>تست دستیار</button>
         </div>
       )}
       <div className="ad-card">
