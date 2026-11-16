@@ -6,7 +6,7 @@ import { getJobsCount } from '../../../lib/content';
 
 export const runtime = 'edge';
 
-const BOOL_KEYS = ['telegram_enabled', 'bale_enabled'];
+const BOOL_KEYS = ['telegram_enabled', 'bale_enabled', 'ai_enabled'];
 
 export async function GET(request: Request) {
   const db = getDBSafe();
@@ -25,9 +25,10 @@ export async function GET(request: Request) {
       completed_jobs: map.completed_jobs ?? '',
       telegram_enabled: map.telegram_enabled !== '0',
       bale_enabled: map.bale_enabled === '1',
+      ai_enabled: map.ai_enabled === '1',
     },
     // فقط نشان می‌دهد Secretها در Cloudflare تنظیم شده‌اند؛ مقدارشان هرگز برگردانده نمی‌شود
-    configured: { telegram: !!(env.BOT_TOKEN && env.CHAT_ID), bale: !!(env.BALE_BOT_TOKEN && env.BALE_CHAT_ID) },
+    configured: { telegram: !!(env.BOT_TOKEN && env.CHAT_ID), bale: !!(env.BALE_BOT_TOKEN && env.BALE_CHAT_ID), ai: !!(env as any).AI },
   });
 }
 

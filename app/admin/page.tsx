@@ -121,7 +121,16 @@ function OrdersTab() {
               <b>{o.name}</b>
               <div className="ad-muted" dir="ltr" style={{ textAlign: 'right' }}>{o.phone}</div>
             </div>
-            <span className="ad-chip" style={{ color: STATUS_COLOR[o.status] || '#94a3b8' }}>{o.status}</span>
+            <select
+              className="ad-sel"
+              aria-label="وضعیت سفارش"
+              style={{ width: 'auto', minWidth: 130, padding: '7px 10px', fontSize: 14, color: STATUS_COLOR[o.status] || '#e6eefc', borderColor: STATUS_COLOR[o.status] || undefined }}
+              value={o.status}
+              disabled={busy === o.id}
+              onChange={(e) => patch(o, { status: e.target.value })}
+            >
+              {ORDER_STATUSES.map((st) => <option key={st}>{st}</option>)}
+            </select>
           </div>
           <div className="ad-muted" style={{ marginTop: 6 }}>خدمت: {o.service}</div>
           {o.description && <div style={{ marginTop: 4, fontSize: 14 }}>{o.description}</div>}
@@ -130,16 +139,12 @@ function OrdersTab() {
             <a className="ad-btn sm" href={`tel:${o.phone}`}>تماس</a>
             <a className="ad-btn sm" href={`https://wa.me/98${String(o.phone).replace(/^0/, '')}`} target="_blank" rel="noopener noreferrer">واتساپ</a>
             <button className="ad-btn sm" onClick={() => { setOpenId(openId === o.id ? null : o.id); setNotes((n) => ({ ...n, [o.id]: o.note || '' })); }}>
-              {openId === o.id ? 'بستن' : 'وضعیت و یادداشت'}
+              {openId === o.id ? 'بستن' : 'یادداشت'}
             </button>
             <span className="ad-muted">{new Date(o.created_at).toLocaleString('fa-IR')}</span>
           </div>
           {openId === o.id && (
             <div style={{ marginTop: 10 }}>
-              <label className="ad-lbl">وضعیت</label>
-              <select className="ad-sel" value={o.status} disabled={busy === o.id} onChange={(e) => patch(o, { status: e.target.value })}>
-                {ORDER_STATUSES.map((s) => <option key={s}>{s}</option>)}
-              </select>
               <label className="ad-lbl">یادداشت (فقط برای خودتان)</label>
               <textarea className="ad-ta" value={notes[o.id] ?? ''} onChange={(e) => setNotes((n) => ({ ...n, [o.id]: e.target.value }))} maxLength={1000} />
               <div className="ad-row" style={{ marginTop: 8 }}>
@@ -452,6 +457,7 @@ function SettingsTab() {
           <input className="ad-in" type="number" inputMode="numeric" value={s.completed_jobs} onChange={(e) => setS({ ...s, completed_jobs: e.target.value })} />
           <label className="ad-chk" style={{ marginTop: 14 }}><input type="checkbox" checked={s.telegram_enabled} onChange={(e) => setS({ ...s, telegram_enabled: e.target.checked })} />ارسال سفارش‌ها به تلگرام {conf.telegram ? '' : '(توکن در Cloudflare تنظیم نشده)'}</label>
           <label className="ad-chk"><input type="checkbox" checked={s.bale_enabled} onChange={(e) => setS({ ...s, bale_enabled: e.target.checked })} />ارسال سفارش‌ها به بله {conf.bale ? '' : '(BALE_BOT_TOKEN و BALE_CHAT_ID در Cloudflare تنظیم نشده)'}</label>
+          <label className="ad-chk"><input type="checkbox" checked={!!s.ai_enabled} onChange={(e) => setS({ ...s, ai_enabled: e.target.checked })} />دستیار هوشمند در سایت {conf.ai ? '' : '(Binding با نام AI در Cloudflare ساخته نشده)'}</label>
           <button className="ad-btn pri" style={{ marginTop: 12 }} onClick={save}>ذخیره‌ی تنظیمات</button>
         </div>
       )}

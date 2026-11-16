@@ -7,6 +7,7 @@ import Credentials from './Credentials';
 import OrderForm from './OrderForm';
 import Faq from './Faq';
 import Contact from './Contact';
+import AssistantMount from './AssistantMount';
 import { getDBSafe } from '../lib/db';
 import { loadContent } from '../lib/content';
 import { getServices } from '../lib/services';
@@ -48,6 +49,7 @@ export default async function HomePage() {
       <OrderForm />
       <Faq />
       <Contact />
+      <AssistantMount />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, '\\u003c') }} />
     </main>
   );

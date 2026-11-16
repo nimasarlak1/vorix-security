@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import OrderForm from '../../components/OrderForm';
+import AssistantMount from '../../components/AssistantMount';
 import { getDBSafe } from '../../lib/db';
 import { getServices } from '../../lib/services';
 import { SITE } from '../../data/site';
@@ -117,6 +118,7 @@ export default async function ServicePage({ params }: Props) {
         </ul>
       </div>
 
+      <AssistantMount />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }} />
     </main>
   );
