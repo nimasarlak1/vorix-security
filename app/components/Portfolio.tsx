@@ -48,6 +48,14 @@ const css = `
 @media(min-width:900px){.pf-media::after{background:linear-gradient(to right,transparent 70%,rgba(9,14,26,.7))}}
 .pf-badge{position:absolute;top:.8rem;left:.8rem;z-index:2;padding:.15rem .8rem;border-radius:999px;font-size:.72rem;font-weight:800;color:#fde68a;background:rgba(251,191,36,.12);border:1px solid rgba(252,211,77,.42);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .pf-dim{position:absolute;inset:0;z-index:3;background:#02040a;opacity:0;pointer-events:none}
+@media(max-width:899px){
+  .pf{padding:3.5rem 0 4rem}
+  .pf-wrap{position:static!important}
+  .pf-card{transform:none!important;will-change:auto;box-shadow:0 14px 34px -22px rgba(0,0,0,.9)}
+  .pf-media img{transform:none!important;will-change:auto}
+  .pf-dim{display:none}
+  .pf-badge{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(40,30,8,.85)}
+}
 @media(prefers-reduced-motion:reduce){
   .pf-wrap{position:static!important}
   .pf-card{transform:none!important}
@@ -68,9 +76,12 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let raf = 0;
+    // روی گوشی و تبلت کارت‌ها ساده زیر هم می‌آیند و این محاسبه‌ی سنگین اجرا نمی‌شود
+    const mobile = window.matchMedia('(max-width: 899px)');
 
     const update = () => {
       raf = 0;
+      if (mobile.matches) return;
       const vh = window.innerHeight;
       const list = wraps.current;
 
@@ -105,6 +116,7 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
     };
 
     const onScroll = () => {
+      if (mobile.matches) return;
       if (!raf) raf = requestAnimationFrame(update);
     };
 
