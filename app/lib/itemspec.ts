@@ -138,6 +138,17 @@ export const KINDS: Record<ItemKind, KindSpec> = {
     ],
     fields: [
       { key: 'title', label: 'عنوان', type: 'text', max: 120, required: true },
+      {
+        key: 'group',
+        label: 'نوع (خالی = مجوز)',
+        type: 'select',
+        max: 10,
+        options: [
+          { v: 'license', l: 'مجوز / تأییدیه' },
+          { v: 'trust', l: 'نماد اعتماد' },
+          { v: 'partner', l: 'همکاری / شریک' },
+        ],
+      },
       { key: 'issuer', label: 'صادرکننده', type: 'text', max: 120 },
       { key: 'number', label: 'شماره', type: 'text', max: 60 },
       { key: 'date', label: 'تاریخ', type: 'text', max: 30 },

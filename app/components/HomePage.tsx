@@ -4,6 +4,7 @@ import Stats from './Stats';
 import Portfolio from './Portfolio';
 import About from './About';
 import Credentials from './Credentials';
+import TrustBar from './TrustBar';
 import OrderForm from './OrderForm';
 import Faq from './Faq';
 import Contact from './Contact';
@@ -32,11 +33,12 @@ export default async function HomePage() {
   return (
     <main id="main">
       <Hero />
+      <TrustBar items={content.credential as any} />
       <Services services={services} />
+      <Credentials items={content.credential as any} />
       <Stats jobs={content.completedJobs} />
       <Portfolio projects={content.portfolio.map(toProject)} />
       <About />
-      <Credentials items={content.credential as any} />
       {content.product.length > 0 && (
         <section id="products" className="relative py-16">
           <div className="container-x text-center">
