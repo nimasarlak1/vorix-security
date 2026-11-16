@@ -19,6 +19,12 @@ export async function ensureSchema(db: any): Promise<void> {
     `CREATE INDEX IF NOT EXISTS vx_items_kind_status ON vx_items (kind, status)`,
     `CREATE TABLE IF NOT EXISTS vx_media (id TEXT PRIMARY KEY, mime TEXT NOT NULL, data TEXT NOT NULL, created_at TEXT NOT NULL)`,
     `CREATE TABLE IF NOT EXISTS vx_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)`,
+    `CREATE TABLE IF NOT EXISTS vx_coupons (
+      id TEXT PRIMARY KEY, code TEXT NOT NULL UNIQUE, title TEXT NOT NULL DEFAULT '', kind TEXT NOT NULL, value INTEGER NOT NULL DEFAULT 0,
+      services TEXT NOT NULL DEFAULT '[]', starts_at TEXT, expires_at TEXT, max_uses INTEGER NOT NULL DEFAULT 0, per_phone INTEGER NOT NULL DEFAULT 0,
+      used INTEGER NOT NULL DEFAULT 0, active INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL)`,
+    `CREATE TABLE IF NOT EXISTS vx_order_coupons (order_id TEXT PRIMARY KEY, coupon_id TEXT NOT NULL, code TEXT NOT NULL, label TEXT NOT NULL, phone TEXT NOT NULL, created_at TEXT NOT NULL)`,
+    `CREATE INDEX IF NOT EXISTS vx_order_coupons_code_phone ON vx_order_coupons (code, phone)`,
   ];
   await db.batch(stmts.map((s) => db.prepare(s)));
   ready = true;

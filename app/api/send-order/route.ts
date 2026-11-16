@@ -5,6 +5,7 @@ import { clientIp, describePlatform, isAllowedOrigin } from '../../lib/security'
 import { hitRateLimit } from '../../lib/ratelimit';
 import { ensureSchema } from '../../lib/schema';
 import { getSetting } from '../../lib/content';
+import { findValidCoupon, normCode, type Coupon } from '../../lib/coupons';
 
 export const runtime = 'edge';
 
@@ -64,6 +65,24 @@ export async function POST(request: Request) {
     return fail('شماره موبایل معتبر نیست (مثال: 09123456789).', 400);
   }
 
+  // کد تخفیف (اختیاری): اگر کاربر کدی نوشته باشد، همین‌جا دوباره بررسی می‌شود؛ کد نامعتبر = خطا تا مشتری اصلاحش کند
+  const couponRaw = cleanText(body?.coupon, 40);
+  let coupon: (Coupon & { label: string }) | null = null;
+  if (couponRaw) {
+    const code = normCode(couponRaw);
+    if (!code) return fail('کد تخفیف معتبر نیست.', 400);
+    if (!db) return fail('بررسی کد تخفیف فعلاً ممکن نیست. بدون کد ثبت کنید یا تماس بگیرید.', 503);
+    try {
+      await ensureSchema(db);
+      const r = await findValidCoupon(db, code, service, phone);
+      if (!r.ok) return fail(r.error, 400);
+      coupon = { ...r.coupon, label: r.label };
+    } catch (e) {
+      console.error('coupon check failed', e);
+      return fail('بررسی کد تخفیف انجام نشد. بدون کد ثبت کنید یا تماس بگیرید.', 500);
+    }
+  }
+
   const env = getEnv();
   const token = env.BOT_TOKEN;
   const chatId = env.CHAT_ID;
@@ -73,6 +92,7 @@ export async function POST(request: Request) {
 
   // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
   let saved = false;
+  let couponApplied = false;
   let dbNote = '';
   if (db) {
     try {
@@ -84,6 +104,23 @@ export async function POST(request: Request) {
         .bind(id, createdAt, name, phone, service, description, 'جدید')
         .run();
 
+      // ثبت استفاده از کد: اگر در همین لحظه ظرفیت تمام شده باشد، ردیف ثبت نمی‌شود (سفارش بدون تخفیف می‌ماند)
+      if (coupon) {
+        try {
+          const res = await db.batch([
+            db
+              .prepare(
+                `INSERT INTO vx_order_coupons (order_id, coupon_id, code, label, phone, created_at)
+                 SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE EXISTS (SELECT 1 FROM vx_coupons WHERE id = ?2 AND (max_uses = 0 OR used < max_uses))`
+              )
+              .bind(id, coupon.id, coupon.code, coupon.label, phone, createdAt),
+            db.prepare('UPDATE vx_coupons SET used = used + 1 WHERE id = ?1 AND (max_uses = 0 OR used < max_uses)').bind(coupon.id),
+          ]);
+          couponApplied = Number(res?.[0]?.meta?.changes) === 1;
+        } catch (e) {
+          console.error('coupon record failed', e);
+        }
+      }
       const check = await db.prepare(`SELECT COUNT(*) AS c FROM ${ORDERS_TABLE}`).first();
       saved = true;
       dbNote = `ذخیره شد (تعداد کل سفارش‌ها در پنل: ${check?.c ?? '?'})`;
@@ -103,6 +140,7 @@ export async function POST(request: Request) {
     `📞 شماره: ${phone}`,
     `🛠 خدمت: ${service}`,
     `💬 توضیحات: ${description || 'بدون توضیحات'}`,
+    ...(coupon ? [`🎟 کد تخفیف: ${coupon.code} — ${coupon.label}${couponApplied ? '' : ' (در پنل ثبت نشد؛ دستی بررسی کنید)'}`] : []),
     `🕒 ${time}`,
     `${saved ? '🗄' : '⚠️'} پنل: ${dbNote}`,
   ];

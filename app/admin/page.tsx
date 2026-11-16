@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { KINDS, KIND_LIST, PERMS, PERM_LABELS, imgSrc, type ItemKind, type Perm, type Field } from '../lib/itemspec';
+import { ORDER_SERVICES } from '../data/site';
 
 // پنل مدیریت (موبایل‌محور). همه‌ی بخش‌ها در همین فایل‌اند و فقط بخش‌هایی که ادمین به آن‌ها دسترسی دارد دیده می‌شوند.
 
@@ -133,6 +134,7 @@ function OrdersTab() {
             </select>
           </div>
           <div className="ad-muted" style={{ marginTop: 6 }}>خدمت: {o.service}</div>
+          {o.coupon && <div style={{ marginTop: 4, fontSize: 14, color: '#fbbf24' }}>🎟 کد تخفیف: {o.coupon}</div>}
           {o.description && <div style={{ marginTop: 4, fontSize: 14 }}>{o.description}</div>}
           {o.note && openId !== o.id && <div className="ad-muted" style={{ marginTop: 6 }}>📝 {o.note}</div>}
           <div className="ad-row" style={{ marginTop: 10 }}>
@@ -478,6 +480,135 @@ function SettingsTab() {
   );
 }
 
+// ---------------------------------------------------------------- کدهای تخفیف (فقط مدیر کل)
+const KIND_OPTIONS = [
+  { v: 'percent', l: 'درصدی' },
+  { v: 'fixed', l: 'مبلغ ثابت (تومان)' },
+  { v: 'free', l: 'مزیت رایگان (متن دلخواه)' },
+];
+const EMPTY_COUPON = { code: '', title: '', kind: 'percent', value: '10', starts_at: '', expires_at: '', max_uses: '0', per_phone: '1', services: [] as string[] };
+
+function CouponsTab() {
+  const [list, setList] = useState<any[] | null>(null);
+  const [error, setError] = useState('');
+  const [msg, setMsg] = useState('');
+  const [form, setForm] = useState({ ...EMPTY_COUPON });
+  const [editId, setEditId] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    const r = await api('/api/admin/coupons');
+    if (r.res.ok && r.data?.success) { setList(r.data.coupons); setError(''); } else setError(errText(r));
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  const toggleSvc = (s: string) => setForm((f) => ({ ...f, services: f.services.includes(s) ? f.services.filter((x) => x !== s) : [...f.services, s] }));
+
+  function startEdit(c: any) {
+    setEditId(c.id);
+    setMsg(''); setError('');
+    setForm({
+      code: c.code, title: c.title || '', kind: c.kind, value: String(c.value || ''),
+      starts_at: c.starts_at ? String(c.starts_at).slice(0, 10) : '', expires_at: c.expires_at ? String(c.expires_at).slice(0, 10) : '',
+      max_uses: String(c.max_uses), per_phone: String(c.per_phone), services: c.services || [],
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function reset() { setEditId(null); setForm({ ...EMPTY_COUPON }); }
+
+  async function save() {
+    setBusy(true); setError(''); setMsg('');
+    const payload = {
+      code: form.code, title: form.title, kind: form.kind, value: form.kind === 'free' ? 0 : Number(form.value),
+      starts_at: form.starts_at, expires_at: form.expires_at, max_uses: Number(form.max_uses || 0), per_phone: Number(form.per_phone || 0), services: form.services,
+    };
+    const r = editId
+      ? await api(`/api/admin/coupons/${encodeURIComponent(editId)}`, { method: 'PATCH', json: payload })
+      : await api('/api/admin/coupons', { json: payload });
+    setBusy(false);
+    if (!r.res.ok || !r.data?.success) return setError(errText(r));
+    setMsg(editId ? 'تغییرات ذخیره شد.' : 'کد ساخته شد.');
+    reset();
+    load();
+  }
+  async function setActive(c: any, active: boolean) {
+    const r = await api(`/api/admin/coupons/${encodeURIComponent(c.id)}`, { method: 'PATCH', json: { active } });
+    if (!r.res.ok || !r.data?.success) return setError(errText(r));
+    setList((l) => (l ? l.map((x) => (x.id === c.id ? { ...x, active } : x)) : l));
+  }
+  async function del(c: any) {
+    if (!confirm(`کد «${c.code}» برای همیشه حذف شود؟`)) return;
+    const r = await api(`/api/admin/coupons/${encodeURIComponent(c.id)}`, { method: 'DELETE' });
+    if (!r.res.ok || !r.data?.success) return setError(errText(r));
+    setList((l) => (l ? l.filter((x) => x.id !== c.id) : l));
+  }
+  const describe = (c: any) =>
+    c.kind === 'percent' ? `${c.value}٪ تخفیف` : c.kind === 'fixed' ? `${Number(c.value).toLocaleString('fa-IR')} تومان تخفیف` : 'مزیت رایگان';
+
+  return (
+    <div>
+      {error && <p className="ad-err" role="alert">{error}</p>}
+      {msg && <p className="ad-ok">{msg}</p>}
+      <div className="ad-card">
+        <b>{editId ? 'ویرایش کد تخفیف' : 'ساخت کد تخفیف'}</b>
+        <p className="ad-muted">چون روی سایت قیمت ثابتی نیست، کد روی سفارش ثبت می‌شود و در تلگرام و پنل نشان داده می‌شود؛ مبلغ نهایی را خودتان با مشتری هماهنگ می‌کنید.</p>
+        <label className="ad-lbl">کد (حرف انگلیسی و عدد، مثلاً VORIX20)</label>
+        <input className="ad-in" dir="ltr" value={form.code} disabled={!!editId} maxLength={20} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} />
+        <label className="ad-lbl">نوع تخفیف</label>
+        <select className="ad-sel" value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value })}>
+          {KIND_OPTIONS.map((o) => <option key={o.v} value={o.v}>{o.l}</option>)}
+        </select>
+        {form.kind !== 'free' && (
+          <>
+            <label className="ad-lbl">{form.kind === 'percent' ? 'درصد (۱ تا ۱۰۰)' : 'مبلغ تخفیف (تومان)'}</label>
+            <input className="ad-in" type="number" inputMode="numeric" value={form.value} onChange={(e) => setForm({ ...form, value: e.target.value })} />
+          </>
+        )}
+        <label className="ad-lbl">{form.kind === 'free' ? 'عنوان مزیت (مثلاً: بررسی اولیه رایگان)' : 'توضیح کوتاه برای مشتری (اختیاری)'}</label>
+        <input className="ad-in" value={form.title} maxLength={80} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        <label className="ad-lbl">شروع اعتبار (اختیاری)</label>
+        <input className="ad-in" type="date" value={form.starts_at} onChange={(e) => setForm({ ...form, starts_at: e.target.value })} />
+        <label className="ad-lbl">پایان اعتبار (اختیاری)</label>
+        <input className="ad-in" type="date" value={form.expires_at} onChange={(e) => setForm({ ...form, expires_at: e.target.value })} />
+        <label className="ad-lbl">حداکثر تعداد کل استفاده (۰ = نامحدود)</label>
+        <input className="ad-in" type="number" inputMode="numeric" value={form.max_uses} onChange={(e) => setForm({ ...form, max_uses: e.target.value })} />
+        <label className="ad-lbl">حداکثر استفاده برای هر شماره موبایل (۰ = نامحدود)</label>
+        <input className="ad-in" type="number" inputMode="numeric" value={form.per_phone} onChange={(e) => setForm({ ...form, per_phone: e.target.value })} />
+        <label className="ad-lbl">فقط برای این خدمات (هیچ‌کدام انتخاب نشود = همه‌ی خدمات)</label>
+        {ORDER_SERVICES.map((s) => (
+          <label className="ad-chk" key={s}><input type="checkbox" checked={form.services.includes(s)} onChange={() => toggleSvc(s)} />{s}</label>
+        ))}
+        <div className="ad-row" style={{ marginTop: 12 }}>
+          <button className="ad-btn pri" disabled={busy} onClick={save}>{editId ? 'ذخیره‌ی تغییرات' : 'ساخت کد'}</button>
+          {editId && <button className="ad-btn" onClick={reset}>انصراف</button>}
+        </div>
+      </div>
+
+      {list === null && !error && <p className="ad-muted">در حال بارگذاری…</p>}
+      {list && list.length === 0 && <p className="ad-muted">هنوز کدی نساخته‌اید.</p>}
+      {list && list.map((c) => (
+        <div className="ad-card" key={c.id}>
+          <div className="ad-row ad-between">
+            <b dir="ltr">{c.code}</b>
+            <span className="ad-chip" style={{ color: c.active ? '#34d399' : '#94a3b8' }}>{c.active ? 'فعال' : 'غیرفعال'}</span>
+          </div>
+          <div style={{ marginTop: 4 }}>{describe(c)}{c.title ? ` — ${c.title}` : ''}</div>
+          <div className="ad-muted" style={{ marginTop: 4 }}>
+            استفاده‌شده: {c.used}{c.max_uses > 0 ? ` از ${c.max_uses}` : ' (نامحدود)'} | هر شماره: {c.per_phone > 0 ? c.per_phone : 'نامحدود'}
+            {c.starts_at ? ` | از ${new Date(c.starts_at).toLocaleDateString('fa-IR')}` : ''}{c.expires_at ? ` | تا ${new Date(c.expires_at).toLocaleDateString('fa-IR')}` : ''}
+          </div>
+          <div className="ad-muted" style={{ marginTop: 4 }}>خدمات: {c.services && c.services.length ? c.services.join('، ') : 'همه'}</div>
+          <div className="ad-row" style={{ marginTop: 10 }}>
+            <button className="ad-btn sm" onClick={() => setActive(c, !c.active)}>{c.active ? 'غیرفعال کردن' : 'فعال کردن'}</button>
+            <button className="ad-btn sm" onClick={() => startEdit(c)}>ویرایش</button>
+            <button className="ad-btn red sm" onClick={() => del(c)}>حذف</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------- صفحه‌ی اصلی پنل
 export default function AdminPage() {
   const [admin, setAdmin] = useState<Admin | null>(null);
@@ -498,6 +629,7 @@ export default function AdminPage() {
     if (has('orders')) t.push({ id: 'orders', label: 'سفارش‌ها' });
     for (const k of KIND_LIST) if (has(KINDS[k].perm)) t.push({ id: k, label: KINDS[k].perm === 'credentials' ? 'مجوزها و همکاری‌ها' : PERM_LABELS[KINDS[k].perm] });
     if (admin.role === 'owner') t.push({ id: 'admins', label: 'ادمین‌ها' });
+    if (has('settings')) t.push({ id: 'coupons', label: 'کد تخفیف' });
     if (has('settings')) t.push({ id: 'settings', label: 'تنظیمات و امضا' });
     return t;
   }, [admin]);
@@ -529,6 +661,7 @@ export default function AdminPage() {
         {tab === 'orders' && <OrdersTab />}
         {(KIND_LIST as string[]).includes(tab) && <ItemsTab key={tab} kind={tab as ItemKind} />}
         {tab === 'admins' && <AdminsTab />}
+        {tab === 'coupons' && <CouponsTab />}
         {tab === 'settings' && <SettingsTab />}
       </div>
     </div>

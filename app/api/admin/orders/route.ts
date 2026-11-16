@@ -32,8 +32,8 @@ export async function GET(request: Request) {
       where.push(`(o.name LIKE ? ESCAPE '\\' OR o.phone LIKE ? ESCAPE '\\' OR o.service LIKE ? ESCAPE '\\' OR o.description LIKE ? ESCAPE '\\')`);
       binds.push(like, like, like, like);
     }
-    const sql = `SELECT o.id, o.created_at, o.name, o.phone, o.service, o.description, o.status, COALESCE(n.note, '') AS note
-      FROM ${ORDERS_TABLE} o LEFT JOIN vx_order_notes n ON n.order_id = o.id
+    const sql = `SELECT o.id, o.created_at, o.name, o.phone, o.service, o.description, o.status, COALESCE(n.note, '') AS note, COALESCE(c.code || ' — ' || c.label, '') AS coupon
+      FROM ${ORDERS_TABLE} o LEFT JOIN vx_order_notes n ON n.order_id = o.id LEFT JOIN vx_order_coupons c ON c.order_id = o.id
       ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY o.created_at DESC LIMIT 300`;
     const { results } = await db.prepare(sql).bind(...binds).all();
     return jsonNoStore({ success: true, orders: results });
