@@ -2,6 +2,7 @@ import { getDBSafe, getEnv } from '../../../lib/db';
 import { authenticate, readJson } from '../../../lib/guard';
 import { jsonNoStore } from '../../../lib/security';
 import { ensureSchema } from '../../../lib/schema';
+import { getJobsCount } from '../../../lib/content';
 
 export const runtime = 'edge';
 
@@ -16,8 +17,10 @@ export async function GET(request: Request) {
   const { results } = await db.prepare('SELECT key, value FROM vx_settings').all();
   const map: Record<string, string> = {};
   for (const r of results || []) map[r.key] = r.value;
+  const jobs = await getJobsCount(db);
   return jsonNoStore({
     success: true,
+    jobs,
     settings: {
       completed_jobs: map.completed_jobs ?? '',
       telegram_enabled: map.telegram_enabled !== '0',
@@ -49,6 +52,16 @@ export async function PUT(request: Request) {
       if (!Number.isInteger(n) || n < 0 || n > 999999) return jsonNoStore({ success: false, error: 'عدد کارهای انجام‌شده نامعتبر است.' }, 400);
       put('completed_jobs', String(n));
     }
+  }
+  // افزودن چند کار حضوری انجام‌شده به عدد پایه (مثلاً +۱)
+  if (body.add_jobs !== undefined) {
+    const n = Number(body.add_jobs);
+    if (!Number.isInteger(n) || n < 1 || n > 100) return jsonNoStore({ success: false, error: 'تعداد باید بین ۱ تا ۱۰۰ باشد.' }, 400);
+    writes.push(
+      db
+        .prepare(`INSERT INTO vx_settings (key, value) VALUES ('completed_jobs', ?1) ON CONFLICT(key) DO UPDATE SET value = CAST(CAST(value AS INTEGER) + ?1 AS TEXT)`)
+        .bind(n)
+    );
   }
   for (const k of BOOL_KEYS) if (typeof body[k] === 'boolean') put(k, body[k] ? '1' : '0');
 

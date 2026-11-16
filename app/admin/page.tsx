@@ -407,20 +407,30 @@ const SIG_SNIPPET = `<a href="https://vorixsecurity.ir" target="_blank" rel="noo
 function SettingsTab() {
   const [s, setS] = useState<any>(null);
   const [conf, setConf] = useState<any>({});
+  const [jobs, setJobs] = useState<any>(null);
+  const [loadKey, setLoadKey] = useState(0);
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
 
   useEffect(() => {
     api('/api/admin/settings').then((r) => {
-      if (r.res.ok && r.data?.success) { setS(r.data.settings); setConf(r.data.configured); } else setError(errText(r));
+      if (r.res.ok && r.data?.success) { setS(r.data.settings); setConf(r.data.configured); setJobs(r.data.jobs); } else setError(errText(r));
     });
-  }, []);
+  }, [loadKey]);
 
   async function save() {
     setError(''); setMsg('');
     const r = await api('/api/admin/settings', { method: 'PUT', json: s });
     if (!r.res.ok || !r.data?.success) return setError(errText(r));
     setMsg('ذخیره شد.');
+    setLoadKey((k) => k + 1);
+  }
+  async function addInPerson() {
+    setError(''); setMsg('');
+    const r = await api('/api/admin/settings', { method: 'PUT', json: { add_jobs: 1 } });
+    if (!r.res.ok || !r.data?.success) return setError(errText(r));
+    setMsg('یک کار حضوری اضافه شد.');
+    setLoadKey((k) => k + 1);
   }
   async function copy() {
     try { await navigator.clipboard.writeText(SIG_SNIPPET); setMsg('کد کپی شد.'); } catch { setMsg('کپی نشد؛ کد را با انگشت انتخاب و کپی کنید.'); }
@@ -432,7 +442,13 @@ function SettingsTab() {
       {msg && <p className="ad-ok">{msg}</p>}
       {s && (
         <div className="ad-card">
-          <label className="ad-lbl">عدد «کارهای انجام‌شده» (خالی = نمایش داده نشود)</label>
+          {jobs && (
+            <p className="ad-muted" style={{ marginBottom: 10 }}>
+              عدد نمایش‌داده‌شده در سایت: <b>{jobs.total}</b> = عدد پایه ({jobs.base}) + سفارش‌های «انجام شد» در پنل ({jobs.done}). هر سفارشی که وضعیتش را «انجام شد» کنید خودکار به آن اضافه می‌شود. صفر یعنی در سایت نمایش داده نمی‌شود.
+            </p>
+          )}
+          <button className="ad-btn pri" onClick={addInPerson}>+۱ کار حضوری انجام شد</button>
+          <label className="ad-lbl">عدد پایه‌ی کارهای انجام‌شده (کارهای حضوری و قبلی؛ خالی = ۰)</label>
           <input className="ad-in" type="number" inputMode="numeric" value={s.completed_jobs} onChange={(e) => setS({ ...s, completed_jobs: e.target.value })} />
           <label className="ad-chk" style={{ marginTop: 14 }}><input type="checkbox" checked={s.telegram_enabled} onChange={(e) => setS({ ...s, telegram_enabled: e.target.checked })} />ارسال سفارش‌ها به تلگرام {conf.telegram ? '' : '(توکن در Cloudflare تنظیم نشده)'}</label>
           <label className="ad-chk"><input type="checkbox" checked={s.bale_enabled} onChange={(e) => setS({ ...s, bale_enabled: e.target.checked })} />ارسال سفارش‌ها به بله {conf.bale ? '' : '(BALE_BOT_TOKEN و BALE_CHAT_ID در Cloudflare تنظیم نشده)'}</label>
