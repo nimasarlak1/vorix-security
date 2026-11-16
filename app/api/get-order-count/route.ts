@@ -1,27 +1,21 @@
 import { NextResponse } from 'next/server';
 import { getDBInfo } from '../../lib/db';
+import { getSetting } from '../../lib/content';
+import { ensureSchema } from '../../lib/schema';
 
 export const runtime = 'edge';
 
-const STATS_TABLE = 'order_stats';
-const DEFAULT_COUNT = 312;
-
-// این عدد عمومی است؛ برای جلوگیری از فشار روی دیتابیس، پاسخ ۶۰ ثانیه کش می‌شود
+// عدد «کارهای انجام‌شده» را فقط مدیر در پنل تعیین می‌کند. اگر وارد نشده باشد ۰ برمی‌گردد (یعنی نمایش داده نمی‌شود).
 const CACHE = { 'Cache-Control': 'public, max-age=60, s-maxage=60' };
 
 export async function GET() {
   const { db } = getDBInfo();
-
-  if (!db) {
-    return NextResponse.json({ count: DEFAULT_COUNT }, { headers: CACHE });
-  }
-
+  if (!db) return NextResponse.json({ count: 0 }, { headers: CACHE });
   try {
-    const result = await db.prepare(`SELECT count FROM ${STATS_TABLE} WHERE id = 1`).first();
-    const count = Number(result?.count);
-    return NextResponse.json({ count: Number.isFinite(count) && count > 0 ? count : DEFAULT_COUNT }, { headers: CACHE });
-  } catch (error) {
-    console.error('Error fetching order count:', error);
-    return NextResponse.json({ count: DEFAULT_COUNT }, { headers: CACHE });
+    await ensureSchema(db);
+    const n = Number(await getSetting(db, 'completed_jobs'));
+    return NextResponse.json({ count: Number.isFinite(n) && n > 0 ? Math.floor(n) : 0 }, { headers: CACHE });
+  } catch {
+    return NextResponse.json({ count: 0 }, { headers: CACHE });
   }
 }

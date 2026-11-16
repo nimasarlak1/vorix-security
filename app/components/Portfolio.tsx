@@ -3,7 +3,7 @@
 import { useEffect, useRef, type CSSProperties } from 'react';
 import Reveal from './Reveal';
 import { ServiceIconView } from './Icons';
-import { PROJECTS } from '../data/portfolio';
+import type { Project } from '../data/portfolio';
 import type { ServiceIcon } from '../data/site';
 
 // رنگ مخصوص هر دسته‌ی خدمت (به‌صورت r,g,b)
@@ -58,8 +58,7 @@ const css = `
 
 const fa = (n: number) => n.toLocaleString('fa-IR', { minimumIntegerDigits: 2 });
 
-export default function Portfolio() {
-  const hasSamples = PROJECTS.some((p) => p.sample);
+export default function Portfolio({ projects }: { projects: Project[] }) {
   const wraps = useRef<(HTMLDivElement | null)[]>([]);
   const cards = useRef<(HTMLElement | null)[]>([]);
   const dims = useRef<(HTMLDivElement | null)[]>([]);
@@ -119,22 +118,19 @@ export default function Portfolio() {
     };
   }, []);
 
+  if (projects.length === 0) return null;
+
   return (
     <section id="portfolio" className="pf">
       <style>{css}</style>
       <div className="container-x">
         <Reveal>
           <p className="eyebrow">۰۲ — نمونه‌کارها</p>
-          <h2 className="section-title mt-4">نمونه‌ای از کارهایی که انجام می‌دهیم</h2>
-          {hasSamples && (
-            <p className="mt-4 max-w-2xl text-sm text-neutral-500">
-              کارت‌های دارای برچسب «نمونه» برای معرفی نوع خدمات است و به‌زودی با پروژه‌های واقعی جایگزین می‌شود.
-            </p>
-          )}
+          <h2 className="section-title mt-4">نمونه‌کارها</h2>
         </Reveal>
 
         <div className="pf-list">
-          {PROJECTS.map((p, i) => (
+          {projects.map((p, i) => (
             <div
               key={p.title}
               ref={(el) => {
@@ -167,6 +163,11 @@ export default function Portfolio() {
                       ))}
                     </ul>
                   )}
+                  {p.url && (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="pf-cta" dir="ltr" style={{ marginInlineEnd: '1rem' }}>
+                      {p.url.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗
+                    </a>
+                  )}
                   <a href="#order" className="pf-cta">
                     درخواست کاری مشابه این ←
                   </a>
@@ -187,7 +188,6 @@ export default function Portfolio() {
                       decoding="async"
                     />
                   )}
-                  {p.sample && <span className="pf-badge">نمونه</span>}
                 </div>
 
                 <div

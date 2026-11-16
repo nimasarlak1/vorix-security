@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 export default function AdminLoginPage() {
+  const [username, setUsername] = useState('owner');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
       let data: any = null;
       try {
@@ -51,12 +52,14 @@ export default function AdminLoginPage() {
         }}
       >
         <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>ورود به پنل مدیریت</h1>
-        <label style={{ display: 'block', fontSize: 13, color: '#9ca3af', marginBottom: 6 }}>رمز عبور</label>
+        <label style={{ display: 'block', fontSize: 13, color: '#9ca3af', marginBottom: 6 }}>نام کاربری (مدیر کل: owner)</label>
         <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoFocus
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          autoCapitalize="none"
+          autoCorrect="off"
+          dir="ltr"
           style={{
             width: '100%',
             boxSizing: 'border-box',
@@ -66,7 +69,26 @@ export default function AdminLoginPage() {
             background: '#05070d',
             color: '#e6eefc',
             marginBottom: 12,
-            fontSize: 15,
+            fontSize: 16,
+          }}
+        />
+        <label style={{ display: 'block', fontSize: 13, color: '#9ca3af', marginBottom: 6 }}>رمز عبور</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoFocus
+          autoComplete="current-password"
+          style={{
+            width: '100%',
+            boxSizing: 'border-box',
+            padding: '10px 12px',
+            borderRadius: 10,
+            border: '1px solid rgba(255,255,255,0.15)',
+            background: '#05070d',
+            color: '#e6eefc',
+            marginBottom: 12,
+            fontSize: 16,
           }}
         />
         {error && <p style={{ color: '#f87171', fontSize: 13, marginBottom: 12 }}>{error}</p>}

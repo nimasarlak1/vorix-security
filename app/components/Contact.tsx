@@ -59,6 +59,15 @@ export default function Contact() {
         </Reveal>
 
         <Reveal delay={120}>
+          {SITE.mapEmbedUrl && (
+            <iframe
+              src={SITE.mapEmbedUrl}
+              title={`نقشه‌ی دفتر ${SITE.legalName}`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="mb-6 h-64 w-full rounded-3xl border border-cyan-400/20"
+            />
+          )}
           <div className="relative mx-auto max-w-sm">
             <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-tr from-cyan-400/15 to-blue-500/20 blur-2xl" aria-hidden="true" />
             <img

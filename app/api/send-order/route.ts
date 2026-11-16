@@ -3,10 +3,10 @@ import { cleanText, isValidMobile, normalizePhone } from '../../lib/validate';
 import { getDBInfo, getEnv, ORDERS_TABLE } from '../../lib/db';
 import { clientIp, describePlatform, isAllowedOrigin } from '../../lib/security';
 import { hitRateLimit } from '../../lib/ratelimit';
+import { ensureSchema } from '../../lib/schema';
+import { getSetting } from '../../lib/content';
 
 export const runtime = 'edge';
-
-const STATS_TABLE = 'order_stats';
 
 // حداکثر ۵ سفارش در ۱۰ دقیقه برای هر IP، و ۱۰۰ سفارش در ساعت برای کل سایت (مانع حمله‌ی انبوه به تلگرام)
 const IP_MAX = 5;
@@ -76,37 +76,13 @@ export async function POST(request: Request) {
   let dbNote = '';
   if (db) {
     try {
-      await db
-        .prepare(
-          `CREATE TABLE IF NOT EXISTS ${ORDERS_TABLE} (
-            id TEXT PRIMARY KEY,
-            created_at TEXT NOT NULL,
-            name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            service TEXT NOT NULL,
-            description TEXT,
-            status TEXT NOT NULL DEFAULT 'جدید'
-          )`
-        )
-        .run();
+      await ensureSchema(db);
       await db
         .prepare(
           `INSERT INTO ${ORDERS_TABLE} (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)`
         )
         .bind(id, createdAt, name, phone, service, description, 'جدید')
         .run();
-
-      // ساخت و به‌روزرسانی جدول آمار (شمارنده سفارش‌ها)
-      await db
-        .prepare(
-          `CREATE TABLE IF NOT EXISTS ${STATS_TABLE} (
-            id INTEGER PRIMARY KEY,
-            count INTEGER NOT NULL
-          )`
-        )
-        .run();
-      await db.prepare(`INSERT OR IGNORE INTO ${STATS_TABLE} (id, count) VALUES (1, 312)`).run();
-      await db.prepare(`UPDATE ${STATS_TABLE} SET count = count + 1 WHERE id = 1`).run();
 
       const check = await db.prepare(`SELECT COUNT(*) AS c FROM ${ORDERS_TABLE}`).first();
       saved = true;
@@ -134,28 +110,44 @@ export async function POST(request: Request) {
   if (!saved) lines.push(`🔎 اجرا روی: ${describePlatform(request)}`);
   const text = lines.join('\n');
 
-  // اعلان تلگرام
-  let notified = false;
-  if (token && chatId) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
+  // کانال‌های اعلان: تلگرام و بله (هرکدام با کلید روشن/خاموش در پنل). تلگرام پیش‌فرض روشن و بله پیش‌فرض خاموش است.
+  let telegramOn = true;
+  let baleOn = false;
+  if (db) {
     try {
-      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text }),
-        signal: controller.signal,
-      });
-      if (res.ok) notified = true;
-      else console.error('Telegram responded with status', res.status);
-    } catch {
-      console.error('Telegram request failed');
-    } finally {
-      clearTimeout(timer);
-    }
-  } else {
-    console.error('BOT_TOKEN or CHAT_ID is not set');
+      telegramOn = (await getSetting(db, 'telegram_enabled')) !== '0';
+      baleOn = (await getSetting(db, 'bale_enabled')) === '1';
+    } catch {}
   }
+  const channels: { name: string; url: string; chatId: string }[] = [];
+  if (telegramOn && token && chatId) channels.push({ name: 'telegram', url: `https://api.telegram.org/bot${token}/sendMessage`, chatId });
+  if (baleOn && env.BALE_BOT_TOKEN && env.BALE_CHAT_ID) {
+    channels.push({ name: 'bale', url: `https://tapi.bale.ai/bot${env.BALE_BOT_TOKEN}/sendMessage`, chatId: env.BALE_CHAT_ID });
+  }
+
+  const results = await Promise.all(
+    channels.map(async (ch) => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      try {
+        const res = await fetch(ch.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: ch.chatId, text }),
+          signal: controller.signal,
+        });
+        if (!res.ok) console.error(`${ch.name} responded with status`, res.status);
+        return res.ok;
+      } catch {
+        console.error(`${ch.name} request failed`);
+        return false;
+      } finally {
+        clearTimeout(timer);
+      }
+    })
+  );
+  const notified = results.some(Boolean);
+  if (channels.length === 0) console.error('هیچ کانال اعلانی (تلگرام/بله) فعال و کامل تنظیم نشده است');
 
   // اگر سفارش نه ذخیره شد و نه به تلگرام رسید، به مشتری خطا بده تا با دفتر تماس بگیرد
   if (!saved && !notified) {

@@ -5,11 +5,11 @@ import { IconClose, IconMenu, IconPhone } from './Icons';
 import { SITE } from '../data/site';
 
 const LINKS = [
-  { href: '#services', label: 'خدمات' },
-  { href: '#portfolio', label: 'نمونه‌کارها' },
-  { href: '#about', label: 'درباره ما' },
-  { href: '#faq', label: 'سؤالات متداول' },
-  { href: '#contact', label: 'تماس' },
+  { href: '/#services', label: 'خدمات' },
+  { href: '/#portfolio', label: 'نمونه‌کارها' },
+  { href: '/#about', label: 'درباره ما' },
+  { href: '/#faq', label: 'سؤالات متداول' },
+  { href: '/#contact', label: 'تماس' },
 ];
 
 export default function Navbar() {
@@ -27,7 +27,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#05070d]/80 backdrop-blur-md">
       <div className="container-x flex h-16 items-center justify-between gap-4">
-        <a href="#top" className="flex items-center gap-3" aria-label={`${SITE.name} - صفحه اصلی`}>
+        <a href="/" className="flex items-center gap-3" aria-label={`${SITE.name} - صفحه اصلی`}>
           <img src="/logo-mark.png" width={512} height={404} alt="" className="h-8 w-auto" />
           <span className="text-sm font-black tracking-[0.18em] text-white" dir="ltr">
             VORIX<span className="text-cyan-300">.SECURITY</span>
@@ -43,7 +43,7 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a href="#order" className="btn-primary hidden !py-2 text-sm sm:inline-flex">
+          <a href="/#order" className="btn-primary hidden !py-2 text-sm sm:inline-flex">
             ثبت سفارش
           </a>
           <a
@@ -83,7 +83,7 @@ export default function Navbar() {
                 {l.label}
               </a>
             ))}
-            <a href="#order" onClick={() => setOpen(false)} className="btn-primary mt-4 justify-center">
+            <a href="/#order" onClick={() => setOpen(false)} className="btn-primary mt-4 justify-center">
               ثبت سفارش
             </a>
           </div>

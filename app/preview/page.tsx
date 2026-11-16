@@ -1,11 +1,8 @@
-import Hero from '../components/Hero';
-import Services from '../components/Services';
-import Stats from '../components/Stats';
-import Portfolio from '../components/Portfolio';
-import About from '../components/About';
-import OrderForm from '../components/OrderForm';
-import Faq from '../components/Faq';
-import Contact from '../components/Contact';
+import HomePage from '../components/HomePage';
+
+// صفحه‌ی آزمایشی فقط برای شاخه‌ی dev (قبل از ادغام با main حذف می‌شود).
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'پیش‌نمایش',
@@ -13,16 +10,5 @@ export const metadata = {
 };
 
 export default function PreviewPage() {
-  return (
-    <main id="main">
-      <Hero />
-      <Services />
-      <Stats />
-      <Portfolio />
-      <About />
-      <OrderForm />
-      <Faq />
-      <Contact />
-    </main>
-  );
+  return <HomePage />;
 }

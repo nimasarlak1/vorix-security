@@ -1,12 +1,12 @@
 import { SITE } from '../data/site';
 
 const LINKS = [
-  { href: '#services', label: 'خدمات' },
-  { href: '#portfolio', label: 'نمونه‌کارها' },
-  { href: '#about', label: 'درباره ما' },
-  { href: '#order', label: 'ثبت سفارش' },
-  { href: '#faq', label: 'سؤالات متداول' },
-  { href: '#contact', label: 'تماس' },
+  { href: '/#services', label: 'خدمات' },
+  { href: '/#portfolio', label: 'نمونه‌کارها' },
+  { href: '/#about', label: 'درباره ما' },
+  { href: '/#order', label: 'ثبت سفارش' },
+  { href: '/#faq', label: 'سؤالات متداول' },
+  { href: '/#contact', label: 'تماس' },
 ];
 
 export default function Footer() {

@@ -22,8 +22,13 @@ const STEPS = [
   'برای هماهنگی با شما تماس می‌گیریم.',
 ];
 
-export default function OrderForm() {
-  const [form, setForm] = useState<Form>(INITIAL);
+export default function OrderForm({ defaultService, defaultDescription }: { defaultService?: string; defaultDescription?: string } = {}) {
+  const start: Form = {
+    ...INITIAL,
+    service: defaultService && ORDER_SERVICES.includes(defaultService) ? defaultService : INITIAL.service,
+    description: defaultDescription || '',
+  };
+  const [form, setForm] = useState<Form>(start);
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
@@ -57,7 +62,7 @@ export default function OrderForm() {
       if (res.ok && data.success) {
         setStatus('success');
         setMessage('سفارش شما ثبت شد. به‌زودی با شما تماس می‌گیریم.');
-        setForm(INITIAL);
+        setForm(start);
       } else {
         setStatus('error');
         setMessage(data.error || `ثبت سفارش انجام نشد. لطفاً با شماره ${SITE.phone} تماس بگیرید.`);
