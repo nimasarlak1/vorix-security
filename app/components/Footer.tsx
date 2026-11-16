@@ -22,7 +22,7 @@ export default function Footer() {
       <div className="container-x grid gap-10 py-14 md:grid-cols-[1.3fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-3">
-            <img src="/logo-mark.png" width={512} height={404} alt="" className="h-9 w-auto" loading="lazy" />
+            <img src="/logo-mark-sm.webp" width={144} height={114} alt="" className="h-9 w-auto" loading="lazy" decoding="async" />
             <span className="font-black tracking-[0.18em]" dir="ltr">
               VORIX<span className="text-cyan-300">.SECURITY</span>
             </span>

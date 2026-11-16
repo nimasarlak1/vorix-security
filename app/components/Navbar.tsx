@@ -30,36 +30,40 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#05070d]/80 backdrop-blur-md">
-      <div className="container-x flex h-16 items-center justify-between gap-4">
-        <a href={base || '/'} className="flex items-center gap-3" aria-label={`${SITE.name} - صفحه اصلی`}>
-          <img src="/logo-mark.png" width={512} height={404} alt="" className="h-8 w-auto" />
-          <span className="text-sm font-black tracking-[0.18em] text-white" dir="ltr">
+      <div className="container-x flex h-16 items-center justify-between gap-3">
+        <a href={base || '/'} className="flex shrink-0 items-center gap-2.5 sm:gap-3" aria-label={`${SITE.name} - صفحه اصلی`}>
+          <img src="/logo-mark-sm.webp" width={144} height={114} alt="" className="h-8 w-auto shrink-0" />
+          <span className="whitespace-nowrap text-[13px] font-black tracking-[0.1em] text-white sm:text-sm sm:tracking-[0.18em]" dir="ltr">
             VORIX<span className="text-cyan-300">.SECURITY</span>
           </span>
         </a>
 
-        <nav aria-label="منوی اصلی" className="hidden items-center gap-7 md:flex">
+        {/* لینک‌های منو فقط روی صفحه‌ی بزرگ (۱۰۲۴ پیکسل به بالا) دیده می‌شوند تا به اسم برند نچسبند */}
+        <nav aria-label="منوی اصلی" className="hidden items-center gap-6 lg:flex xl:gap-7">
           {LINKS.map((l) => (
-            <a key={l.href} href={base + l.href.replace('/#', '#')} className="nav-link text-sm text-neutral-300">
+            <a key={l.href} href={base + l.href.replace('/#', '#')} className="nav-link whitespace-nowrap text-sm text-neutral-300">
               {l.label}
             </a>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <a href={`${base}#order`} className="btn-primary hidden !py-2 text-sm sm:inline-flex">
-            ثبت سفارش
-          </a>
+        <div className="flex shrink-0 items-center gap-2">
+          {/* دکمه‌ی ثبت سفارش داخل div پنهان می‌شود، چون کلاس btn-primary نمایش را خودش تعیین می‌کند و hidden را خنثی می‌کرد */}
+          <div className="hidden sm:block">
+            <a href={`${base}#order`} className="btn-primary !px-5 !py-2 !text-sm whitespace-nowrap">
+              ثبت سفارش
+            </a>
+          </div>
           <a
             href={`tel:${SITE.phone}`}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-cyan-300 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-cyan-300 lg:hidden"
             aria-label="تماس تلفنی"
           >
             <IconPhone className="h-5 w-5" />
           </a>
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white lg:hidden"
             aria-label={open ? 'بستن منو' : 'باز کردن منو'}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -74,7 +78,7 @@ export default function Navbar() {
         <nav
           id="mobile-menu"
           aria-label="منوی موبایل"
-          className="border-t border-white/[0.06] bg-[#05070d] md:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/[0.06] bg-[#05070d] lg:hidden"
         >
           <div className="container-x flex flex-col py-3">
             {LINKS.map((l) => (

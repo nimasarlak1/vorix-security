@@ -326,4 +326,9 @@ article.card:hover {
   html {
     scroll-behavior: auto;
   }
+  /* ورود سریع‌تر عنصرهای بالای صفحه روی گوشی */
+  .rise {
+    animation-duration: 0.4s !important;
+    animation-delay: 0s !important;
+  }
 }
