@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { IconClose, IconMenu, IconPhone } from './Icons';
 import { SITE } from '../data/site';
 
@@ -14,6 +15,9 @@ const LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname() || '/';
+  // در صفحه‌ی اصلی (و پیش‌نمایش) لینک بخش‌ها همان صفحه را اسکرول می‌کند؛ در صفحه‌های دیگر به صفحه‌ی اصلی می‌رود
+  const base = pathname === '/' ? '' : pathname.startsWith('/preview') ? '/preview' : '/';
 
   useEffect(() => {
     if (!open) return;
@@ -27,7 +31,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#05070d]/80 backdrop-blur-md">
       <div className="container-x flex h-16 items-center justify-between gap-4">
-        <a href="/" className="flex items-center gap-3" aria-label={`${SITE.name} - صفحه اصلی`}>
+        <a href={base || '/'} className="flex items-center gap-3" aria-label={`${SITE.name} - صفحه اصلی`}>
           <img src="/logo-mark.png" width={512} height={404} alt="" className="h-8 w-auto" />
           <span className="text-sm font-black tracking-[0.18em] text-white" dir="ltr">
             VORIX<span className="text-cyan-300">.SECURITY</span>
@@ -36,14 +40,14 @@ export default function Navbar() {
 
         <nav aria-label="منوی اصلی" className="hidden items-center gap-7 md:flex">
           {LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="nav-link text-sm text-neutral-300">
+            <a key={l.href} href={base + l.href.replace('/#', '#')} className="nav-link text-sm text-neutral-300">
               {l.label}
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <a href="/#order" className="btn-primary hidden !py-2 text-sm sm:inline-flex">
+          <a href={`${base}#order`} className="btn-primary hidden !py-2 text-sm sm:inline-flex">
             ثبت سفارش
           </a>
           <a
@@ -76,14 +80,14 @@ export default function Navbar() {
             {LINKS.map((l) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={base + l.href.replace('/#', '#')}
                 onClick={() => setOpen(false)}
                 className="border-b border-white/5 py-3.5 text-base text-neutral-200 last:border-0"
               >
                 {l.label}
               </a>
             ))}
-            <a href="/#order" onClick={() => setOpen(false)} className="btn-primary mt-4 justify-center">
+            <a href={`${base}#order`} onClick={() => setOpen(false)} className="btn-primary mt-4 justify-center">
               ثبت سفارش
             </a>
           </div>

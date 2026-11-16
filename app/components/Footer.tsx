@@ -1,3 +1,6 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import { SITE } from '../data/site';
 
 const LINKS = [
@@ -10,6 +13,8 @@ const LINKS = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname() || '/';
+  const base = pathname === '/' ? '' : pathname.startsWith('/preview') ? '/preview' : '/';
   const year = new Date().toLocaleDateString('fa-IR', { year: 'numeric' });
 
   return (
@@ -32,7 +37,7 @@ export default function Footer() {
           <ul className="mt-4 space-y-2 text-sm text-neutral-400">
             {LINKS.map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="nav-link">
+                <a href={base + l.href.replace('/#', '#')} className="nav-link">
                   {l.label}
                 </a>
               </li>
