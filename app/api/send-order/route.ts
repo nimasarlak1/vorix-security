@@ -3,10 +3,11 @@ import { cleanText, isValidMobile, normalizePhone } from '../../lib/validate';
 import { getDBInfo, getEnv, ORDERS_TABLE } from '../../lib/db';
 import { clientIp, describePlatform, isAllowedOrigin } from '../../lib/security';
 import { hitRateLimit } from '../../lib/ratelimit';
+import { ensureSchema } from '../../lib/schema';
+import { getSetting } from '../../lib/content';
+import { findValidCoupon, normCode, type Coupon } from '../../lib/coupons';
 
 export const runtime = 'edge';
-
-const STATS_TABLE = 'order_stats';
 
 // حداکثر ۵ سفارش در ۱۰ دقیقه برای هر IP، و ۱۰۰ سفارش در ساعت برای کل سایت (مانع حمله‌ی انبوه به تلگرام)
 const IP_MAX = 5;
@@ -64,6 +65,24 @@ export async function POST(request: Request) {
     return fail('شماره موبایل معتبر نیست (مثال: 09123456789).', 400);
   }
 
+  // کد تخفیف (اختیاری): اگر کاربر کدی نوشته باشد، همین‌جا دوباره بررسی می‌شود؛ کد نامعتبر = خطا تا مشتری اصلاحش کند
+  const couponRaw = cleanText(body?.coupon, 40);
+  let coupon: (Coupon & { label: string }) | null = null;
+  if (couponRaw) {
+    const code = normCode(couponRaw);
+    if (!code) return fail('کد تخفیف معتبر نیست.', 400);
+    if (!db) return fail('بررسی کد تخفیف فعلاً ممکن نیست. بدون کد ثبت کنید یا تماس بگیرید.', 503);
+    try {
+      await ensureSchema(db);
+      const r = await findValidCoupon(db, code, service, phone);
+      if (!r.ok) return fail(r.error, 400);
+      coupon = { ...r.coupon, label: r.label };
+    } catch (e) {
+      console.error('coupon check failed', e);
+      return fail('بررسی کد تخفیف انجام نشد. بدون کد ثبت کنید یا تماس بگیرید.', 500);
+    }
+  }
+
   const env = getEnv();
   const token = env.BOT_TOKEN;
   const chatId = env.CHAT_ID;
@@ -73,22 +92,11 @@ export async function POST(request: Request) {
 
   // ذخیره در D1 برای نمایش و مدیریت در پنل ادمین
   let saved = false;
+  let couponApplied = false;
   let dbNote = '';
   if (db) {
     try {
-      await db
-        .prepare(
-          `CREATE TABLE IF NOT EXISTS ${ORDERS_TABLE} (
-            id TEXT PRIMARY KEY,
-            created_at TEXT NOT NULL,
-            name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            service TEXT NOT NULL,
-            description TEXT,
-            status TEXT NOT NULL DEFAULT 'جدید'
-          )`
-        )
-        .run();
+      await ensureSchema(db);
       await db
         .prepare(
           `INSERT INTO ${ORDERS_TABLE} (id, created_at, name, phone, service, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)`
@@ -96,18 +104,23 @@ export async function POST(request: Request) {
         .bind(id, createdAt, name, phone, service, description, 'جدید')
         .run();
 
-      // ساخت و به‌روزرسانی جدول آمار (شمارنده سفارش‌ها)
-      await db
-        .prepare(
-          `CREATE TABLE IF NOT EXISTS ${STATS_TABLE} (
-            id INTEGER PRIMARY KEY,
-            count INTEGER NOT NULL
-          )`
-        )
-        .run();
-      await db.prepare(`INSERT OR IGNORE INTO ${STATS_TABLE} (id, count) VALUES (1, 312)`).run();
-      await db.prepare(`UPDATE ${STATS_TABLE} SET count = count + 1 WHERE id = 1`).run();
-
+      // ثبت استفاده از کد: اگر در همین لحظه ظرفیت تمام شده باشد، ردیف ثبت نمی‌شود (سفارش بدون تخفیف می‌ماند)
+      if (coupon) {
+        try {
+          const res = await db.batch([
+            db
+              .prepare(
+                `INSERT INTO vx_order_coupons (order_id, coupon_id, code, label, phone, created_at)
+                 SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE EXISTS (SELECT 1 FROM vx_coupons WHERE id = ?2 AND (max_uses = 0 OR used < max_uses))`
+              )
+              .bind(id, coupon.id, coupon.code, coupon.label, phone, createdAt),
+            db.prepare('UPDATE vx_coupons SET used = used + 1 WHERE id = ?1 AND (max_uses = 0 OR used < max_uses)').bind(coupon.id),
+          ]);
+          couponApplied = Number(res?.[0]?.meta?.changes) === 1;
+        } catch (e) {
+          console.error('coupon record failed', e);
+        }
+      }
       const check = await db.prepare(`SELECT COUNT(*) AS c FROM ${ORDERS_TABLE}`).first();
       saved = true;
       dbNote = `ذخیره شد (تعداد کل سفارش‌ها در پنل: ${check?.c ?? '?'})`;
@@ -127,6 +140,7 @@ export async function POST(request: Request) {
     `📞 شماره: ${phone}`,
     `🛠 خدمت: ${service}`,
     `💬 توضیحات: ${description || 'بدون توضیحات'}`,
+    ...(coupon ? [`🎟 کد تخفیف: ${coupon.code} — ${coupon.label}${couponApplied ? '' : ' (در پنل ثبت نشد؛ دستی بررسی کنید)'}`] : []),
     `🕒 ${time}`,
     `${saved ? '🗄' : '⚠️'} پنل: ${dbNote}`,
   ];
@@ -134,28 +148,44 @@ export async function POST(request: Request) {
   if (!saved) lines.push(`🔎 اجرا روی: ${describePlatform(request)}`);
   const text = lines.join('\n');
 
-  // اعلان تلگرام
-  let notified = false;
-  if (token && chatId) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
+  // کانال‌های اعلان: تلگرام و بله (هرکدام با کلید روشن/خاموش در پنل). تلگرام پیش‌فرض روشن و بله پیش‌فرض خاموش است.
+  let telegramOn = true;
+  let baleOn = false;
+  if (db) {
     try {
-      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text }),
-        signal: controller.signal,
-      });
-      if (res.ok) notified = true;
-      else console.error('Telegram responded with status', res.status);
-    } catch {
-      console.error('Telegram request failed');
-    } finally {
-      clearTimeout(timer);
-    }
-  } else {
-    console.error('BOT_TOKEN or CHAT_ID is not set');
+      telegramOn = (await getSetting(db, 'telegram_enabled')) !== '0';
+      baleOn = (await getSetting(db, 'bale_enabled')) === '1';
+    } catch {}
   }
+  const channels: { name: string; url: string; chatId: string }[] = [];
+  if (telegramOn && token && chatId) channels.push({ name: 'telegram', url: `https://api.telegram.org/bot${token}/sendMessage`, chatId });
+  if (baleOn && env.BALE_BOT_TOKEN && env.BALE_CHAT_ID) {
+    channels.push({ name: 'bale', url: `https://tapi.bale.ai/bot${env.BALE_BOT_TOKEN}/sendMessage`, chatId: env.BALE_CHAT_ID });
+  }
+
+  const results = await Promise.all(
+    channels.map(async (ch) => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      try {
+        const res = await fetch(ch.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: ch.chatId, text }),
+          signal: controller.signal,
+        });
+        if (!res.ok) console.error(`${ch.name} responded with status`, res.status);
+        return res.ok;
+      } catch {
+        console.error(`${ch.name} request failed`);
+        return false;
+      } finally {
+        clearTimeout(timer);
+      }
+    })
+  );
+  const notified = results.some(Boolean);
+  if (channels.length === 0) console.error('هیچ کانال اعلانی (تلگرام/بله) فعال و کامل تنظیم نشده است');
 
   // اگر سفارش نه ذخیره شد و نه به تلگرام رسید، به مشتری خطا بده تا با دفتر تماس بگیرد
   if (!saved && !notified) {
