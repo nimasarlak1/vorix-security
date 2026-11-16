@@ -39,6 +39,7 @@ export async function getServices(db: any): Promise<Service[]> {
         steps: cur?.steps,
         docs: cur?.docs,
         docsNote: cur?.docsNote,
+        installment: typeof d.installment === 'string' && d.installment.trim() ? d.installment : cur?.installment,
       };
       if (cur) base.set(d.slug, merged);
       else extra.push(merged);

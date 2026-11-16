@@ -101,6 +101,13 @@ export default async function ServicePage({ params }: Props) {
           </>
         )}
 
+        {s.installment && (
+          <>
+            <h2 className="mt-12 text-xl font-bold text-white">شرایط پرداخت قسطی</h2>
+            <p className="card mt-5 whitespace-pre-line p-4 leading-9 text-neutral-300">{s.installment}</p>
+          </>
+        )}
+
         <div className="mt-10 flex flex-wrap gap-3">
           <a href="#order" className="btn-primary">ثبت سفارش این خدمت</a>
           <a href={`tel:${SITE.phone}`} className="btn-ghost" dir="ltr">{SITE.phone}</a>

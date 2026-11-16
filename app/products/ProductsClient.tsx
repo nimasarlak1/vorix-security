@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import OrderForm from '../components/OrderForm';
 import { imgSrc } from '../lib/itemspec';
 
-type P = { id: string; title: string; brand?: string; category?: string; specs?: string; image?: string; price?: string; stock?: string };
+type P = { id: string; title: string; brand?: string; category?: string; specs?: string; image?: string; price?: string; stock?: string; installment?: string };
 
 const CATS: Record<string, string> = { camera: 'دوربین', recorder: 'دستگاه ضبط', hdd: 'هارد', accessory: 'تجهیزات جانبی' };
 
@@ -64,6 +64,11 @@ export default function ProductsClient({ products }: { products: P[] }) {
                 <ul className="mt-3 space-y-1 text-sm text-neutral-400">
                   {p.specs.split('\n').filter(Boolean).slice(0, 5).map((s, i) => <li key={i}>• {s}</li>)}
                 </ul>
+              )}
+              {p.installment && (
+                <p className="mt-3 whitespace-pre-line rounded-lg border border-amber-300/20 bg-amber-300/5 p-2 text-xs leading-6 text-amber-100/90">
+                  شرایط قسطی: {p.installment}
+                </p>
               )}
               <div className="mt-auto pt-4">
                 <div className="flex items-center justify-between text-sm">

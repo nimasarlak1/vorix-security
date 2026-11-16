@@ -17,6 +17,7 @@ export type Service = {
   steps?: string[];
   docs?: string[];
   docsNote?: string;
+  installment?: string; // شرایط قسطی (فقط از پنل وارد می‌شود)
 };
 
 export const SERVICES: Service[] = [

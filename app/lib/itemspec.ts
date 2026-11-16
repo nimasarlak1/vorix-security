@@ -73,6 +73,7 @@ export const KINDS: Record<ItemKind, KindSpec> = {
       { key: 'specs', label: 'مشخصات (هر خط یک مورد)', type: 'long', max: 1200 },
       { key: 'image', label: 'عکس', type: 'media', max: 100 },
       { key: 'price', label: 'قیمت (خالی = استعلام قیمت)', type: 'text', max: 40 },
+      { key: 'installment', label: 'شرایط قسطی (اختیاری؛ خالی = در سایت نمایش داده نمی‌شود). فقط شرایطی بنویسید که واقعاً اجرا می‌کنید', type: 'long', max: 800 },
       {
         key: 'stock',
         label: 'موجودی',
@@ -98,6 +99,7 @@ export const KINDS: Record<ItemKind, KindSpec> = {
       { key: 'text', label: 'توضیح کوتاه', type: 'long', max: 400 },
       { key: 'points', label: 'ویژگی‌ها (هر خط یکی)', type: 'list', max: 80 },
       { key: 'body', label: 'متن کامل صفحه‌ی خدمت', type: 'long', max: 4000 },
+      { key: 'installment', label: 'شرایط قسطی (اختیاری؛ خالی = در سایت نمایش داده نمی‌شود). فقط شرایطی بنویسید که واقعاً اجرا می‌کنید', type: 'long', max: 800 },
       { key: 'seoTitle', label: 'عنوان سئو (اختیاری)', type: 'text', max: 70 },
       { key: 'seoDesc', label: 'توضیح سئو (اختیاری)', type: 'long', max: 170 },
     ],
