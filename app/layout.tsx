@@ -51,6 +51,7 @@ export const metadata: Metadata = {
     apple: [{ url: '/apple-icon.png', sizes: '180x180' }],
   },
   robots: { index: true, follow: true },
+  other: { enamad: '53303921' },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
